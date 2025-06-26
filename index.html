@@ -65,15 +65,6 @@
             background: linear-gradient(45deg, #6c757d, #495057);
             color: white;
         }
-
-        .btn-info {
-            background: linear-gradient(45deg, #0ea5e9, #2563eb);
-            color: white;
-        }
-
-        .dark .btn-info {
-            background: linear-gradient(45deg, #2563eb, #0ea5e9) !important;
-        }
         
         .message {
             padding: 20px;
@@ -1202,48 +1193,20 @@
         }
         
         @keyframes breakupDisappear {
-            0% {
-                transform: scale(1);
-                opacity: 1;
+            0% { 
+                transform: scale(1); 
+                opacity: 1; 
             }
             50% { 
                 transform: scale(0.95); 
                 opacity: 0.5; 
             }
-            100% {
-                transform: scale(0.8);
-                opacity: 0;
+            100% { 
+                transform: scale(0.8); 
+                opacity: 0; 
             }
         }
-
-        /* Quiz culturel */
-        .quiz-card {
-            background: rgba(255, 255, 255, 0.6);
-            backdrop-filter: blur(15px);
-            border-radius: 20px;
-            padding: 25px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            transition: all 0.3s ease;
-        }
-
-        .dark .quiz-card {
-            background: rgba(30, 30, 30, 0.6);
-        }
-
-        .quiz-option {
-            width: 100%;
-        }
-
-        .quiz-option.correct {
-            background: linear-gradient(45deg, #16a34a, #15803d);
-            color: white;
-        }
-
-        .quiz-option.incorrect {
-            background: linear-gradient(45deg, #dc2626, #b91c1c);
-            color: white;
-        }
-
+        
         /* Responsive design pour mobile */
         @media (max-width: 768px) {
             .chat-container {
@@ -1275,27 +1238,50 @@
     <div class="container mx-auto px-4 py-8 max-w-4xl">
         <!-- Header -->
         <header class="text-center mb-8">
-            <h1 id="headerTitle" data-i18n="headerTitle" class="text-4xl md:text-5xl font-bold bg-gradient-to-r from-pink-500 to-purple-600 bg-clip-text text-transparent mb-4">
+            <h1 class="text-4xl md:text-5xl font-bold bg-gradient-to-r from-pink-500 to-purple-600 bg-clip-text text-transparent mb-4">
                 💕 Country Balls: Mariage 💕
             </h1>
-            <p id="tagline" data-i18n="tagline" class="text-lg text-gray-600 dark:text-gray-300">
+            <p class="text-lg text-gray-600 dark:text-gray-300">
                 Trouvez l'amour à travers le monde ! 🌍💖
             </p>
             
-            <!-- Bouton de thème -->
-            <button id="themeToggle" class="btn btn-secondary mt-4" onclick="toggleTheme()">
-                🌙 Mode Sombre
-            </button>
-            <select id="languageSelect" class="btn btn-secondary mt-4 ml-2">
-                <option value="fr">FR</option>
-                <option value="en">EN</option>
-            </select>
+            <!-- Sélecteurs de langue et thème -->
+            <div class="flex flex-wrap gap-4 justify-center items-center mt-4">
+                <div class="flex flex-col items-center">
+                    <label class="text-sm font-semibold mb-1">🌐 Langue d'interface</label>
+                    <select id="languageSelect" class="p-2 border-2 border-purple-300 rounded-lg text-sm focus:border-purple-500 focus:outline-none transition-colors duration-300 dark:bg-gray-700 dark:border-gray-600 dark:text-white" onchange="changeLanguage()">
+                        <option value="fr">🇫🇷 Français</option>
+                        <option value="en">🇺🇸 English</option>
+                        <option value="es">🇪🇸 Español</option>
+                        <option value="de">🇩🇪 Deutsch</option>
+                        <option value="it">🇮🇹 Italiano</option>
+                    </select>
+                </div>
+                
+                <div class="flex flex-col items-center">
+                    <label class="text-sm font-semibold mb-1">🗣️ Prononciation</label>
+                    <select id="pronunciationSelect" class="p-2 border-2 border-purple-300 rounded-lg text-sm focus:border-purple-500 focus:outline-none transition-colors duration-300 dark:bg-gray-700 dark:border-gray-600 dark:text-white" onchange="changePronunciationLanguage()">
+                        <option value="auto">🌍 Auto (selon origine)</option>
+                        <option value="fr">🇫🇷 Français</option>
+                        <option value="en">🇺🇸 English</option>
+                        <option value="es">🇪🇸 Español</option>
+                        <option value="de">🇩🇪 Deutsch</option>
+                        <option value="it">🇮🇹 Italiano</option>
+                        <option value="ar">🇲🇦 العربية</option>
+                        <option value="kab">ⵣ Kabyle</option>
+                    </select>
+                </div>
+                
+                <button id="themeToggle" class="btn btn-secondary" onclick="toggleTheme()">
+                    🌙 Mode Sombre
+                </button>
+            </div>
         </header>
 
         <!-- Écran de création de personnage -->
         <div id="characterCreation" class="text-center">
             <div class="country-card">
-                <h2 id="creationTitle" data-i18n="creationTitle" class="text-3xl font-bold mb-6 text-center">✨ Création de votre Country Ball ✨</h2>
+                <h2 class="text-3xl font-bold mb-6 text-center">✨ Création de votre Country Ball ✨</h2>
                 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <div>
@@ -1357,7 +1343,7 @@
                         <option value="Egypt">🇪🇬 Égypte</option>
                         <option value="Morocco">🇲🇦 Maroc</option>
                         <option value="Algeria">🇩🇿 Algérie</option>
-                        <option value="Kabylia">ⵣ Kabylie</option>
+                        <option value="Kabylia">ⵣ Kabyle</option>
                         <option value="Tunisia">🇹🇳 Tunisie</option>
                         <option value="South Africa">🇿🇦 Afrique du Sud</option>
                         <option value="Nigeria">🇳🇬 Nigeria</option>
@@ -1433,7 +1419,7 @@
                     </select>
                 </div>
                 
-                <button id="startGameBtn" data-i18n="startAdventure" class="btn btn-primary mt-8 text-xl px-8 py-4" onclick="startMainGame()">
+                <button id="startGameBtn" class="btn btn-primary mt-8 text-xl px-8 py-4" onclick="startMainGame()">
                     🚀 Commencer l'aventure !
                 </button>
             </div>
@@ -1472,9 +1458,6 @@
                 <button class="btn btn-warning" onclick="showSection('missions')">
                     🎯 Missions
                 </button>
-                <button class="btn btn-info" onclick="showSection('quiz')">
-                    📚 Quiz
-                </button>
                 <button class="btn btn-secondary" onclick="showSection('saves')">
                     💾 Sauvegardes
                 </button>
@@ -1510,16 +1493,6 @@
                 <div class="country-card">
                     <h3 class="text-2xl font-bold mb-6 text-center">🎯 Missions 🎯</h3>
                     <div id="missionsList"></div>
-                </div>
-            </div>
-
-            <!-- Section Quiz -->
-            <div id="quizSection" class="section hidden">
-                <div id="quizCard" class="quiz-card text-center">
-                    <div id="quizQuestion" class="text-xl font-semibold mb-4"></div>
-                    <div id="quizOptions" class="grid grid-cols-1 gap-4"></div>
-                    <button id="nextQuestionBtn" class="btn btn-primary mt-4 hidden" onclick="nextQuizQuestion()">Question suivante</button>
-                    <div id="quizScore" class="mt-4 text-lg font-bold"></div>
                 </div>
             </div>
 
@@ -1741,59 +1714,6 @@
             }
         });
 
-        // ==============================
-        // MULTILINGUAL SUPPORT
-        // ==============================
-
-        const translations = {
-            fr: {
-                headerTitle: '💕 Country Balls: Mariage 💕',
-                tagline: "Trouvez l'amour à travers le monde ! 🌍💖",
-                themeToggleDark: '🌙 Mode Sombre',
-                themeToggleLight: '☀️ Mode Clair',
-                creationTitle: '✨ Création de votre Country Ball ✨',
-                startAdventure: "🚀 Commencer l'aventure !"
-            },
-            en: {
-                headerTitle: '💕 Country Balls: Wedding 💕',
-                tagline: 'Find love around the world! 🌍💖',
-                themeToggleDark: '🌙 Dark Mode',
-                themeToggleLight: '☀️ Light Mode',
-                creationTitle: '✨ Create Your Country Ball ✨',
-                startAdventure: '🚀 Start the adventure!'
-            }
-        };
-
-        let currentLang = 'fr';
-
-        function updateThemeToggleText() {
-            const themeToggle = document.getElementById('themeToggle');
-            if (themeToggle) {
-                const isDark = document.documentElement.classList.contains('dark');
-                themeToggle.textContent = isDark
-                    ? translations[currentLang].themeToggleLight
-                    : translations[currentLang].themeToggleDark;
-            }
-        }
-
-        function setLanguage(lang) {
-            currentLang = lang;
-            document.documentElement.setAttribute('lang', lang);
-            document.querySelectorAll('[data-i18n]').forEach(el => {
-                const key = el.getAttribute('data-i18n');
-                if (key && translations[lang][key]) {
-                    el.textContent = translations[lang][key];
-                }
-            });
-            updateThemeToggleText();
-        }
-
-        document.getElementById('languageSelect').addEventListener('change', e => {
-            setLanguage(e.target.value);
-        });
-
-        // ==============================
-        
         // État du jeu
         let gameState = {
             player: {
@@ -1802,12 +1722,13 @@
                 country: '',
                 fullName: '',
                 gender: '',
-                pronunciation: {},
                 level: 1,
                 xp: 0
             },
             currentSection: 'explore',
-            theme: 'light'
+            theme: 'light',
+            language: 'fr', // Langue d'interface
+            pronunciationLanguage: 'auto' // Langue de prononciation préférée
         };
 
         // Historique des mariages
@@ -1873,110 +1794,639 @@
             'Iran': '🇮🇷'
         };
 
-        // Outils pour gérer les origines multiples
-        function parseOrigins(country) {
-            if (Array.isArray(country)) return country;
-            if (countries[country]) return [country];
-            return country.split(/[-\/]/).map(c => c.trim()).filter(Boolean);
-        }
+        // Combinaisons d'origines multiples possibles
+        const multiOriginCombinations = [
+            // Origines franco-maghrébines
+            { primary: 'France', secondary: 'Morocco', probability: 0.15 },
+            { primary: 'France', secondary: 'Algeria', probability: 0.15 },
+            { primary: 'France', secondary: 'Tunisia', probability: 0.10 },
+            { primary: 'France', secondary: 'Kabylia', probability: 0.08 },
+            
+            // Origines germano-turques
+            { primary: 'Germany', secondary: 'Turkey', probability: 0.12 },
+            
+            // Origines euro-américaines
+            { primary: 'United States', secondary: 'Italy', probability: 0.08 },
+            { primary: 'United States', secondary: 'Ireland', probability: 0.06 },
+            { primary: 'Canada', secondary: 'France', probability: 0.10 },
+            
+            // Origines hispano-latines
+            { primary: 'Spain', secondary: 'Mexico', probability: 0.08 },
+            { primary: 'United States', secondary: 'Mexico', probability: 0.12 },
+            
+            // Origines asiatiques mixtes
+            { primary: 'Japan', secondary: 'Brazil', probability: 0.05 },
+            { primary: 'China', secondary: 'Singapore', probability: 0.06 },
+            
+            // Origines libano-maghrébines
+            { primary: 'Lebanon', secondary: 'Morocco', probability: 0.06 },
+            { primary: 'Lebanon', secondary: 'France', probability: 0.08 },
+            
+            // Origines australo-européennes
+            { primary: 'Australia', secondary: 'United Kingdom', probability: 0.10 },
+            
+            // Origines sud-africaines
+            { primary: 'South Africa', secondary: 'Netherlands', probability: 0.05 },
+            
+            // Autres combinaisons intéressantes
+            { primary: 'Belgium', secondary: 'Congo', probability: 0.04 },
+            { primary: 'Portugal', secondary: 'Brazil', probability: 0.08 },
+            { primary: 'United Kingdom', secondary: 'India', probability: 0.07 },
+            { primary: 'Russia', secondary: 'Kazakhstan', probability: 0.05 }
+        ];
 
-        function formatCountryName(country) {
-            return parseOrigins(country).join(' - ');
-        }
-
-        function getFlags(country) {
-            return parseOrigins(country).map(c => countries[c] || '🏳️').join('-');
-        }
-
-        // Démonymes pour les prononciations
-        const countryDemonyms = {
-            'Lebanon': 'libanais',
-            'Morocco': 'marocain'
-        };
-
-        // Prononciations connues de certains prénoms
-        const namePronunciations = {
-            'Layla': {
-                'Lebanon': 'Lay-la',
-                'Morocco': 'Laï-la'
+        // Fonction pour obtenir le drapeau d'un pays (avec support des origines multiples)
+        function getCountryFlag(countryOrOrigins) {
+            if (typeof countryOrOrigins === 'string') {
+                // Origine simple
+                return countries[countryOrOrigins] || '🏳️';
+            } else if (countryOrOrigins && countryOrOrigins.primary) {
+                // Origines multiples
+                const primaryFlag = countries[countryOrOrigins.primary] || '🏳️';
+                const secondaryFlag = countries[countryOrOrigins.secondary] || '🏳️';
+                return `${primaryFlag}-${secondaryFlag}`;
             }
-        };
-
-        function formatPronunciation(pronObj) {
-            return Object.entries(pronObj)
-                .map(([lang, pron]) => `${lang}: ${pron}`)
-                .join(' • ');
+            return '🏳️';
         }
 
-        function getNameInfo(firstName, country) {
-            const origins = parseOrigins(country);
-            const pron = {};
-            const mapping = namePronunciations[firstName];
-            origins.forEach(o => {
-                if (mapping && mapping[o] && countryDemonyms[o]) {
-                    pron[countryDemonyms[o]] = mapping[o];
+        // Fonction pour formater l'affichage des origines
+        function formatOrigins(countryOrOrigins) {
+            if (typeof countryOrOrigins === 'string') {
+                // Origine simple
+                return countryOrOrigins;
+            } else if (countryOrOrigins && countryOrOrigins.primary) {
+                // Origines multiples
+                return `${countryOrOrigins.primary} - ${countryOrOrigins.secondary}`;
+            }
+            return countryOrOrigins;
+        }
+
+        // Fonction pour générer un personnage avec prononciation selon ses origines
+        function generateCharacterWithPronunciation(origins, playerGender) {
+            // Déterminer le genre opposé au joueur
+            const characterGender = playerGender === 'male' ? 'female' : 'male';
+            
+            // Déterminer le/les pays d'origine
+            const primaryCountry = typeof origins === 'string' ? origins : origins.primary;
+            const secondaryCountry = typeof origins === 'object' ? origins.secondary : null;
+            
+            // Générer le prénom depuis le pays principal
+            const names = namesByCountry[primaryCountry] || namesByCountry['United States'];
+            const nameData = names[characterGender] ? 
+                names[characterGender][Math.floor(Math.random() * names[characterGender].length)] :
+                { name: 'Alex', pronunciation: { english: 'A-lex' } };
+            
+            // Construire l'objet prononciation selon les origines
+            let prononciation = {};
+            
+            if (typeof origins === 'string') {
+                // Origine simple
+                prononciation = nameData.pronunciation || {};
+            } else {
+                // Origines multiples - combiner les prononciations
+                const primaryNameData = namesByCountry[primaryCountry]?.[characterGender] || [];
+                const secondaryNameData = namesByCountry[secondaryCountry]?.[characterGender] || [];
+                
+                // Trouver les prononciations du prénom dans les deux cultures
+                const primaryPronunciation = primaryNameData.find(n => n.name === nameData.name)?.pronunciation || {};
+                const secondaryPronunciation = secondaryNameData.find(n => n.name === nameData.name)?.pronunciation || {};
+                
+                // Fusionner les prononciations
+                prononciation = { ...primaryPronunciation, ...secondaryPronunciation };
+                
+                // Si pas de prononciation pour le pays secondaire, en créer une approximative
+                if (!prononciation[getLanguageCode(secondaryCountry)]) {
+                    prononciation[getLanguageCode(secondaryCountry)] = adaptPronunciationToLanguage(nameData.name, secondaryCountry);
                 }
-            });
+            }
+            
             return {
-                prenom: firstName,
-                origine: formatCountryName(country),
-                prononciation: pron
+                prenom: nameData.name,
+                nom: generateLastName(primaryCountry),
+                genre: characterGender,
+                origine: formatOrigins(origins),
+                prononciation: prononciation
             };
         }
 
-        // Prénoms par pays
+        // Fonction pour obtenir le code de langue d'un pays
+        function getLanguageCode(country) {
+            const languageCodes = {
+                'France': 'french',
+                'Germany': 'german',
+                'United States': 'english',
+                'United Kingdom': 'english',
+                'Japan': 'japanese',
+                'Italy': 'italian',
+                'Spain': 'spanish',
+                'Brazil': 'portuguese',
+                'Mexico': 'spanish',
+                'China': 'chinese',
+                'India': 'hindi',
+                'Russia': 'russian',
+                'Turkey': 'turkish',
+                'Lebanon': 'arabic',
+                'Morocco': 'arabic',
+                'Algeria': 'arabic',
+                'Kabylia': 'berber'
+            };
+            return languageCodes[country] || 'english';
+        }
+
+        // Fonction pour adapter la prononciation à une langue donnée
+        function adaptPronunciationToLanguage(name, country) {
+            // Adaptations basiques selon les caractéristiques phonétiques des langues
+            const adaptations = {
+                'France': () => name.replace(/th/g, 'z').replace(/h/g, '').toLowerCase().split('').map((c, i) => i === 0 ? c.toUpperCase() : c).join(''),
+                'Germany': () => name.replace(/c/g, 'k').replace(/j/g, 'y'),
+                'Arabic': () => name.replace(/p/g, 'b').replace(/v/g, 'f'),
+                'Japanese': () => name.replace(/l/g, 'r').replace(/th/g, 's'),
+                'Spanish': () => name.replace(/ph/g, 'f').replace(/th/g, 't'),
+                'Chinese': () => name.split('').join('-').toLowerCase()
+            };
+            
+            const languageFamily = {
+                'France': 'France',
+                'Morocco': 'Arabic',
+                'Algeria': 'Arabic',
+                'Tunisia': 'Arabic',
+                'Lebanon': 'Arabic',
+                'Germany': 'Germany',
+                'Japan': 'Japanese',
+                'Spain': 'Spanish',
+                'Mexico': 'Spanish',
+                'China': 'Chinese'
+            };
+            
+            const family = languageFamily[country] || 'English';
+            const adapter = adaptations[family];
+            
+            return adapter ? adapter() : name;
+        }
+
+        // Fonction pour obtenir un pays aléatoire (avec possibilité d'origines multiples)
+        function generateRandomOrigins() {
+            // 25% de chance d'avoir des origines multiples
+            if (Math.random() < 0.25) {
+                const combination = multiOriginCombinations[Math.floor(Math.random() * multiOriginCombinations.length)];
+                if (Math.random() < combination.probability) {
+                    return {
+                        primary: combination.primary,
+                        secondary: combination.secondary
+                    };
+                }
+            }
+            
+            // Sinon, origine simple
+            const countryNames = Object.keys(countries).filter(country => 
+                country !== gameState.player.country
+            );
+            return countryNames[Math.floor(Math.random() * countryNames.length)];
+        }
+
+        // Prénoms par pays avec prononciations
         const namesByCountry = {
             'France': {
-                male: ['Pierre', 'Jean', 'François', 'Michel', 'Alain', 'Philippe', 'Daniel', 'Bernard', 'Christian', 'Thierry'],
-                female: ['Marie', 'Françoise', 'Monique', 'Catherine', 'Isabelle', 'Sylvie', 'Christine', 'Brigitte', 'Martine', 'Nicole']
+                male: [
+                    { name: 'Pierre', pronunciation: { french: 'Pee-air' } },
+                    { name: 'Jean', pronunciation: { french: 'Zhahn' } },
+                    { name: 'François', pronunciation: { french: 'Frahn-swah' } },
+                    { name: 'Michel', pronunciation: { french: 'Mee-shell' } },
+                    { name: 'Alain', pronunciation: { french: 'Ah-lahn' } },
+                    { name: 'Philippe', pronunciation: { french: 'Fee-leep' } },
+                    { name: 'Daniel', pronunciation: { french: 'Dah-nee-ell' } },
+                    { name: 'Bernard', pronunciation: { french: 'Ber-nar' } },
+                    { name: 'Christian', pronunciation: { french: 'Krees-tee-ahn' } },
+                    { name: 'Thierry', pronunciation: { french: 'Tee-air-ree' } }
+                ],
+                female: [
+                    { name: 'Marie', pronunciation: { french: 'Mah-ree' } },
+                    { name: 'Françoise', pronunciation: { french: 'Frahn-swahz' } },
+                    { name: 'Monique', pronunciation: { french: 'Moh-neek' } },
+                    { name: 'Catherine', pronunciation: { french: 'Kah-treen' } },
+                    { name: 'Isabelle', pronunciation: { french: 'Ee-zah-bell' } },
+                    { name: 'Sylvie', pronunciation: { french: 'Seel-vee' } },
+                    { name: 'Christine', pronunciation: { french: 'Krees-teen' } },
+                    { name: 'Brigitte', pronunciation: { french: 'Bree-zheet' } },
+                    { name: 'Martine', pronunciation: { french: 'Mar-teen' } },
+                    { name: 'Nicole', pronunciation: { french: 'Nee-kohl' } }
+                ]
             },
             'Germany': {
-                male: ['Hans', 'Wolfgang', 'Klaus', 'Jürgen', 'Dieter', 'Peter', 'Andreas', 'Thomas', 'Michael', 'Stefan'],
-                female: ['Ursula', 'Ingrid', 'Monika', 'Petra', 'Sabine', 'Gabriele', 'Andrea', 'Susanne', 'Brigitte', 'Christine']
+                male: [
+                    { name: 'Hans', pronunciation: { german: 'Hahnss' } },
+                    { name: 'Wolfgang', pronunciation: { german: 'Volf-gahng' } },
+                    { name: 'Klaus', pronunciation: { german: 'Klowss' } },
+                    { name: 'Jürgen', pronunciation: { german: 'Yur-gen' } },
+                    { name: 'Dieter', pronunciation: { german: 'Dee-ter' } },
+                    { name: 'Peter', pronunciation: { german: 'Pay-ter' } },
+                    { name: 'Andreas', pronunciation: { german: 'Ahn-dray-ahs' } },
+                    { name: 'Thomas', pronunciation: { german: 'Toh-mahs' } },
+                    { name: 'Michael', pronunciation: { german: 'Mee-khah-el' } },
+                    { name: 'Stefan', pronunciation: { german: 'Shte-fahn' } }
+                ],
+                female: [
+                    { name: 'Ursula', pronunciation: { german: 'Oor-zoo-lah' } },
+                    { name: 'Ingrid', pronunciation: { german: 'In-greed' } },
+                    { name: 'Monika', pronunciation: { german: 'Moh-nee-kah' } },
+                    { name: 'Petra', pronunciation: { german: 'Pay-trah' } },
+                    { name: 'Sabine', pronunciation: { german: 'Zah-bee-neh' } },
+                    { name: 'Gabriele', pronunciation: { german: 'Gah-bree-ay-leh' } },
+                    { name: 'Andrea', pronunciation: { german: 'Ahn-dray-ah' } },
+                    { name: 'Susanne', pronunciation: { german: 'Zoo-zah-neh' } },
+                    { name: 'Brigitte', pronunciation: { german: 'Bree-git-teh' } },
+                    { name: 'Christine', pronunciation: { german: 'Krees-tee-neh' } }
+                ]
+            },
+            'Lebanon': {
+                male: [
+                    { name: 'Ahmad', pronunciation: { arabic: 'Ah-mad', french: 'Ah-mahd' } },
+                    { name: 'Mohammed', pronunciation: { arabic: 'Mou-ham-mad', french: 'Mo-ha-med' } },
+                    { name: 'Ali', pronunciation: { arabic: 'Ah-lee', french: 'A-li' } },
+                    { name: 'Omar', pronunciation: { arabic: 'Oh-mar', french: 'O-mar' } },
+                    { name: 'Khalil', pronunciation: { arabic: 'Kha-leel', french: 'Kha-lil' } },
+                    { name: 'Youssef', pronunciation: { arabic: 'You-sef', french: 'You-sef' } },
+                    { name: 'Samir', pronunciation: { arabic: 'Sa-meer', french: 'Sa-mir' } },
+                    { name: 'Hassan', pronunciation: { arabic: 'Has-san', french: 'Has-sane' } },
+                    { name: 'Rami', pronunciation: { arabic: 'Ra-mee', french: 'Ra-mi' } },
+                    { name: 'Fadi', pronunciation: { arabic: 'Fa-dee', french: 'Fa-di' } }
+                ],
+                female: [
+                    { name: 'Layla', pronunciation: { arabic: 'Lay-la', french: 'Laï-la' } },
+                    { name: 'Fatima', pronunciation: { arabic: 'Fa-ti-ma', french: 'Fa-ti-ma' } },
+                    { name: 'Amina', pronunciation: { arabic: 'A-mee-na', french: 'A-mi-na' } },
+                    { name: 'Zahra', pronunciation: { arabic: 'Zah-ra', french: 'Za-hra' } },
+                    { name: 'Nadia', pronunciation: { arabic: 'Na-dee-ya', french: 'Na-dia' } },
+                    { name: 'Rania', pronunciation: { arabic: 'Ra-nee-ya', french: 'Ra-nia' } },
+                    { name: 'Samar', pronunciation: { arabic: 'Sa-mar', french: 'Sa-mar' } },
+                    { name: 'Dina', pronunciation: { arabic: 'Dee-na', french: 'Di-na' } },
+                    { name: 'Maya', pronunciation: { arabic: 'Ma-ya', french: 'Ma-ya' } },
+                    { name: 'Lina', pronunciation: { arabic: 'Lee-na', french: 'Li-na' } }
+                ]
+            },
+            'Morocco': {
+                male: [
+                    { name: 'Mohammed', pronunciation: { arabic: 'Mou-ham-mad', french: 'Mo-ha-med' } },
+                    { name: 'Ahmed', pronunciation: { arabic: 'Ah-med', french: 'Ah-med' } },
+                    { name: 'Youssef', pronunciation: { arabic: 'You-sef', french: 'You-sef' } },
+                    { name: 'Hassan', pronunciation: { arabic: 'Has-san', french: 'Has-sane' } },
+                    { name: 'Omar', pronunciation: { arabic: 'Oh-mar', french: 'O-mar' } },
+                    { name: 'Rachid', pronunciation: { arabic: 'Ra-sheed', french: 'Ra-chid' } },
+                    { name: 'Karim', pronunciation: { arabic: 'Ka-reem', french: 'Ka-rim' } },
+                    { name: 'Saïd', pronunciation: { arabic: 'Sa-eed', french: 'Sa-ïd' } },
+                    { name: 'Abdel', pronunciation: { arabic: 'Ab-del', french: 'Ab-del' } },
+                    { name: 'Mustapha', pronunciation: { arabic: 'Mus-ta-fa', french: 'Mus-ta-pha' } }
+                ],
+                female: [
+                    { name: 'Fatima', pronunciation: { arabic: 'Fa-ti-ma', french: 'Fa-ti-ma' } },
+                    { name: 'Aicha', pronunciation: { arabic: 'Ah-ee-sha', french: 'Aï-cha' } },
+                    { name: 'Khadija', pronunciation: { arabic: 'Kha-dee-ja', french: 'Kha-di-ja' } },
+                    { name: 'Zahra', pronunciation: { arabic: 'Zah-ra', french: 'Za-hra' } },
+                    { name: 'Amina', pronunciation: { arabic: 'A-mee-na', french: 'A-mi-na' } },
+                    { name: 'Nadia', pronunciation: { arabic: 'Na-dee-ya', french: 'Na-dia' } },
+                    { name: 'Leila', pronunciation: { arabic: 'Lay-la', french: 'Leï-la' } },
+                    { name: 'Rachida', pronunciation: { arabic: 'Ra-shee-da', french: 'Ra-chi-da' } },
+                    { name: 'Malika', pronunciation: { arabic: 'Ma-li-ka', french: 'Ma-li-ka' } },
+                    { name: 'Hafida', pronunciation: { arabic: 'Ha-fee-da', french: 'Ha-fi-da' } }
+                ]
+            },
+            'Algeria': {
+                male: [
+                    { name: 'Mohammed', pronunciation: { arabic: 'Mou-ham-mad', french: 'Mo-ha-med' } },
+                    { name: 'Ahmed', pronunciation: { arabic: 'Ah-med', french: 'Ah-med' } },
+                    { name: 'Ali', pronunciation: { arabic: 'Ah-lee', french: 'A-li' } },
+                    { name: 'Omar', pronunciation: { arabic: 'Oh-mar', french: 'O-mar' } },
+                    { name: 'Karim', pronunciation: { arabic: 'Ka-reem', french: 'Ka-rim' } },
+                    { name: 'Yacine', pronunciation: { arabic: 'Ya-seen', french: 'Ya-cine' } },
+                    { name: 'Sofiane', pronunciation: { arabic: 'So-fee-an', french: 'So-fi-ane' } },
+                    { name: 'Amine', pronunciation: { arabic: 'A-meen', french: 'A-mine' } },
+                    { name: 'Riad', pronunciation: { arabic: 'Ree-ad', french: 'Ri-ad' } },
+                    { name: 'Farid', pronunciation: { arabic: 'Fa-reed', french: 'Fa-rid' } }
+                ],
+                female: [
+                    { name: 'Fatima', pronunciation: { arabic: 'Fa-ti-ma', french: 'Fa-ti-ma' } },
+                    { name: 'Aicha', pronunciation: { arabic: 'Ah-ee-sha', french: 'Aï-cha' } },
+                    { name: 'Amina', pronunciation: { arabic: 'A-mee-na', french: 'A-mi-na' } },
+                    { name: 'Zahra', pronunciation: { arabic: 'Zah-ra', french: 'Za-hra' } },
+                    { name: 'Samira', pronunciation: { arabic: 'Sa-mee-ra', french: 'Sa-mi-ra' } },
+                    { name: 'Nadia', pronunciation: { arabic: 'Na-dee-ya', french: 'Na-dia' } },
+                    { name: 'Karima', pronunciation: { arabic: 'Ka-ree-ma', french: 'Ka-ri-ma' } },
+                    { name: 'Yasmina', pronunciation: { arabic: 'Yas-mee-na', french: 'Yas-mi-na' } },
+                    { name: 'Leila', pronunciation: { arabic: 'Lay-la', french: 'Leï-la' } },
+                    { name: 'Soraya', pronunciation: { arabic: 'So-ra-ya', french: 'So-ra-ya' } }
+                ]
+            },
+            'Turkey': {
+                male: [
+                    { name: 'Mehmet', pronunciation: { turkish: 'Meh-met' } },
+                    { name: 'Mustafa', pronunciation: { turkish: 'Mus-ta-fa' } },
+                    { name: 'Ali', pronunciation: { turkish: 'A-li' } },
+                    { name: 'Ahmet', pronunciation: { turkish: 'Ah-met' } },
+                    { name: 'Hasan', pronunciation: { turkish: 'Ha-san' } },
+                    { name: 'Osman', pronunciation: { turkish: 'Os-man' } },
+                    { name: 'Emre', pronunciation: { turkish: 'Em-re' } },
+                    { name: 'Burak', pronunciation: { turkish: 'Bu-rak' } },
+                    { name: 'Kemal', pronunciation: { turkish: 'Ke-mal' } },
+                    { name: 'Cem', pronunciation: { turkish: 'Jem' } }
+                ],
+                female: [
+                    { name: 'Ayşe', pronunciation: { turkish: 'Ah-ye-she' } },
+                    { name: 'Fatma', pronunciation: { turkish: 'Fat-ma' } },
+                    { name: 'Emine', pronunciation: { turkish: 'E-mi-ne' } },
+                    { name: 'Hatice', pronunciation: { turkish: 'Ha-ti-je' } },
+                    { name: 'Zeynep', pronunciation: { turkish: 'Zey-nep' } },
+                    { name: 'Merve', pronunciation: { turkish: 'Mer-ve' } },
+                    { name: 'Elif', pronunciation: { turkish: 'E-lif' } },
+                    { name: 'Selin', pronunciation: { turkish: 'Se-lin' } },
+                    { name: 'Burcu', pronunciation: { turkish: 'Bur-ju' } },
+                    { name: 'Deniz', pronunciation: { turkish: 'De-niz' } }
+                ]
             },
             'United States': {
-                male: ['James', 'Robert', 'John', 'Michael', 'David', 'William', 'Richard', 'Joseph', 'Thomas', 'Christopher'],
-                female: ['Mary', 'Patricia', 'Jennifer', 'Linda', 'Elizabeth', 'Barbara', 'Susan', 'Jessica', 'Sarah', 'Karen']
+                male: [
+                    { name: 'James', pronunciation: { english: 'Jayms' } },
+                    { name: 'Robert', pronunciation: { english: 'Rob-ert' } },
+                    { name: 'John', pronunciation: { english: 'John' } },
+                    { name: 'Michael', pronunciation: { english: 'My-kel' } },
+                    { name: 'David', pronunciation: { english: 'Day-vid' } },
+                    { name: 'William', pronunciation: { english: 'Wil-yem' } },
+                    { name: 'Richard', pronunciation: { english: 'Rich-erd' } },
+                    { name: 'Joseph', pronunciation: { english: 'Jo-zef' } },
+                    { name: 'Thomas', pronunciation: { english: 'Tom-es' } },
+                    { name: 'Christopher', pronunciation: { english: 'Kris-to-fer' } }
+                ],
+                female: [
+                    { name: 'Mary', pronunciation: { english: 'Mare-ee' } },
+                    { name: 'Patricia', pronunciation: { english: 'Pa-trish-a' } },
+                    { name: 'Jennifer', pronunciation: { english: 'Jen-i-fer' } },
+                    { name: 'Linda', pronunciation: { english: 'Lin-da' } },
+                    { name: 'Elizabeth', pronunciation: { english: 'E-liz-a-beth' } },
+                    { name: 'Barbara', pronunciation: { english: 'Bar-ba-ra' } },
+                    { name: 'Susan', pronunciation: { english: 'Su-zen' } },
+                    { name: 'Jessica', pronunciation: { english: 'Jes-i-ka' } },
+                    { name: 'Sarah', pronunciation: { english: 'Sare-a' } },
+                    { name: 'Karen', pronunciation: { english: 'Care-en' } }
+                ]
             },
             'Japan': {
-                male: ['Hiroshi', 'Takeshi', 'Akira', 'Satoshi', 'Kazuhiro', 'Masahiro', 'Yuji', 'Shinji', 'Koji', 'Taro'],
-                female: ['Yoko', 'Keiko', 'Michiko', 'Naoko', 'Tomoko', 'Hiroko', 'Mayumi', 'Akiko', 'Kyoko', 'Noriko']
+                male: [
+                    { name: 'Hiroshi', pronunciation: { japanese: 'Hi-ro-shi' } },
+                    { name: 'Takeshi', pronunciation: { japanese: 'Ta-ke-shi' } },
+                    { name: 'Akira', pronunciation: { japanese: 'A-ki-ra' } },
+                    { name: 'Satoshi', pronunciation: { japanese: 'Sa-to-shi' } },
+                    { name: 'Kazuhiro', pronunciation: { japanese: 'Ka-zu-hi-ro' } },
+                    { name: 'Masahiro', pronunciation: { japanese: 'Ma-sa-hi-ro' } },
+                    { name: 'Yuji', pronunciation: { japanese: 'Yu-ji' } },
+                    { name: 'Shinji', pronunciation: { japanese: 'Shin-ji' } },
+                    { name: 'Koji', pronunciation: { japanese: 'Ko-ji' } },
+                    { name: 'Taro', pronunciation: { japanese: 'Ta-ro' } }
+                ],
+                female: [
+                    { name: 'Yoko', pronunciation: { japanese: 'Yo-ko' } },
+                    { name: 'Keiko', pronunciation: { japanese: 'Kei-ko' } },
+                    { name: 'Michiko', pronunciation: { japanese: 'Mi-chi-ko' } },
+                    { name: 'Naoko', pronunciation: { japanese: 'Na-o-ko' } },
+                    { name: 'Tomoko', pronunciation: { japanese: 'To-mo-ko' } },
+                    { name: 'Hiroko', pronunciation: { japanese: 'Hi-ro-ko' } },
+                    { name: 'Mayumi', pronunciation: { japanese: 'Ma-yu-mi' } },
+                    { name: 'Akiko', pronunciation: { japanese: 'A-ki-ko' } },
+                    { name: 'Kyoko', pronunciation: { japanese: 'Kyo-ko' } },
+                    { name: 'Noriko', pronunciation: { japanese: 'No-ri-ko' } }
+                ]
             },
             'United Kingdom': {
-                male: ['James', 'John', 'Robert', 'Michael', 'William', 'David', 'Richard', 'Charles', 'Joseph', 'Thomas'],
-                female: ['Mary', 'Patricia', 'Jennifer', 'Linda', 'Elizabeth', 'Barbara', 'Susan', 'Jessica', 'Sarah', 'Karen']
+                male: [
+                    { name: 'James', pronunciation: { english: 'Jayms' } },
+                    { name: 'John', pronunciation: { english: 'John' } },
+                    { name: 'Robert', pronunciation: { english: 'Rob-ert' } },
+                    { name: 'Michael', pronunciation: { english: 'My-kel' } },
+                    { name: 'William', pronunciation: { english: 'Wil-yem' } },
+                    { name: 'David', pronunciation: { english: 'Day-vid' } },
+                    { name: 'Richard', pronunciation: { english: 'Rich-erd' } },
+                    { name: 'Charles', pronunciation: { english: 'Charlz' } },
+                    { name: 'Joseph', pronunciation: { english: 'Jo-zef' } },
+                    { name: 'Thomas', pronunciation: { english: 'Tom-es' } }
+                ],
+                female: [
+                    { name: 'Mary', pronunciation: { english: 'Mare-ee' } },
+                    { name: 'Patricia', pronunciation: { english: 'Pa-trish-a' } },
+                    { name: 'Jennifer', pronunciation: { english: 'Jen-i-fer' } },
+                    { name: 'Linda', pronunciation: { english: 'Lin-da' } },
+                    { name: 'Elizabeth', pronunciation: { english: 'E-liz-a-beth' } },
+                    { name: 'Barbara', pronunciation: { english: 'Bar-ba-ra' } },
+                    { name: 'Susan', pronunciation: { english: 'Su-zen' } },
+                    { name: 'Jessica', pronunciation: { english: 'Jes-i-ka' } },
+                    { name: 'Sarah', pronunciation: { english: 'Sare-a' } },
+                    { name: 'Karen', pronunciation: { english: 'Care-en' } }
+                ]
             },
             'Italy': {
-                male: ['Giuseppe', 'Antonio', 'Mario', 'Francesco', 'Giovanni', 'Salvatore', 'Angelo', 'Vincenzo', 'Pietro', 'Carlo'],
-                female: ['Maria', 'Anna', 'Giuseppina', 'Rosa', 'Angela', 'Giovanna', 'Teresa', 'Lucia', 'Carmela', 'Caterina']
+                male: [
+                    { name: 'Giuseppe', pronunciation: { italian: 'Ju-zep-pe' } },
+                    { name: 'Antonio', pronunciation: { italian: 'An-to-nio' } },
+                    { name: 'Mario', pronunciation: { italian: 'Ma-rio' } },
+                    { name: 'Francesco', pronunciation: { italian: 'Fran-ches-ko' } },
+                    { name: 'Giovanni', pronunciation: { italian: 'Jo-van-ni' } },
+                    { name: 'Salvatore', pronunciation: { italian: 'Sal-va-to-re' } },
+                    { name: 'Angelo', pronunciation: { italian: 'An-je-lo' } },
+                    { name: 'Vincenzo', pronunciation: { italian: 'Vin-chen-tso' } },
+                    { name: 'Pietro', pronunciation: { italian: 'Pie-tro' } },
+                    { name: 'Carlo', pronunciation: { italian: 'Car-lo' } }
+                ],
+                female: [
+                    { name: 'Maria', pronunciation: { italian: 'Ma-ria' } },
+                    { name: 'Anna', pronunciation: { italian: 'An-na' } },
+                    { name: 'Giuseppina', pronunciation: { italian: 'Ju-zep-pi-na' } },
+                    { name: 'Rosa', pronunciation: { italian: 'Ro-za' } },
+                    { name: 'Angela', pronunciation: { italian: 'An-je-la' } },
+                    { name: 'Giovanna', pronunciation: { italian: 'Jo-van-na' } },
+                    { name: 'Teresa', pronunciation: { italian: 'Te-re-za' } },
+                    { name: 'Lucia', pronunciation: { italian: 'Lu-chia' } },
+                    { name: 'Carmela', pronunciation: { italian: 'Car-me-la' } },
+                    { name: 'Caterina', pronunciation: { italian: 'Ca-te-ri-na' } }
+                ]
             },
             'Spain': {
-                male: ['Antonio', 'José', 'Manuel', 'Francisco', 'Juan', 'David', 'José Antonio', 'José Luis', 'Jesús', 'Javier'],
-                female: ['María Carmen', 'María', 'Carmen', 'Josefa', 'Isabel', 'Ana María', 'María Dolores', 'María Pilar', 'María Teresa', 'Ana']
+                male: [
+                    { name: 'Antonio', pronunciation: { spanish: 'An-to-nio' } },
+                    { name: 'José', pronunciation: { spanish: 'Ho-sé' } },
+                    { name: 'Manuel', pronunciation: { spanish: 'Ma-nuel' } },
+                    { name: 'Francisco', pronunciation: { spanish: 'Fran-this-ko' } },
+                    { name: 'Juan', pronunciation: { spanish: 'Huan' } },
+                    { name: 'David', pronunciation: { spanish: 'Da-vid' } },
+                    { name: 'José Antonio', pronunciation: { spanish: 'Ho-sé An-to-nio' } },
+                    { name: 'José Luis', pronunciation: { spanish: 'Ho-sé Luis' } },
+                    { name: 'Jesús', pronunciation: { spanish: 'He-sus' } },
+                    { name: 'Javier', pronunciation: { spanish: 'Ha-vier' } }
+                ],
+                female: [
+                    { name: 'María Carmen', pronunciation: { spanish: 'Ma-ri-a Car-men' } },
+                    { name: 'María', pronunciation: { spanish: 'Ma-ri-a' } },
+                    { name: 'Carmen', pronunciation: { spanish: 'Car-men' } },
+                    { name: 'Josefa', pronunciation: { spanish: 'Ho-se-fa' } },
+                    { name: 'Isabel', pronunciation: { spanish: 'I-sa-bel' } },
+                    { name: 'Ana María', pronunciation: { spanish: 'A-na Ma-ri-a' } },
+                    { name: 'María Dolores', pronunciation: { spanish: 'Ma-ri-a Do-lo-res' } },
+                    { name: 'María Pilar', pronunciation: { spanish: 'Ma-ri-a Pi-lar' } },
+                    { name: 'María Teresa', pronunciation: { spanish: 'Ma-ri-a Te-re-sa' } },
+                    { name: 'Ana', pronunciation: { spanish: 'A-na' } }
+                ]
             },
             'Brazil': {
-                male: ['José', 'João', 'Antonio', 'Francisco', 'Carlos', 'Paulo', 'Pedro', 'Lucas', 'Luiz', 'Marcos'],
-                female: ['Maria', 'Ana', 'Francisca', 'Antonia', 'Adriana', 'Juliana', 'Márcia', 'Fernanda', 'Patricia', 'Aline']
+                male: [
+                    { name: 'José', pronunciation: { portuguese: 'Zho-zé' } },
+                    { name: 'João', pronunciation: { portuguese: 'Zhow-ow' } },
+                    { name: 'Antonio', pronunciation: { portuguese: 'An-to-nio' } },
+                    { name: 'Francisco', pronunciation: { portuguese: 'Fran-this-ko' } },
+                    { name: 'Carlos', pronunciation: { portuguese: 'Car-los' } },
+                    { name: 'Paulo', pronunciation: { portuguese: 'Pow-lo' } },
+                    { name: 'Pedro', pronunciation: { portuguese: 'Pe-dro' } },
+                    { name: 'Lucas', pronunciation: { portuguese: 'Lu-kas' } },
+                    { name: 'Luiz', pronunciation: { portuguese: 'Lu-is' } },
+                    { name: 'Marcos', pronunciation: { portuguese: 'Mar-kos' } }
+                ],
+                female: [
+                    { name: 'Maria', pronunciation: { portuguese: 'Ma-ri-a' } },
+                    { name: 'Ana', pronunciation: { portuguese: 'A-na' } },
+                    { name: 'Francisca', pronunciation: { portuguese: 'Fran-this-ka' } },
+                    { name: 'Antonia', pronunciation: { portuguese: 'An-to-nia' } },
+                    { name: 'Adriana', pronunciation: { portuguese: 'A-dri-a-na' } },
+                    { name: 'Juliana', pronunciation: { portuguese: 'Zhu-li-a-na' } },
+                    { name: 'Márcia', pronunciation: { portuguese: 'Mar-sia' } },
+                    { name: 'Fernanda', pronunciation: { portuguese: 'Fer-nan-da' } },
+                    { name: 'Patricia', pronunciation: { portuguese: 'Pa-tri-sia' } },
+                    { name: 'Aline', pronunciation: { portuguese: 'A-li-ne' } }
+                ]
             },
             'Mexico': {
-                male: ['José', 'Luis', 'Juan', 'Miguel', 'Carlos', 'Antonio', 'Francisco', 'Alejandro', 'Rafael', 'Jesús'],
-                female: ['María', 'Guadalupe', 'Juana', 'Margarita', 'Francisca', 'Rosa', 'Antonia', 'Ana', 'Carmen', 'Martha']
+                male: [
+                    { name: 'José', pronunciation: { spanish: 'Ho-sé' } },
+                    { name: 'Luis', pronunciation: { spanish: 'Luis' } },
+                    { name: 'Juan', pronunciation: { spanish: 'Huan' } },
+                    { name: 'Miguel', pronunciation: { spanish: 'Mi-gel' } },
+                    { name: 'Carlos', pronunciation: { spanish: 'Car-los' } },
+                    { name: 'Antonio', pronunciation: { spanish: 'An-to-nio' } },
+                    { name: 'Francisco', pronunciation: { spanish: 'Fran-this-ko' } },
+                    { name: 'Alejandro', pronunciation: { spanish: 'A-le-han-dro' } },
+                    { name: 'Rafael', pronunciation: { spanish: 'Ra-fa-el' } },
+                    { name: 'Jesús', pronunciation: { spanish: 'He-sus' } }
+                ],
+                female: [
+                    { name: 'María', pronunciation: { spanish: 'Ma-ri-a' } },
+                    { name: 'Guadalupe', pronunciation: { spanish: 'Gua-da-lu-pe' } },
+                    { name: 'Juana', pronunciation: { spanish: 'Hua-na' } },
+                    { name: 'Margarita', pronunciation: { spanish: 'Mar-ga-ri-ta' } },
+                    { name: 'Francisca', pronunciation: { spanish: 'Fran-this-ka' } },
+                    { name: 'Rosa', pronunciation: { spanish: 'Ro-sa' } },
+                    { name: 'Antonia', pronunciation: { spanish: 'An-to-nia' } },
+                    { name: 'Ana', pronunciation: { spanish: 'A-na' } },
+                    { name: 'Carmen', pronunciation: { spanish: 'Car-men' } },
+                    { name: 'Martha', pronunciation: { spanish: 'Mar-ta' } }
+                ]
             },
             'China': {
-                male: ['Wei', 'Ming', 'Jun', 'Qiang', 'Gang', 'Lei', 'Tao', 'Peng', 'Jie', 'Hao'],
-                female: ['Li', 'Wang', 'Zhang', 'Liu', 'Chen', 'Yang', 'Zhao', 'Huang', 'Zhou', 'Wu']
+                male: [
+                    { name: 'Wei', pronunciation: { chinese: 'Way' } },
+                    { name: 'Ming', pronunciation: { chinese: 'Ming' } },
+                    { name: 'Jun', pronunciation: { chinese: 'Jün' } },
+                    { name: 'Qiang', pronunciation: { chinese: 'Chi-ang' } },
+                    { name: 'Gang', pronunciation: { chinese: 'Gang' } },
+                    { name: 'Lei', pronunciation: { chinese: 'Lay' } },
+                    { name: 'Tao', pronunciation: { chinese: 'Tao' } },
+                    { name: 'Peng', pronunciation: { chinese: 'Pung' } },
+                    { name: 'Jie', pronunciation: { chinese: 'Jye' } },
+                    { name: 'Hao', pronunciation: { chinese: 'Hao' } }
+                ],
+                female: [
+                    { name: 'Li', pronunciation: { chinese: 'Li' } },
+                    { name: 'Wang', pronunciation: { chinese: 'Wang' } },
+                    { name: 'Zhang', pronunciation: { chinese: 'Jang' } },
+                    { name: 'Liu', pronunciation: { chinese: 'Liu' } },
+                    { name: 'Chen', pronunciation: { chinese: 'Chen' } },
+                    { name: 'Yang', pronunciation: { chinese: 'Yang' } },
+                    { name: 'Zhao', pronunciation: { chinese: 'Jao' } },
+                    { name: 'Huang', pronunciation: { chinese: 'Huang' } },
+                    { name: 'Zhou', pronunciation: { chinese: 'Jou' } },
+                    { name: 'Wu', pronunciation: { chinese: 'Wu' } }
+                ]
             },
             'India': {
-                male: ['Raj', 'Ravi', 'Anil', 'Sunil', 'Sanjay', 'Rakesh', 'Ajay', 'Vijay', 'Ashok', 'Deepak'],
-                female: ['Sunita', 'Asha', 'Usha', 'Rekha', 'Meera', 'Pooja', 'Kavita', 'Anita', 'Sushma', 'Ritu']
+                male: [
+                    { name: 'Raj', pronunciation: { hindi: 'Rahj' } },
+                    { name: 'Ravi', pronunciation: { hindi: 'Ra-vi' } },
+                    { name: 'Anil', pronunciation: { hindi: 'A-nil' } },
+                    { name: 'Sunil', pronunciation: { hindi: 'Su-nil' } },
+                    { name: 'Sanjay', pronunciation: { hindi: 'San-jay' } },
+                    { name: 'Rakesh', pronunciation: { hindi: 'Ra-kesh' } },
+                    { name: 'Ajay', pronunciation: { hindi: 'A-jay' } },
+                    { name: 'Vijay', pronunciation: { hindi: 'Vi-jay' } },
+                    { name: 'Ashok', pronunciation: { hindi: 'A-shok' } },
+                    { name: 'Deepak', pronunciation: { hindi: 'Dee-pak' } }
+                ],
+                female: [
+                    { name: 'Sunita', pronunciation: { hindi: 'Su-ni-ta' } },
+                    { name: 'Asha', pronunciation: { hindi: 'A-sha' } },
+                    { name: 'Usha', pronunciation: { hindi: 'U-sha' } },
+                    { name: 'Rekha', pronunciation: { hindi: 'Re-kha' } },
+                    { name: 'Meera', pronunciation: { hindi: 'Mee-ra' } },
+                    { name: 'Pooja', pronunciation: { hindi: 'Poo-ja' } },
+                    { name: 'Kavita', pronunciation: { hindi: 'Ka-vi-ta' } },
+                    { name: 'Anita', pronunciation: { hindi: 'A-ni-ta' } },
+                    { name: 'Sushma', pronunciation: { hindi: 'Sush-ma' } },
+                    { name: 'Ritu', pronunciation: { hindi: 'Ri-tu' } }
+                ]
             },
             'Russia': {
-                male: ['Александр', 'Сергей', 'Дмитрий', 'Андрей', 'Алексей', 'Михаил', 'Евгений', 'Николай', 'Владимир', 'Игорь'],
-                female: ['Елена', 'Татьяна', 'Наталья', 'Ольга', 'Светлана', 'Людмила', 'Галина', 'Ирина', 'Анна', 'Екатерина']
+                male: [
+                    { name: 'Александр', pronunciation: { russian: 'A-lek-sandr' } },
+                    { name: 'Сергей', pronunciation: { russian: 'Ser-gey' } },
+                    { name: 'Дмитрий', pronunciation: { russian: 'Dmi-tri' } },
+                    { name: 'Андрей', pronunciation: { russian: 'An-drey' } },
+                    { name: 'Алексей', pronunciation: { russian: 'A-lek-sey' } },
+                    { name: 'Михаил', pronunciation: { russian: 'Mi-kha-il' } },
+                    { name: 'Евгений', pronunciation: { russian: 'Yev-ge-ni' } },
+                    { name: 'Николай', pronunciation: { russian: 'Ni-ko-lay' } },
+                    { name: 'Владимир', pronunciation: { russian: 'Vla-di-mir' } },
+                    { name: 'Игорь', pronunciation: { russian: 'I-gor' } }
+                ],
+                female: [
+                    { name: 'Елена', pronunciation: { russian: 'Ye-le-na' } },
+                    { name: 'Татьяна', pronunciation: { russian: 'Ta-tya-na' } },
+                    { name: 'Наталья', pronunciation: { russian: 'Na-ta-lya' } },
+                    { name: 'Ольга', pronunciation: { russian: 'Ol-ga' } },
+                    { name: 'Светлана', pronunciation: { russian: 'Svet-la-na' } },
+                    { name: 'Людмила', pronunciation: { russian: 'Lyu-dmi-la' } },
+                    { name: 'Галина', pronunciation: { russian: 'Ga-li-na' } },
+                    { name: 'Ирина', pronunciation: { russian: 'I-ri-na' } },
+                    { name: 'Анна', pronunciation: { russian: 'An-na' } },
+                    { name: 'Екатерина', pronunciation: { russian: 'Ye-ka-te-ri-na' } }
+                ]
             },
             'Kabylia': {
-                male: ['Massinissa', 'Tarik', 'Youcef', 'Amirouche', 'Akli', 'Jugurtha', 'Mohand', 'Said', 'Larbi', 'Ouali'],
-                female: ['Tamazight', 'Kahina', 'Fadhma', 'Malika', 'Zahra', 'Yamina', 'Tassadit', 'Djamila', 'Noura', 'Fatima']
+                male: [
+                    { name: 'Massinissa', pronunciation: { berber: 'Mas-si-nis-sa', french: 'Mas-si-nis-sa' } },
+                    { name: 'Tarik', pronunciation: { berber: 'Ta-rik', french: 'Ta-rik' } },
+                    { name: 'Youcef', pronunciation: { berber: 'You-sef', french: 'You-sef' } },
+                    { name: 'Amirouche', pronunciation: { berber: 'A-mi-rouch', french: 'A-mi-rouche' } },
+                    { name: 'Akli', pronunciation: { berber: 'Ak-li', french: 'Ak-li' } },
+                    { name: 'Jugurtha', pronunciation: { berber: 'Ju-gur-tha', french: 'Ju-gur-tha' } },
+                    { name: 'Mohand', pronunciation: { berber: 'Mo-hand', french: 'Mo-hand' } },
+                    { name: 'Said', pronunciation: { berber: 'Sa-id', french: 'Sa-ïd' } },
+                    { name: 'Larbi', pronunciation: { berber: 'Lar-bi', french: 'Lar-bi' } },
+                    { name: 'Ouali', pronunciation: { berber: 'Oua-li', french: 'Oua-li' } }
+                ],
+                female: [
+                    { name: 'Tamazight', pronunciation: { berber: 'Ta-ma-zight', french: 'Ta-ma-zight' } },
+                    { name: 'Kahina', pronunciation: { berber: 'Ka-hi-na', french: 'Ka-hi-na' } },
+                    { name: 'Fadhma', pronunciation: { berber: 'Fadh-ma', french: 'Fadh-ma' } },
+                    { name: 'Malika', pronunciation: { berber: 'Ma-li-ka', french: 'Ma-li-ka' } },
+                    { name: 'Zahra', pronunciation: { berber: 'Zah-ra', french: 'Za-hra' } },
+                    { name: 'Yamina', pronunciation: { berber: 'Ya-mi-na', french: 'Ya-mi-na' } },
+                    { name: 'Tassadit', pronunciation: { berber: 'Tas-sa-dit', french: 'Tas-sa-dit' } },
+                    { name: 'Djamila', pronunciation: { berber: 'Dja-mi-la', french: 'Dja-mi-la' } },
+                    { name: 'Noura', pronunciation: { berber: 'Nou-ra', french: 'Nou-ra' } },
+                    { name: 'Fatima', pronunciation: { berber: 'Fa-ti-ma', french: 'Fa-ti-ma' } }
+                ]
             }
         };
 
@@ -2026,53 +2476,6 @@
             }
         };
 
-        // Questions du quiz culturel
-        const quizQuestions = [
-            {
-                question: 'Quelle est la capitale du Maroc ?',
-                options: ['Casablanca', 'Rabat', 'Marrakech', 'Fès'],
-                correct: 1
-            },
-            {
-                question: "Comment dit-on 'bonjour' en kabyle ?",
-                options: ['Azul', 'Marhaban', 'Salam', 'Bonjour'],
-                correct: 0
-            },
-            {
-                question: 'Quelle spécialité libanaise est à base de boulgour et de persil ?',
-                options: ['Taboulé', 'Couscous', 'Chawarma', 'Makroud'],
-                correct: 0
-            },
-            {
-                question: 'Quel est l\'instrument typique du folklore kabyle ?',
-                options: ['Gimbri', 'Mandole', 'Guitare', 'Oud'],
-                correct: 1
-            },
-            {
-                question: 'Quel dessert marocain à base d\'amandes est souvent servi aux mariages ?',
-                options: ['Baklava', 'Cornes de gazelle', 'Tiramisu', 'Makrout'],
-                correct: 1
-            },
-            {
-                question: "Quelle ville est surnommée 'la perle du Nord' au Liban ?",
-                options: ['Jounieh', 'Beyrouth', 'Tripoli', 'Saïda'],
-                correct: 2
-            },
-            {
-                question: 'Quelle langue parle-t-on principalement en Kabylie ?',
-                options: ['Kabyle', 'Libanais', 'Darija', 'Anglais'],
-                correct: 0
-            },
-            {
-                question: 'Quel plat marocain est cuit dans un plat en terre cuite conique ?',
-                options: ['Tajine', 'Briouate', 'Pastilla', 'Harira'],
-                correct: 0
-            }
-        ];
-
-        let quizIndex = 0;
-        let quizScore = 0;
-
         // Système de sauvegarde avec auto-save
         let saveStatus = {
             hasUnsavedChanges: false,
@@ -2091,38 +2494,37 @@
             
             // Sélectionner un pays aléatoire des mariages
             const randomMarriage = marriageHistory[Math.floor(Math.random() * marriageHistory.length)];
-            const targetCountry = randomMarriage.formattedCountry || randomMarriage.partnerCountry;
-            const targetFlags = getFlags(targetCountry);
+            const targetCountry = randomMarriage.partnerCountry;
             
             // Messages dramatiques selon le type d'événement
             const eventTypes = [
                 {
                     type: 'ex_returns',
-                    message: `😱 Drama ! Un(e) ex de ${targetCountry} ${targetFlags} essaie de récupérer votre partenaire !`,
+                    message: `😱 Drama ! Un(e) ex de ${targetCountry} essaie de récupérer votre partenaire !`,
                     effect: -20,
                     emoji: '💔💔💔'
                 },
                 {
                     type: 'celebrity_crush',
-                    message: `📸 Scandale ! Votre partenaire de ${targetCountry} ${targetFlags} a été vu(e) avec une célébrité !`,
+                    message: `📸 Scandale ! Votre partenaire de ${targetCountry} a été vu(e) avec une célébrité !`,
                     effect: -15,
                     emoji: '📸📸📸'
                 },
                 {
                     type: 'family_disapproval',
-                    message: `💔 La famille de ${targetCountry} ${targetFlags} n'approuve pas votre relation !`,
+                    message: `💔 La famille de ${targetCountry} n'approuve pas votre relation !`,
                     effect: -25,
                     emoji: '⚡😤⚡'
                 },
                 {
                     type: 'social_media_drama',
-                    message: `📱 Drama sur les réseaux ! Votre relation avec ${targetCountry} ${targetFlags} fait polémique !`,
+                    message: `📱 Drama sur les réseaux ! Votre relation avec ${targetCountry} fait polémique !`,
                     effect: -10,
                     emoji: '📱💬📱'
                 },
                 {
                     type: 'old_flame',
-                    message: `🌹 Coup de théâtre ! Une ancienne flamme de ${targetCountry} ${targetFlags} réapparaît !`,
+                    message: `🌹 Coup de théâtre ! Une ancienne flamme de ${targetCountry} réapparaît !`,
                     effect: -18,
                     emoji: '🌹💕🌹'
                 }
@@ -2534,19 +2936,338 @@
         }
 
         // ============================================
+        // SYSTÈME DE TRADUCTIONS MULTILINGUES
+        // ============================================
+
+        // Traductions pour les différentes langues
+        const translations = {
+            fr: {
+                interface_language: 'Langue d\'interface',
+                pronunciation: 'Prononciation',
+                auto_origin: 'Auto (selon origine)',
+                dark_mode: 'Mode Sombre',
+                light_mode: 'Mode Clair',
+                character_creation: 'Création de votre Country Ball',
+                first_name: 'Prénom :',
+                last_name: 'Nom de famille :',
+                gender: 'Genre :',
+                choose: 'Choisissez...',
+                male: 'Homme',
+                female: 'Femme',
+                choose_country: 'Choisissez votre pays :',
+                start_adventure: 'Commencer l\'aventure !',
+                level: 'Niveau',
+                explore: 'Explorer',
+                marriages: 'Mariages',
+                missions: 'Missions',
+                saves: 'Sauvegardes',
+                explore_world: 'Explorez le monde et trouvez l\'amour !',
+                explore_random: 'Explorer un pays aléatoire !',
+                no_marriages: 'Aucun mariage pour le moment. Explorez le monde !',
+                no_missions: 'Aucune mission disponible.',
+                fill_all_fields: 'Veuillez remplir tous les champs !',
+                welcome_message: 'Bienvenue ! Votre aventure amoureuse commence maintenant !',
+                explore_message: 'Vous explorez {country} et rencontrez {name} !',
+                propose_marriage: 'Demander en mariage',
+                continue_exploring: 'Continuer à explorer',
+                pronunciation_label: 'Prononciation :',
+                pronunciation_unavailable: 'Prononciation non disponible'
+            },
+            en: {
+                interface_language: 'Interface Language',
+                pronunciation: 'Pronunciation',
+                auto_origin: 'Auto (by origin)',
+                dark_mode: 'Dark Mode',
+                light_mode: 'Light Mode',
+                character_creation: 'Create your Country Ball',
+                first_name: 'First Name:',
+                last_name: 'Last Name:',
+                gender: 'Gender:',
+                choose: 'Choose...',
+                male: 'Male',
+                female: 'Female',
+                choose_country: 'Choose your country:',
+                start_adventure: 'Start the adventure!',
+                level: 'Level',
+                explore: 'Explore',
+                marriages: 'Marriages',
+                missions: 'Missions',
+                saves: 'Saves',
+                explore_world: 'Explore the world and find love!',
+                explore_random: 'Explore a random country!',
+                no_marriages: 'No marriages yet. Explore the world!',
+                no_missions: 'No missions available.',
+                fill_all_fields: 'Please fill all fields!',
+                welcome_message: 'Welcome! Your romantic adventure begins now!',
+                explore_message: 'You explore {country} and meet {name}!',
+                propose_marriage: 'Propose marriage',
+                continue_exploring: 'Continue exploring',
+                pronunciation_label: 'Pronunciation:',
+                pronunciation_unavailable: 'Pronunciation unavailable'
+            },
+            es: {
+                interface_language: 'Idioma de Interfaz',
+                pronunciation: 'Pronunciación',
+                auto_origin: 'Auto (según origen)',
+                dark_mode: 'Modo Oscuro',
+                light_mode: 'Modo Claro',
+                character_creation: 'Crea tu Country Ball',
+                first_name: 'Nombre:',
+                last_name: 'Apellido:',
+                gender: 'Género:',
+                choose: 'Elegir...',
+                male: 'Hombre',
+                female: 'Mujer',
+                choose_country: 'Elige tu país:',
+                start_adventure: '¡Comenzar la aventura!',
+                level: 'Nivel',
+                explore: 'Explorar',
+                marriages: 'Matrimonios',
+                missions: 'Misiones',
+                saves: 'Guardados',
+                explore_world: '¡Explora el mundo y encuentra el amor!',
+                explore_random: '¡Explorar un país aleatorio!',
+                no_marriages: 'No hay matrimonios aún. ¡Explora el mundo!',
+                no_missions: 'No hay misiones disponibles.',
+                fill_all_fields: '¡Por favor completa todos los campos!',
+                welcome_message: '¡Bienvenido! ¡Tu aventura romántica comienza ahora!',
+                explore_message: '¡Exploras {country} y conoces a {name}!',
+                propose_marriage: 'Proponer matrimonio',
+                continue_exploring: 'Continuar explorando',
+                pronunciation_label: 'Pronunciación:',
+                pronunciation_unavailable: 'Pronunciación no disponible'
+            },
+            de: {
+                interface_language: 'Oberflächensprache',
+                pronunciation: 'Aussprache',
+                auto_origin: 'Auto (nach Herkunft)',
+                dark_mode: 'Dunkler Modus',
+                light_mode: 'Heller Modus',
+                character_creation: 'Erstelle deinen Country Ball',
+                first_name: 'Vorname:',
+                last_name: 'Nachname:',
+                gender: 'Geschlecht:',
+                choose: 'Wählen...',
+                male: 'Mann',
+                female: 'Frau',
+                choose_country: 'Wähle dein Land:',
+                start_adventure: 'Abenteuer beginnen!',
+                level: 'Level',
+                explore: 'Erkunden',
+                marriages: 'Ehen',
+                missions: 'Missionen',
+                saves: 'Speicherstände',
+                explore_world: 'Erkunde die Welt und finde die Liebe!',
+                explore_random: 'Ein zufälliges Land erkunden!',
+                no_marriages: 'Noch keine Ehen. Erkunde die Welt!',
+                no_missions: 'Keine Missionen verfügbar.',
+                fill_all_fields: 'Bitte fülle alle Felder aus!',
+                welcome_message: 'Willkommen! Dein romantisches Abenteuer beginnt jetzt!',
+                explore_message: 'Du erkundest {country} und triffst {name}!',
+                propose_marriage: 'Heiratsantrag machen',
+                continue_exploring: 'Weiter erkunden',
+                pronunciation_label: 'Aussprache:',
+                pronunciation_unavailable: 'Aussprache nicht verfügbar'
+            },
+            it: {
+                interface_language: 'Lingua dell\'Interfaccia',
+                pronunciation: 'Pronuncia',
+                auto_origin: 'Auto (per origine)',
+                dark_mode: 'Modalità Scura',
+                light_mode: 'Modalità Chiara',
+                character_creation: 'Crea il tuo Country Ball',
+                first_name: 'Nome:',
+                last_name: 'Cognome:',
+                gender: 'Genere:',
+                choose: 'Scegli...',
+                male: 'Uomo',
+                female: 'Donna',
+                choose_country: 'Scegli il tuo paese:',
+                start_adventure: 'Inizia l\'avventura!',
+                level: 'Livello',
+                explore: 'Esplora',
+                marriages: 'Matrimoni',
+                missions: 'Missioni',
+                saves: 'Salvataggi',
+                explore_world: 'Esplora il mondo e trova l\'amore!',
+                explore_random: 'Esplora un paese casuale!',
+                no_marriages: 'Nessun matrimonio ancora. Esplora il mondo!',
+                no_missions: 'Nessuna missione disponibile.',
+                fill_all_fields: 'Per favore compila tutti i campi!',
+                welcome_message: 'Benvenuto! La tua avventura romantica inizia ora!',
+                explore_message: 'Esplori {country} e incontri {name}!',
+                propose_marriage: 'Proporre matrimonio',
+                continue_exploring: 'Continua a esplorare',
+                pronunciation_label: 'Pronuncia:',
+                pronunciation_unavailable: 'Pronuncia non disponibile'
+            }
+        };
+
+        // Fonction pour obtenir la traduction courante
+        function getTranslation(key) {
+            const language = gameState.language || 'fr';
+            return translations[language]?.[key] || translations['fr'][key] || key;
+        }
+
+        // Fonction pour changer la langue d'interface
+        function changeLanguage() {
+            const selectedLanguage = document.getElementById('languageSelect').value;
+            gameState.language = selectedLanguage;
+            
+            updateInterfaceLanguage(selectedLanguage);
+            markUnsavedChanges();
+        }
+
+        // Fonction pour changer la langue de prononciation préférée
+        function changePronunciationLanguage() {
+            const selectedPronunciationLanguage = document.getElementById('pronunciationSelect').value;
+            gameState.pronunciationLanguage = selectedPronunciationLanguage;
+            markUnsavedChanges();
+        }
+
+        // Fonction pour mettre à jour l'interface selon la langue
+        function updateInterfaceLanguage(language) {
+            const t = translations[language];
+            if (!t) return;
+
+            // Mettre à jour les labels et textes de l'interface
+            const languageLabel = document.querySelector('label[for="languageSelect"]');
+            if (languageLabel) languageLabel.textContent = '🌐 ' + t.interface_language;
+            
+            const pronunciationLabel = document.querySelector('label[for="pronunciationSelect"]');
+            if (pronunciationLabel) pronunciationLabel.textContent = '🗣️ ' + t.pronunciation;
+            
+            const themeButton = document.getElementById('themeToggle');
+            if (themeButton) {
+                const isDark = document.documentElement.classList.contains('dark');
+                themeButton.textContent = isDark ? '☀️ ' + t.light_mode : '🌙 ' + t.dark_mode;
+            }
+
+            // Mettre à jour les options de prononciation
+            const pronunciationSelect = document.getElementById('pronunciationSelect');
+            if (pronunciationSelect && pronunciationSelect.children.length > 0) {
+                pronunciationSelect.children[0].textContent = '🌍 ' + t.auto_origin;
+            }
+
+            // Mettre à jour la création de personnage
+            const characterTitle = document.querySelector('#characterCreation h2');
+            if (characterTitle) {
+                characterTitle.textContent = '✨ ' + t.character_creation + ' ✨';
+            }
+
+            // Mettre à jour les labels de formulaire
+            const firstNameLabel = document.querySelector('label[for="firstName"]');
+            if (firstNameLabel) firstNameLabel.textContent = '👤 ' + t.first_name;
+            
+            const lastNameLabel = document.querySelector('label[for="lastName"]');
+            if (lastNameLabel) lastNameLabel.textContent = '🏷️ ' + t.last_name;
+            
+            const genderLabel = document.querySelector('label[for="genderSelect"]');
+            if (genderLabel) genderLabel.textContent = '⚧️ ' + t.gender;
+            
+            const countryLabel = document.querySelector('label[for="countrySelect"]');
+            if (countryLabel) countryLabel.textContent = '🏳️ ' + t.choose_country;
+
+            // Mettre à jour les options de genre
+            const genderSelect = document.getElementById('genderSelect');
+            if (genderSelect && genderSelect.children.length >= 3) {
+                genderSelect.children[0].textContent = t.choose;
+                genderSelect.children[1].textContent = '👨 ' + t.male;
+                genderSelect.children[2].textContent = '👩 ' + t.female;
+            }
+
+            // Mettre à jour le bouton de démarrage
+            const startButton = document.getElementById('startGameBtn');
+            if (startButton) {
+                startButton.textContent = '🚀 ' + t.start_adventure;
+            }
+
+            // Mettre à jour les boutons de navigation du jeu principal
+            updateNavigationButtons(t);
+            updateSectionTitles(t);
+        }
+
+        // Fonction pour mettre à jour les boutons de navigation
+        function updateNavigationButtons(t) {
+            const exploreBtn = document.querySelector('button[onclick="showSection(\'explore\')"]');
+            if (exploreBtn) exploreBtn.textContent = '🌍 ' + t.explore;
+            
+            const marriageBtn = document.querySelector('button[onclick="showSection(\'marriage\')"]');
+            if (marriageBtn) marriageBtn.textContent = '💒 ' + t.marriages;
+            
+            const missionsBtn = document.querySelector('button[onclick="showSection(\'missions\')"]');
+            if (missionsBtn) missionsBtn.textContent = '🎯 ' + t.missions;
+            
+            const savesBtn = document.querySelector('button[onclick="showSection(\'saves\')"]');
+            if (savesBtn) savesBtn.textContent = '💾 ' + t.saves;
+        }
+
+        // Fonction pour mettre à jour les titres des sections
+        function updateSectionTitles(t) {
+            const exploreTitle = document.querySelector('#exploreSection h3');
+            if (exploreTitle) {
+                exploreTitle.textContent = '🌍 ' + t.explore_world + ' 🌍';
+            }
+
+            const exploreButton = document.getElementById('exploreBtn');
+            if (exploreButton) {
+                exploreButton.textContent = '🚀 ' + t.explore_random;
+            }
+
+            const marriageTitle = document.querySelector('#marriageSection h3');
+            if (marriageTitle) {
+                marriageTitle.textContent = '💒 ' + t.marriages + ' 💒';
+            }
+
+            const missionsTitle = document.querySelector('#missionsSection h3');
+            if (missionsTitle) {
+                missionsTitle.textContent = '🎯 ' + t.missions + ' 🎯';
+            }
+
+            const savesTitle = document.querySelector('#savesSection h3');
+            if (savesTitle) {
+                savesTitle.textContent = '💾 ' + t.saves + ' 💾';
+            }
+
+            // Mettre à jour le contenu des sections si elles sont vides
+            const marriageList = document.getElementById('marriageList');
+            if (marriageList && marriageList.textContent.includes('Aucun mariage') || marriageList.textContent.includes('No marriages')) {
+                marriageList.innerHTML = `<p class="text-center text-gray-500 dark:text-gray-400">${t.no_marriages}</p>`;
+            }
+        }
+
+        // ============================================
         // FONCTIONS PRINCIPALES DU JEU
         // ============================================
 
         function initGame() {
             updateMissionsList();
             initTheme();
+            initLanguageSettings();
+        }
+
+        function initLanguageSettings() {
+            // Initialiser la langue selon l'état du jeu
+            const languageSelect = document.getElementById('languageSelect');
+            const pronunciationSelect = document.getElementById('pronunciationSelect');
+            
+            if (languageSelect) {
+                languageSelect.value = gameState.language || 'fr';
+            }
+            
+            if (pronunciationSelect) {
+                pronunciationSelect.value = gameState.pronunciationLanguage || 'auto';
+            }
+            
+            // Appliquer la langue actuelle
+            updateInterfaceLanguage(gameState.language || 'fr');
         }
 
         function initTheme() {
             const themeToggle = document.getElementById('themeToggle');
             if (themeToggle) {
                 const isDark = document.documentElement.classList.contains('dark');
-                updateThemeToggleText();
+                themeToggle.textContent = isDark ? '☀️ Mode Clair' : '🌙 Mode Sombre';
                 gameState.theme = isDark ? 'dark' : 'light';
                 
                 // Forcer l'application du thème
@@ -2570,7 +3291,10 @@
             const isDarkAfter = document.documentElement.classList.contains('dark');
             
             // Mettre à jour le bouton
-            updateThemeToggleText();
+            const themeToggle = document.getElementById('themeToggle');
+            if (themeToggle) {
+                themeToggle.textContent = isDarkAfter ? '☀️ Mode Clair' : '🌙 Mode Sombre';
+            }
             
             // Mettre à jour l'état du jeu
             gameState.theme = isDarkAfter ? 'dark' : 'light';
@@ -2597,13 +3321,11 @@
                 return;
             }
 
-            const info = getNameInfo(firstName, country);
             gameState.player.firstName = firstName;
             gameState.player.lastName = lastName;
             gameState.player.country = country;
             gameState.player.gender = gender;
             gameState.player.fullName = `${firstName} ${lastName}`;
-            gameState.player.pronunciation = info.prononciation;
 
             document.getElementById('characterCreation').classList.add('hidden');
             document.getElementById('gameMain').classList.remove('hidden');
@@ -2616,12 +3338,12 @@
             markUnsavedChanges();
         }
 
-       function updatePlayerInfo() {
-           const flag = getFlags(gameState.player.country);
-            document.getElementById('playerInfo').innerHTML =
-                `${flag} ${gameState.player.firstName} <span class="text-sm text-gray-500 dark:text-gray-400 ml-1">${formatPronunciation(gameState.player.pronunciation)}</span> ${gameState.player.lastName}`;
-            document.getElementById('playerDetails').textContent =
-                `Niveau ${gameState.player.level} • ${formatCountryName(gameState.player.country)}`;
+        function updatePlayerInfo() {
+            const flag = countries[gameState.player.country] || '🏳️';
+            document.getElementById('playerInfo').textContent = 
+                `${flag} ${gameState.player.fullName}`;
+            document.getElementById('playerDetails').textContent = 
+                `Niveau ${gameState.player.level} • ${gameState.player.country}`;
             updateXPDisplay();
         }
 
@@ -2687,37 +3409,27 @@
                 updateMissionsList();
             } else if (sectionName === 'marriage') {
                 updateMarriageList();
-            } else if (sectionName === 'quiz') {
-                startQuiz();
             }
             
             markUnsavedChanges();
         }
 
         function exploreWorld() {
-            const availableCountries = Object.keys(countries).filter(country => 
-                country !== gameState.player.country
-            );
+            // Générer des origines (simple ou multiples)
+            const randomOrigins = generateRandomOrigins();
             
-            if (availableCountries.length === 0) {
-                showMessage('🌍 Vous avez exploré tous les pays disponibles !', 'error');
-                return;
-            }
+            // Obtenir le drapeau et l'affichage formaté
+            const countryFlag = getCountryFlag(randomOrigins);
+            const displayOrigins = formatOrigins(randomOrigins);
             
-            const baseCountry = availableCountries[Math.floor(Math.random() * availableCountries.length)];
-            let randomCountry = baseCountry;
-            if (Math.random() < 0.15) {
-                const second = availableCountries[Math.floor(Math.random() * availableCountries.length)];
-                if (second !== baseCountry) randomCountry = `${baseCountry}-${second}`;
-            }
-            const countryFlag = getFlags(randomCountry);
+            // Déterminer le pays principal pour les noms
+            const primaryCountry = typeof randomOrigins === 'string' ? randomOrigins : randomOrigins.primary;
             
             // Générer une personne aléatoire du genre opposé au joueur
-            const names = namesByCountry[baseCountry] || namesByCountry['United States'];
-            const gender = gameState.player.gender === 'male' ? 'female' : 'male';
-            const firstName = names[gender][Math.floor(Math.random() * names[gender].length)];
-            const lastName = generateLastName(baseCountry);
-            const nameInfo = getNameInfo(firstName, randomCountry);
+            const character = generateCharacterWithPronunciation(randomOrigins, gameState.player.gender);
+            const firstName = character.prenom;
+            const lastName = character.nom;
+            const gender = character.genre;
             
             const resultDiv = document.getElementById('exploreResult');
             resultDiv.classList.remove('hidden');
@@ -2725,21 +3437,29 @@
             const genderEmoji = gender === 'male' ? '👨' : '👩';
             const genderText = gender === 'male' ? 'Homme' : 'Femme';
             
+            // Créer une description enrichie pour les origines multiples
+            let description = generateDescription(displayOrigins, firstName, gender);
+            if (typeof randomOrigins === 'object') {
+                description += ` ${firstName} a des origines mixtes et parle plusieurs langues !`;
+            }
+            
             resultDiv.innerHTML = `
                 <div class="country-card text-center">
                     <div class="flag-heart w-24 h-24 mx-auto mb-4 flex items-center justify-center">
                         <span class="text-4xl">${countryFlag}</span>
                     </div>
-                    <h4 class="text-2xl font-bold mb-2">${genderEmoji} ${firstName}
-                        <span class="text-sm text-gray-500 dark:text-gray-400 ml-1">
-                            ${formatPronunciation(nameInfo.prononciation)}
-                        </span> ${lastName}</h4>
-                    <p class="text-lg mb-2">${formatCountryName(randomCountry)}</p>
+                    <h4 class="text-2xl font-bold mb-2">${genderEmoji} ${firstName} ${lastName}</h4>
+                    <p class="text-lg mb-2 font-semibold text-blue-600 dark:text-blue-400">${displayOrigins}</p>
+                    
+                    <!-- Affichage des prononciations -->
+                    <div class="text-sm text-purple-600 dark:text-purple-400 mb-3">
+                        ${formatPronunciation(character.prononciation)}
+                    </div>
                     <p class="text-sm text-purple-600 dark:text-purple-400 mb-4">${genderText}</p>
-            <p class="text-gray-600 dark:text-gray-300 mb-6">${generateDescription(baseCountry, firstName, gender)}</p>
+                    <p class="text-gray-600 dark:text-gray-300 mb-6">${description}</p>
                     
                     <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                        <button class="btn btn-success" onclick="proposeMarriage('${firstName}', '${lastName}', '${randomCountry}', '${gender}')">
+                        <button class="btn btn-success" onclick="proposeMarriage('${firstName}', '${lastName}', '${encodeURIComponent(JSON.stringify(randomOrigins))}', '${gender}')">
                             💍 Demander en mariage
                         </button>
                         <button class="btn btn-secondary" onclick="exploreWorld()">
@@ -2750,7 +3470,7 @@
             `;
             
             gainXP(10);
-            showMessage(`🌍 Vous explorez ${formatCountryName(randomCountry)} et rencontrez ${firstName} ${lastName} !`, 'special');
+            showMessage(`🌍 Vous explorez ${displayOrigins} et rencontrez ${firstName} ${lastName} !`, 'special');
         }
 
         function generateLastName(country) {
@@ -2772,6 +3492,21 @@
             return names[Math.floor(Math.random() * names.length)];
         }
 
+        // Fonction pour formater l'affichage des prononciations
+        function formatPronunciation(prononciation) {
+            if (!prononciation || Object.keys(prononciation).length === 0) {
+                return '<span class="text-gray-500">Prononciation non disponible</span>';
+            }
+            
+            const pronunciations = [];
+            for (const [langue, prononciation_text] of Object.entries(prononciation)) {
+                const langueFormatted = langue.charAt(0).toUpperCase() + langue.slice(1);
+                pronunciations.push(`[${langueFormatted}] ${prononciation_text}`);
+            }
+            
+            return `<strong>Prononciation :</strong> ${pronunciations.join(' • ')}`;
+        }
+
         function generateDescription(country, firstName, gender) {
             const descriptions = [
                 `${firstName} est ${gender === 'male' ? 'un artiste passionné' : 'une artiste passionnée'} de ${country}.`,
@@ -2787,10 +3522,21 @@
             return descriptions[Math.floor(Math.random() * descriptions.length)];
         }
 
-        function proposeMarriage(firstName, lastName, country, gender) {
+        function proposeMarriage(firstName, lastName, encodedOrigins, gender) {
+            // Décoder les origines
+            let origins;
+            try {
+                origins = JSON.parse(decodeURIComponent(encodedOrigins));
+            } catch (error) {
+                // Si le décodage échoue, traiter comme une origine simple
+                origins = encodedOrigins;
+            }
+            
+            const displayOrigins = formatOrigins(origins);
+            
             // Vérifier si déjà marié avec cette personne
             const alreadyMarried = marriageHistory.some(marriage => 
-                marriage.partner === `${firstName} ${lastName}` && marriage.partnerCountry === country
+                marriage.partner === `${firstName} ${lastName}` && formatOrigins(marriage.partnerOrigins) === displayOrigins
             );
             
             if (alreadyMarried) {
@@ -2801,7 +3547,7 @@
             const success = Math.random() > 0.3; // 70% de chance de succès
             
             if (success) {
-                addToMarriageHistory(firstName, lastName, country, gender);
+                addToMarriageHistory(firstName, lastName, origins, gender);
                 gainXP(50);
                 const genderEmoji = gender === 'male' ? '👨' : '👩';
                 
@@ -2809,7 +3555,7 @@
                 playVictorySound();
                 
                 // Message avec bouton de partage
-                showMarriageSuccessMessage(firstName, lastName, country, gender, genderEmoji);
+                showMarriageSuccessMessage(firstName, lastName, displayOrigins, gender, genderEmoji);
                 
                 updateMissions('first_marriage');
                 updateMissions('five_marriages');
@@ -2834,25 +3580,22 @@
             markUnsavedChanges();
         }
 
-       function addToMarriageHistory(firstName, lastName, country, gender) {
-            const nameInfo = getNameInfo(firstName, country);
+        function addToMarriageHistory(firstName, lastName, origins, gender) {
             const marriage = {
                 partner: `${firstName} ${lastName}`,
-                partnerFirstName: firstName,
-                partnerLastName: lastName,
-                partnerCountry: country,
+                partnerOrigins: origins, // Stocker les origines complètes
+                partnerCountry: typeof origins === 'string' ? origins : origins.primary, // Pays principal pour compatibilité
                 partnerGender: gender,
-                pronunciation: nameInfo.prononciation,
                 date: new Date().toLocaleDateString('fr-FR'),
-                flag: getFlags(country),
-                formattedCountry: formatCountryName(country)
+                flag: getCountryFlag(origins)
             };
             
             marriageHistory.push(marriage);
             
             // Initialiser le tchat avec le nouveau partenaire
             if (marriageHistory.length === 1) {
-                initializeChatWithPartner(firstName, lastName, country, gender);
+                const displayOrigins = formatOrigins(origins);
+                initializeChatWithPartner(firstName, lastName, displayOrigins, gender);
             }
             
             markUnsavedChanges();
@@ -2879,33 +3622,43 @@
                 marriageCard.className = 'country-card';
                 marriageCard.id = `marriage-${index}`;
                 
-                const pron = formatPronunciation(marriage.pronunciation || {});
                 marriageCard.innerHTML = `
                     <div class="flex items-center justify-between">
                         <div class="flex items-center gap-4">
                             <div class="text-4xl">${marriage.flag}</div>
                             <div>
-                                <h4 class="text-xl font-bold">${genderEmoji} ${marriage.partnerFirstName}
-                                    <span class="text-sm text-gray-500 dark:text-gray-400 ml-1">${pron}</span>
-                                    ${marriage.partnerLastName}</h4>
-                                <p class="text-gray-600 dark:text-gray-300">${marriage.formattedCountry}</p>
+                                <h4 class="text-xl font-bold">${genderEmoji} ${marriage.partner}</h4>
+                                <p class="text-gray-600 dark:text-gray-300">${marriage.partnerCountry}</p>
                                 <p class="text-sm text-purple-600 dark:text-purple-400">${genderText}</p>
                                 <p class="text-sm text-gray-500 dark:text-gray-400">Marié(e) le ${marriage.date}</p>
                             </div>
                         </div>
                         <div class="flex items-center gap-4">
                             <div class="text-2xl">💕</div>
-                            <button class="btn breakup-btn" style="background: linear-gradient(45deg, #dc3545, #c82333); color: white; padding: 8px 16px; font-size: 14px;">
+                            <button class="btn breakup-btn" style="background: linear-gradient(45deg, #dc3545, #c82333); color: white; padding: 8px 16px; font-size: 14px;" 
+                                    data-partner-name="${marriage.partner}" 
+                                    data-partner-country="${marriage.partnerCountry}" 
+                                    data-partner-gender="${marriage.partnerGender}" 
+                                    data-marriage-index="${index}">
                                 💔 Je te quitte
                             </button>
                         </div>
                     </div>
                 `;
                 
-                // Action "Je te quitte"
+                // Ajouter l'event listener directement au bouton
                 const breakupBtn = marriageCard.querySelector('.breakup-btn');
-                breakupBtn.addEventListener('click', () => {
-                    breakUp(marriage.partner);
+                breakupBtn.addEventListener('click', function(event) {
+                    event.preventDefault();
+                    const partnerName = this.getAttribute('data-partner-name');
+                    const partnerCountry = this.getAttribute('data-partner-country');
+                    const partnerGender = this.getAttribute('data-partner-gender');
+                    const marriageIndex = parseInt(this.getAttribute('data-marriage-index'));
+                    
+                    console.log('🔥 Bouton rupture cliqué:', partnerName);
+                    
+                    // Appeler directement breakUp avec confirmation
+                    confirmAndBreakUp(marriageIndex, partnerName, partnerCountry, partnerGender);
                 });
                 
                 // Ajouter la carte à la liste
@@ -2913,6 +3666,22 @@
             });
         }
 
+        // Fonction de confirmation et rupture
+        function confirmAndBreakUp(marriageIndex, partnerName, partnerCountry, partnerGender) {
+            const genderEmoji = partnerGender === 'male' ? '👨' : '👩';
+            
+            // Message de confirmation clair
+            const confirmMessage = `💔 RUPTURE DÉFINITIVE 💔\n\nÊtes-vous vraiment sûr(e) de vouloir rompre avec :\n${genderEmoji} ${partnerName} de ${partnerCountry} ?\n\n⚠️ Cette action supprimera définitivement ce mariage !\n\n✅ Cliquez sur "OK" pour confirmer la rupture\n❌ Cliquez sur "Annuler" pour garder votre mariage`;
+            
+            if (confirm(confirmMessage)) {
+                console.log('✅ Rupture confirmée par l\'utilisateur');
+                // Appeler breakUp pour effectuer la rupture
+                breakUp(marriageIndex, partnerName, partnerCountry, genderEmoji);
+            } else {
+                console.log('❌ Rupture annulée par l\'utilisateur');
+                showMessage(`💕 Vous avez gardé votre mariage avec ${genderEmoji} ${partnerName} ! L'amour triomphe ! 💕`, 'success');
+            }
+        }
 
         function updateMissions(missionKey) {
             if (!missionKey || missions[missionKey].completed) return;
@@ -3466,7 +4235,7 @@
             messageDiv.style.border = '2px solid #28a745';
             messageDiv.style.boxShadow = '0 8px 25px rgba(40, 167, 69, 0.3)';
             
-            const shareText = `💕 Mariage réussi ! Je me suis marié(e) avec ${genderEmoji} ${firstName} ${lastName} de ${formatCountryName(country)} dans Country Balls: Mariage ! 🌍💍`;
+            const shareText = `💕 Mariage réussi ! Je me suis marié(e) avec ${genderEmoji} ${firstName} ${lastName} de ${country} dans Country Balls: Mariage ! 🌍💍`;
             
             messageDiv.innerHTML = `
                 <div class="flex flex-col gap-3">
@@ -3477,7 +4246,7 @@
                                 💕 ${genderEmoji} ${firstName} ${lastName} a accepté votre demande ! Vous voilà mariés ! 💕
                             </div>
                             <div class="text-sm text-green-700 dark:text-green-300 mt-2">
-                                🌍 ${formatCountryName(country)} • ${new Date().toLocaleDateString('fr-FR')} • +50 XP
+                                🌍 ${country} • ${new Date().toLocaleDateString('fr-FR')} • +50 XP
                             </div>
                         </div>
                         <button class="btn btn-secondary ml-4 py-1 px-3 text-sm" onclick="this.closest('.marriage-success').remove()">
@@ -3502,7 +4271,7 @@
 
         // Système de partage
         function shareMarriage(shareText, firstName, lastName, country, gender) {
-            const flag = getFlags(country);
+            const flag = countries[country] || '🏳️';
             const genderEmoji = gender === 'male' ? '👨' : '👩';
             const fullShareText = `${shareText}\n\n🎮 Jouez aussi : Country Balls Mariage !`;
             
@@ -3526,7 +4295,6 @@
 
         // Dialogue de partage personnalisé
         function showCustomShareDialog(shareText, firstName, lastName, country, gender, flag, genderEmoji) {
-            const formattedCountry = formatCountryName(country);
             const messageContainer = document.getElementById('messageContainer');
             const shareDialog = document.createElement('div');
             shareDialog.className = 'message special share-dialog';
@@ -3542,7 +4310,7 @@
             shareDialog.innerHTML = `
                 <div class="text-center">
                     <div class="text-xl font-bold mb-4">📤 Partager votre mariage</div>
-                    <div class="text-lg mb-4">${flag} ${genderEmoji} ${firstName} ${lastName} - ${formattedCountry}</div>
+                    <div class="text-lg mb-4">${flag} ${genderEmoji} ${firstName} ${lastName}</div>
                     
                     <div class="bg-white bg-opacity-20 p-3 rounded-lg mb-4 text-sm">
                         <div class="font-semibold mb-2">📝 Message à partager :</div>
@@ -3659,16 +4427,12 @@
         ];
 
         // Initialiser le tchat lors d'un mariage réussi
-       function initializeChatWithPartner(firstName, lastName, country, gender) {
-            const nameInfo = getNameInfo(firstName, country);
+        function initializeChatWithPartner(firstName, lastName, country, gender) {
             const partner = {
                 name: `${firstName} ${lastName}`,
-                firstName,
-                lastName,
-                pronunciation: nameInfo.prononciation,
-                country: formatCountryName(country),
+                country: country,
                 gender: gender,
-                flag: getFlags(country),
+                flag: countries[country] || '🏳️',
                 avatar: gender === 'male' ? '👨' : '👩'
             };
             
@@ -3686,11 +4450,9 @@
         }
 
         // Mettre à jour l'en-tête du tchat
-       function updateChatHeader(partner) {
+        function updateChatHeader(partner) {
             document.getElementById('chatAvatar').textContent = partner.flag;
-            document.getElementById('chatPartnerName').innerHTML = `${partner.avatar} ${partner.firstName}
-                <span class="text-sm text-gray-500 dark:text-gray-400 ml-1">${formatPronunciation(partner.pronunciation)}</span>
-                ${partner.lastName}`;
+            document.getElementById('chatPartnerName').textContent = `${partner.avatar} ${partner.name}`;
             document.getElementById('chatPartnerStatus').innerHTML = `
                 <span class="online-indicator" style="width: 8px; height: 8px; background: #28a745; border-radius: 50%; display: inline-block; margin-right: 5px;"></span>
                 ${partner.country}
@@ -3841,7 +4603,7 @@
                 return `Notre mariage est le plus beau jour de ma vie ! 💒✨`;
             }
             if (lowerMessage.includes('pays') || lowerMessage.includes('voyage')) {
-                return `J'aimerais explorer le monde avec toi ! 🌍 ${getFlags(gameState.player.country)} et ${chatState.currentPartner.flag} ensemble !`;
+                return `J'aimerais explorer le monde avec toi ! 🌍 ${countries[gameState.player.country]} et ${chatState.currentPartner.flag} ensemble !`;
             }
             if (lowerMessage.includes('rêve') || lowerMessage.includes('futur')) {
                 return `Mes rêves se réalisent avec toi ! 🌟 Construisons notre avenir ensemble !`;
@@ -4724,22 +5486,21 @@
         // SYSTÈME DE RUPTURE DRAMATIQUE
         // ============================================
 
-        function breakUp(partnerName) {
-            const marriageIndex = marriageHistory.findIndex(m => m.partner === partnerName);
-            if (marriageIndex === -1) {
-                console.error('❌ Partenaire introuvable:', partnerName);
-                showMessage('❌ Erreur : partenaire introuvable !', 'error');
-                return;
-            }
-
-            const marriage = marriageHistory[marriageIndex];
-            const partnerCountry = marriage.partnerCountry;
-            const genderEmoji = marriage.partnerGender === 'male' ? '👨' : '👩';
-
+        function breakUp(marriageIndex, partnerName, partnerCountry, genderEmoji) {
             console.log(`💔 Tentative de rupture avec ${partnerName} (index: ${marriageIndex})`);
             
+            // Vérifier que l'index est valide
+            if (marriageIndex < 0 || marriageIndex >= marriageHistory.length) {
+                console.error('❌ Index de mariage invalide:', marriageIndex);
+                showMessage('❌ Erreur : Impossible de trouver ce mariage !', 'error');
+                return;
+            }
+            
+            // Récupérer les détails du mariage avant la suppression
+            const marriage = marriageHistory[marriageIndex];
+            
             // Confirmation dramatique
-            const confirmMessage = `💔 Êtes-vous vraiment sûr(e) de vouloir quitter ${genderEmoji} ${partnerName} de ${formatCountryName(partnerCountry)} ?\n\n⚠️ Cette action est irréversible et aura des conséquences !`;
+            const confirmMessage = `💔 Êtes-vous vraiment sûr(e) de vouloir quitter ${genderEmoji} ${partnerName} de ${partnerCountry} ?\n\n⚠️ Cette action est irréversible et aura des conséquences !`;
             
             if (!confirm(confirmMessage)) {
                 console.log('💔 Rupture annulée par l\'utilisateur');
@@ -4781,7 +5542,7 @@
             markUnsavedChanges();
             
             // Message de confirmation immédiat
-            showMessage(`💔 Rupture confirmée ! Vous avez quitté ${genderEmoji} ${partnerName} de ${formatCountryName(partnerCountry)}. XP: -${xpLoss}, Stabilité: -50`, 'error');
+            showMessage(`💔 Rupture confirmée ! Vous avez quitté ${genderEmoji} ${partnerName} de ${partnerCountry}. XP: -${xpLoss}, Stabilité: -50`, 'error');
             
             // Effets dramatiques de rupture (après le message de confirmation)
             setTimeout(() => {
@@ -4907,7 +5668,7 @@
                         🚨 RUPTURE DRAMATIQUE ! 🚨
                     </div>
                     <div style="font-size: 20px; margin-bottom: 20px; background: rgba(0,0,0,0.4); padding: 20px; border-radius: 15px;">
-                        💔 Vous avez quitté ${genderEmoji} ${partnerName} de ${formatCountryName(partnerCountry)} !
+                        💔 Vous avez quitté ${genderEmoji} ${partnerName} de ${partnerCountry} !
                     </div>
                     <div style="font-size: 18px; margin: 15px 0; background: rgba(139,0,0,0.6); padding: 15px; border-radius: 10px;">
                         "${randomMessage}"
@@ -4960,69 +5721,6 @@
         }
 
         // ============================================
-        // QUIZ CULTUREL
-        // ============================================
-
-        function startQuiz() {
-            quizIndex = 0;
-            quizScore = 0;
-            document.getElementById('quizScore').textContent = '';
-            showQuizQuestion();
-        }
-
-        function showQuizQuestion() {
-            const q = quizQuestions[quizIndex];
-            const questionEl = document.getElementById('quizQuestion');
-            const optionsEl = document.getElementById('quizOptions');
-            const nextBtn = document.getElementById('nextQuestionBtn');
-
-            questionEl.textContent = q.question;
-            optionsEl.innerHTML = '';
-
-            q.options.forEach((opt, i) => {
-                const btn = document.createElement('button');
-                btn.className = 'btn btn-secondary quiz-option';
-                btn.textContent = opt;
-                btn.onclick = () => selectQuizAnswer(i);
-                optionsEl.appendChild(btn);
-            });
-
-            nextBtn.classList.add('hidden');
-        }
-
-        function selectQuizAnswer(index) {
-            const q = quizQuestions[quizIndex];
-            const optionButtons = document.querySelectorAll('#quizOptions .quiz-option');
-
-            optionButtons.forEach((btn, i) => {
-                btn.disabled = true;
-                if (i === q.correct) btn.classList.add('correct');
-                if (i === index && i !== q.correct) btn.classList.add('incorrect');
-            });
-
-            if (index === q.correct) {
-                quizScore++;
-                gainXP(20);
-            }
-
-            const nextBtn = document.getElementById('nextQuestionBtn');
-            nextBtn.textContent = quizIndex === quizQuestions.length - 1 ? 'Voir le score' : 'Question suivante';
-            nextBtn.classList.remove('hidden');
-        }
-
-        function nextQuizQuestion() {
-            quizIndex++;
-            if (quizIndex < quizQuestions.length) {
-                showQuizQuestion();
-            } else {
-                document.getElementById('quizQuestion').textContent = `Votre score : ${quizScore} / ${quizQuestions.length}`;
-                document.getElementById('quizOptions').innerHTML = '';
-                document.getElementById('nextQuestionBtn').classList.add('hidden');
-                document.getElementById('quizScore').textContent = `XP gagné : ${quizScore * 20}`;
-            }
-        }
-
-        // ============================================
         // INITIALISATION
         // ============================================
 
@@ -5030,7 +5728,6 @@
         window.onload = function() {
             initGame();
             initTheme();
-            setLanguage(currentLang);
             startJealousySystem();
             
             // Initialiser les événements du tchat
