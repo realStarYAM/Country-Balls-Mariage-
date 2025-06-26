@@ -1799,13 +1799,26 @@
                     </div>
                 </div>
 
+                <!-- Quiz culturel intégré -->
+                <div id="culturalQuizSection" class="mb-8 hidden">
+                    <div class="country-card">
+                        <h3 class="text-xl font-bold mb-4 text-center">🧠 Quiz Culturel 🧠</h3>
+                        <div id="quizContainer">
+                            <!-- Le quiz sera chargé ici -->
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Boutons d'action -->
                 <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                    <button id="quizBtn" class="btn btn-warning" onclick="startCulturalQuiz()">
+                    <button id="quizBtn" class="btn btn-warning" onclick="startProfileQuiz()">
                         🧠 Quiz culturel (+bonus XP)
                     </button>
-                    <button id="startGameBtn" class="btn btn-primary text-xl px-8 py-4" onclick="startMainGame()">
+                    <button id="startGameBtn" class="btn btn-primary text-xl px-8 py-4" onclick="startMainGame()" style="display: none;">
                         🚀 Commencer l'aventure !
+                    </button>
+                    <button id="skipQuizBtn" class="btn btn-secondary" onclick="skipQuiz()" style="display: none;">
+                        ⏭️ Passer le quiz
                     </button>
                 </div>
             </div>
@@ -1819,6 +1832,9 @@
                     <div>
                         <h2 class="text-2xl font-bold" id="playerInfo">Joueur</h2>
                         <p class="text-gray-600 dark:text-gray-300" id="playerDetails">Niveau 1</p>
+                        <div id="playerBadges" class="flex flex-wrap gap-2 mt-2">
+                            <!-- Badges seront affichés ici -->
+                        </div>
                     </div>
                     
                     <div class="flex-1 max-w-md">
@@ -2109,7 +2125,8 @@
                 fullName: '',
                 gender: '',
                 level: 1,
-                xp: 0
+                xp: 0,
+                visitedCountries: new Set() // Suivi des pays visités
             },
             currentSection: 'explore',
             theme: 'light',
@@ -2858,6 +2875,12 @@
                 title: '🕊️ Artisan de Paix',
                 description: 'Négocier avec succès 2 traités de paix',
                 reward: 300,
+                completed: false
+            },
+            'explorer': {
+                title: '🗺️ Explorateur',
+                description: 'Visiter tous les pays disponibles',
+                reward: 1000,
                 completed: false
             }
         };
@@ -3876,6 +3899,16 @@
             `;
             
             gainXP(10);
+            
+            // Ajouter le pays visité au suivi pour le badge Explorateur
+            if (!gameState.player.visitedCountries) {
+                gameState.player.visitedCountries = new Set();
+            }
+            gameState.player.visitedCountries.add(primaryCountry);
+            
+            // Vérifier la mission Explorateur
+            updateMissions('explorer');
+            
             showMessage(`🌍 Vous explorez ${displayOrigins} et rencontrez ${firstName} ${lastName} !`, 'special');
         }
 
@@ -6470,6 +6503,316 @@
             showQuizModal(quizQuestions);
         }
 
+        // Quiz culturel intégré à la création de profil
+        function startProfileQuiz() {
+            if (selectedOrigins.length === 0) {
+                showMessage('⚠️ Sélectionnez d\'abord vos origines pour commencer le quiz !', 'error');
+                return;
+            }
+
+            if (quizData.completed) {
+                showMessage('✅ Vous avez déjà terminé le quiz culturel !', 'special');
+                return;
+            }
+
+            // Masquer le bouton quiz et afficher les boutons de contrôle
+            document.getElementById('quizBtn').style.display = 'none';
+            document.getElementById('skipQuizBtn').style.display = 'inline-block';
+            
+            // Afficher la section quiz
+            const quizSection = document.getElementById('culturalQuizSection');
+            quizSection.classList.remove('hidden');
+            
+            // Générer et afficher le quiz dans la section intégrée
+            const quizQuestions = generateCulturalQuestions(selectedOrigins);
+            showIntegratedQuiz(quizQuestions);
+        }
+
+        // Afficher le quiz intégré dans la page
+        function showIntegratedQuiz(questions) {
+            const quizContainer = document.getElementById('quizContainer');
+            
+            // Initialiser les variables du quiz
+            window.profileQuizQuestions = questions;
+            window.profileQuestionIndex = 0;
+            window.profileQuizScore = 0;
+            window.profileQuizCorrectAnswers = 0;
+            
+            quizContainer.innerHTML = `
+                <div class="text-center mb-6">
+                    <div class="text-lg font-semibold text-purple-700 dark:text-purple-300">
+                        Question <span id="profileCurrentQuestion">1</span> sur ${questions.length}
+                    </div>
+                    <div class="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                        Score actuel : <span id="profileQuizScore" class="font-bold text-green-600">0</span> points
+                    </div>
+                </div>
+                
+                <div id="profileQuizQuestionArea" class="mb-6">
+                    <!-- Question sera chargée ici -->
+                </div>
+                
+                <div class="text-center">
+                    <button id="profileQuizNext" class="btn btn-secondary" onclick="skipProfileQuizQuestion()" style="display: none;">
+                        ⏭️ Question suivante
+                    </button>
+                </div>
+            `;
+            
+            loadProfileQuizQuestion();
+        }
+
+        // Charger une question du quiz de profil
+        function loadProfileQuizQuestion() {
+            const questions = window.profileQuizQuestions;
+            const index = window.profileQuestionIndex;
+            
+            if (index >= questions.length) {
+                completeProfileQuiz();
+                return;
+            }
+            
+            const question = questions[index];
+            const questionArea = document.getElementById('profileQuizQuestionArea');
+            const currentQuestionSpan = document.getElementById('profileCurrentQuestion');
+            
+            if (currentQuestionSpan) {
+                currentQuestionSpan.textContent = index + 1;
+            }
+            
+            if (questionArea) {
+                // Déterminer l'origine de la question pour l'affichage
+                const questionOrigin = getQuestionOrigin(question);
+                const flag = countries[questionOrigin] || '🌍';
+                
+                questionArea.innerHTML = `
+                    <div class="bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/30 dark:to-pink-900/30 p-6 rounded-xl border-2 border-purple-200 dark:border-purple-700">
+                        <div class="text-center mb-4">
+                            <div class="text-3xl mb-2">${flag}</div>
+                            <div class="text-sm text-purple-600 dark:text-purple-400 font-semibold">${questionOrigin}</div>
+                        </div>
+                        
+                        <h4 class="text-xl font-bold text-center mb-6 text-gray-800 dark:text-gray-200">${question.question}</h4>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                            ${question.options.map((option, i) => `
+                                <button class="profile-quiz-option text-left p-4 border-2 border-purple-200 dark:border-purple-600 rounded-lg hover:border-purple-500 hover:bg-purple-100 dark:hover:bg-purple-900/40 transition-all duration-200 font-medium text-gray-700 dark:text-gray-300" 
+                                        onclick="selectProfileQuizAnswer(${i}, ${question.correct}, ${question.points})">
+                                    ${option}
+                                </button>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        // Déterminer l'origine d'une question (pour l'affichage du drapeau)
+        function getQuestionOrigin(question) {
+            // Mapper les questions à leurs origines en analysant le contenu
+            const questionText = question.question.toLowerCase();
+            
+            if (questionText.includes('france') || questionText.includes('paris') || questionText.includes('français')) {
+                return 'France';
+            }
+            if (questionText.includes('maroc') || questionText.includes('rabat') || questionText.includes('marocain')) {
+                return 'Morocco';
+            }
+            if (questionText.includes('algérie') || questionText.includes('alger') || questionText.includes('algérien')) {
+                return 'Algeria';
+            }
+            if (questionText.includes('kabyle') || questionText.includes('amazigh')) {
+                return 'Kabylia';
+            }
+            if (questionText.includes('allemagne') || questionText.includes('berlin') || questionText.includes('allemand')) {
+                return 'Germany';
+            }
+            if (questionText.includes('japon') || questionText.includes('tokyo') || questionText.includes('japonais')) {
+                return 'Japan';
+            }
+            if (questionText.includes('italie') || questionText.includes('italien')) {
+                return 'Italy';
+            }
+            if (questionText.includes('espagne') || questionText.includes('espagnol')) {
+                return 'Spain';
+            }
+            if (questionText.includes('liban') || questionText.includes('libanais')) {
+                return 'Lebanon';
+            }
+            if (questionText.includes('turquie') || questionText.includes('turc')) {
+                return 'Turkey';
+            }
+            
+            // Retourner la première origine sélectionnée par défaut
+            return selectedOrigins[0] || 'France';
+        }
+
+        // Sélectionner une réponse dans le quiz de profil
+        function selectProfileQuizAnswer(selectedIndex, correctIndex, points) {
+            const options = document.querySelectorAll('.profile-quiz-option');
+            
+            // Désactiver tous les boutons et colorer les réponses
+            options.forEach((option, index) => {
+                option.disabled = true;
+                option.style.pointerEvents = 'none';
+                option.style.transform = 'none';
+                
+                if (index === correctIndex) {
+                    option.style.background = 'linear-gradient(135deg, #d4edda, #c3e6cb)';
+                    option.style.borderColor = '#28a745';
+                    option.style.color = '#155724';
+                    option.innerHTML += ' <span style="float: right; font-size: 1.2em;">✅</span>';
+                } else if (index === selectedIndex) {
+                    option.style.background = 'linear-gradient(135deg, #f8d7da, #f1b0b7)';
+                    option.style.borderColor = '#dc3545';
+                    option.style.color = '#721c24';
+                    option.innerHTML += ' <span style="float: right; font-size: 1.2em;">❌</span>';
+                } else {
+                    option.style.opacity = '0.6';
+                }
+            });
+            
+            // Mettre à jour le score
+            let feedbackMessage = '';
+            if (selectedIndex === correctIndex) {
+                window.profileQuizScore += points;
+                window.profileQuizCorrectAnswers++;
+                feedbackMessage = '🎉 Bonne réponse ! +' + points + ' points';
+            } else {
+                feedbackMessage = '❌ Mauvaise réponse. La bonne réponse était mise en vert.';
+            }
+            
+            // Mettre à jour l'affichage du score
+            const scoreSpan = document.getElementById('profileQuizScore');
+            if (scoreSpan) {
+                scoreSpan.textContent = window.profileQuizScore;
+            }
+            
+            // Afficher le feedback temporaire
+            showQuizFeedback(feedbackMessage, selectedIndex === correctIndex);
+            
+            // Afficher le bouton "Question suivante"
+            document.getElementById('profileQuizNext').style.display = 'inline-block';
+            
+            // Passer automatiquement à la question suivante après 3 secondes
+            setTimeout(() => {
+                skipProfileQuizQuestion();
+            }, 3000);
+        }
+
+        // Afficher le feedback du quiz
+        function showQuizFeedback(message, isCorrect) {
+            const questionArea = document.getElementById('profileQuizQuestionArea');
+            const feedbackDiv = document.createElement('div');
+            feedbackDiv.className = `quiz-feedback mt-4 p-3 rounded-lg text-center font-semibold ${isCorrect ? 'bg-green-100 text-green-800 border border-green-300' : 'bg-red-100 text-red-800 border border-red-300'}`;
+            feedbackDiv.textContent = message;
+            
+            questionArea.appendChild(feedbackDiv);
+            
+            // Retirer le feedback après 2.5 secondes
+            setTimeout(() => {
+                if (feedbackDiv.parentElement) {
+                    feedbackDiv.remove();
+                }
+            }, 2500);
+        }
+
+        // Passer à la question suivante
+        function skipProfileQuizQuestion() {
+            window.profileQuestionIndex++;
+            document.getElementById('profileQuizNext').style.display = 'none';
+            loadProfileQuizQuestion();
+        }
+
+        // Terminer le quiz de profil
+        function completeProfileQuiz() {
+            const score = window.profileQuizScore;
+            const correctAnswers = window.profileQuizCorrectAnswers;
+            const totalQuestions = window.profileQuizQuestions.length;
+            const percentage = Math.round((correctAnswers / totalQuestions) * 100);
+            
+            let bonusXP = 0;
+            let message = '';
+            let badge = '';
+            
+            if (percentage === 100) {
+                bonusXP = 100;
+                message = '🏆 PARFAIT ! Tu maîtrises parfaitement tes origines culturelles !';
+                badge = '🏆 Tu gagnes le badge Culture+ sur ton profil !';
+                
+                // Ajouter le badge au profil du joueur
+                if (!gameState.player.badges) {
+                    gameState.player.badges = [];
+                }
+                gameState.player.badges.push({
+                    id: 'culture_plus',
+                    name: 'Culture+',
+                    emoji: '🏆',
+                    description: 'Score parfait au quiz culturel'
+                });
+            } else if (percentage >= 80) {
+                bonusXP = 75;
+                message = '🎉 Excellent ! Tu connais très bien tes origines !';
+            } else if (percentage >= 60) {
+                bonusXP = 50;
+                message = '👍 Très bien ! Tu as de bonnes connaissances culturelles !';
+            } else if (percentage >= 40) {
+                bonusXP = 30;
+                message = '👌 Pas mal ! Continue à apprendre sur tes origines !';
+            } else {
+                bonusXP = 15;
+                message = '🤔 Il te reste encore des choses à découvrir sur tes origines !';
+            }
+            
+            const quizContainer = document.getElementById('quizContainer');
+            quizContainer.innerHTML = `
+                <div class="text-center">
+                    <div class="text-6xl mb-6">${percentage === 100 ? '🏆' : percentage >= 60 ? '🎉' : '🤗'}</div>
+                    <h4 class="text-2xl font-bold mb-4 text-purple-700 dark:text-purple-300">Quiz culturel terminé !</h4>
+                    
+                    <div class="bg-gradient-to-r from-purple-100 to-pink-100 dark:from-purple-900/40 dark:to-pink-900/40 p-6 rounded-xl border-2 border-purple-300 dark:border-purple-600 mb-6">
+                        <div class="text-xl font-bold mb-2">${correctAnswers}/${totalQuestions} bonnes réponses !</div>
+                        <div class="text-lg text-purple-600 dark:text-purple-400 mb-4">${message}</div>
+                        <div class="text-xl font-bold text-green-600 dark:text-green-400">🌟 Tu gagnes +${bonusXP} XP bonus !</div>
+                        ${badge ? `<div class="text-lg text-yellow-600 dark:text-yellow-400 mt-3 font-bold">${badge}</div>` : ''}
+                    </div>
+                    
+                    <div class="text-sm text-gray-600 dark:text-gray-400 mb-6">
+                        Le bonus XP sera ajouté à ton profil quand tu commenceras l'aventure !
+                    </div>
+                </div>
+            `;
+            
+            // Marquer le quiz comme terminé
+            quizData.completed = true;
+            quizData.score = percentage;
+            quizData.bonusXP = bonusXP;
+            quizData.correctAnswers = correctAnswers;
+            quizData.totalQuestions = totalQuestions;
+            
+            // Afficher le bouton "Commencer l'aventure" et masquer les autres
+            document.getElementById('quizBtn').style.display = 'none';
+            document.getElementById('skipQuizBtn').style.display = 'none';
+            document.getElementById('startGameBtn').style.display = 'inline-block';
+            
+            showMessage(`🧠 Quiz culturel terminé ! Score : ${correctAnswers}/${totalQuestions} (+${bonusXP} XP)`, 'success');
+        }
+
+        // Passer le quiz (option pour ceux qui ne veulent pas le faire)
+        function skipQuiz() {
+            const confirmSkip = confirm('❓ Êtes-vous sûr de vouloir passer le quiz culturel ?\n\nVous manquerez des points XP bonus et la chance de gagner le badge Culture+ !');
+            
+            if (confirmSkip) {
+                // Masquer la section quiz
+                document.getElementById('culturalQuizSection').classList.add('hidden');
+                document.getElementById('quizBtn').style.display = 'none';
+                document.getElementById('skipQuizBtn').style.display = 'none';
+                document.getElementById('startGameBtn').style.display = 'inline-block';
+                
+                showMessage('⏭️ Quiz culturel passé. Vous pouvez maintenant commencer l\'aventure !', 'special');
+            }
+        }
+
         // Générer des questions culturelles selon les origines
         function generateCulturalQuestions(origins) {
             const allQuestions = {
@@ -6485,6 +6828,30 @@
                         options: ['Tour de Pise', 'Tour Eiffel', 'Big Ben', 'Statue de la Liberté'],
                         correct: 1,
                         points: 10
+                    },
+                    {
+                        question: 'Quelle spécialité culinaire française est connue mondialement ?',
+                        options: ['Paella', 'Croissant', 'Sushi', 'Hamburger'],
+                        correct: 1,
+                        points: 15
+                    },
+                    {
+                        question: 'Combien de régions administratives compte la France métropolitaine ?',
+                        options: ['12', '13', '14', '15'],
+                        correct: 1,
+                        points: 20
+                    },
+                    {
+                        question: 'Quel président français a dit "Vive le Québec libre !" ?',
+                        options: ['François Mitterrand', 'Charles de Gaulle', 'Jacques Chirac', 'Nicolas Sarkozy'],
+                        correct: 1,
+                        points: 25
+                    },
+                    {
+                        question: 'Dans quelle ville se trouve le château de Versailles ?',
+                        options: ['Paris', 'Versailles', 'Fontainebleau', 'Compiègne'],
+                        correct: 1,
+                        points: 15
                     }
                 ],
                 'Morocco': [
@@ -6499,6 +6866,30 @@
                         options: ['Paella', 'Couscous', 'Pizza', 'Sushi'],
                         correct: 1,
                         points: 10
+                    },
+                    {
+                        question: 'Comment dit-on "merci" en arabe marocain (darija) ?',
+                        options: ['Shukran', 'Baraka Allah fik', 'Marhaba', 'Maasalama'],
+                        correct: 0,
+                        points: 20
+                    },
+                    {
+                        question: 'Quelle couleur domine le drapeau marocain ?',
+                        options: ['Vert', 'Rouge', 'Bleu', 'Jaune'],
+                        correct: 1,
+                        points: 15
+                    },
+                    {
+                        question: 'Quel océan borde le Maroc à l\'ouest ?',
+                        options: ['Océan Indien', 'Océan Atlantique', 'Océan Pacifique', 'Mer Méditerranée'],
+                        correct: 1,
+                        points: 15
+                    },
+                    {
+                        question: 'Dans quelle ville marocaine trouve-t-on la Koutoubia ?',
+                        options: ['Rabat', 'Casablanca', 'Marrakech', 'Fès'],
+                        correct: 2,
+                        points: 25
                     }
                 ],
                 'Algeria': [
@@ -6507,12 +6898,106 @@
                         options: ['Oran', 'Constantine', 'Alger', 'Annaba'],
                         correct: 2,
                         points: 10
+                    },
+                    {
+                        question: 'Quel est le plus grand désert d\'Algérie ?',
+                        options: ['Sahara', 'Gobi', 'Kalahari', 'Atacama'],
+                        correct: 0,
+                        points: 15
+                    },
+                    {
+                        question: 'En quelle année l\'Algérie a-t-elle obtenu son indépendance ?',
+                        options: ['1960', '1962', '1965', '1958'],
+                        correct: 1,
+                        points: 20
+                    },
+                    {
+                        question: 'Quelle est la monnaie algérienne ?',
+                        options: ['Dirham', 'Dinar', 'Franc', 'Euro'],
+                        correct: 1,
+                        points: 15
+                    },
+                    {
+                        question: 'Quel port algérien est le plus important du pays ?',
+                        options: ['Annaba', 'Oran', 'Alger', 'Bejaia'],
+                        correct: 2,
+                        points: 20
                     }
                 ],
                 'Kabylia': [
                     {
                         question: 'Comment dit-on "bonjour" en kabyle ?',
                         options: ['Salam', 'Azul', 'Bonjour', 'Hello'],
+                        correct: 1,
+                        points: 15
+                    },
+                    {
+                        question: 'Comment dit-on "merci" en kabyle ?',
+                        options: ['Tanmirt', 'Shukran', 'Merci', 'Gracias'],
+                        correct: 0,
+                        points: 20
+                    },
+                    {
+                        question: 'Quel est le nom de l\'alphabet kabyle traditionnel ?',
+                        options: ['Tifinagh', 'Arabe', 'Latin', 'Cyrillique'],
+                        correct: 0,
+                        points: 25
+                    },
+                    {
+                        question: 'Dans quelle région d\'Algérie se trouve principalement la Kabylie ?',
+                        options: ['Sud', 'Est', 'Nord', 'Ouest'],
+                        correct: 2,
+                        points: 15
+                    },
+                    {
+                        question: 'Quel chanteur kabyle célèbre a popularisé la musique berbère ?',
+                        options: ['Idir', 'Khaled', 'Cheb Mami', 'Faudel'],
+                        correct: 0,
+                        points: 25
+                    }
+                ],
+                'Tunisia': [
+                    {
+                        question: 'Quelle est la capitale de la Tunisie ?',
+                        options: ['Sfax', 'Sousse', 'Tunis', 'Kairouan'],
+                        correct: 2,
+                        points: 10
+                    },
+                    {
+                        question: 'Quel site archéologique tunisien est classé au patrimoine mondial ?',
+                        options: ['Carthage', 'Dougga', 'Kairouan', 'Tous les trois'],
+                        correct: 3,
+                        points: 25
+                    },
+                    {
+                        question: 'Quelle spécialité tunisienne est un sandwich populaire ?',
+                        options: ['Tajine', 'Fricassé', 'Couscous', 'Méchoui'],
+                        correct: 1,
+                        points: 20
+                    }
+                ],
+                'Lebanon': [
+                    {
+                        question: 'Quelle est la capitale du Liban ?',
+                        options: ['Tripoli', 'Beyrouth', 'Sidon', 'Baalbek'],
+                        correct: 1,
+                        points: 10
+                    },
+                    {
+                        question: 'Quel plat libanais est fait de pois chiches écrasés ?',
+                        options: ['Taboulé', 'Houmous', 'Fattoush', 'Kibbeh'],
+                        correct: 1,
+                        points: 15
+                    },
+                    {
+                        question: 'Combien de langues officielles a le Liban ?',
+                        options: ['1', '2', '3', '4'],
+                        correct: 1,
+                        points: 20
+                    },
+                    {
+                        question: 'Quel est l\'arbre symbolique du Liban ?',
+                        options: ['Olivier', 'Cèdre', 'Chêne', 'Pin'],
                         correct: 1,
                         points: 15
                     }
@@ -6523,6 +7008,114 @@
                         options: ['Munich', 'Berlin', 'Hambourg', 'Cologne'],
                         correct: 1,
                         points: 10
+                    },
+                    {
+                        question: 'En quelle année le mur de Berlin est-il tombé ?',
+                        options: ['1987', '1989', '1991', '1985'],
+                        correct: 1,
+                        points: 20
+                    },
+                    {
+                        question: 'Quelle fête traditionnelle allemande célèbre la bière ?',
+                        options: ['Oktoberfest', 'Karneval', 'Weihnachten', 'Ostern'],
+                        correct: 0,
+                        points: 15
+                    },
+                    {
+                        question: 'Combien d\'États fédérés (Länder) compte l\'Allemagne ?',
+                        options: ['14', '15', '16', '17'],
+                        correct: 2,
+                        points: 25
+                    },
+                    {
+                        question: 'Quel compositeur allemand a écrit la 9e symphonie ?',
+                        options: ['Mozart', 'Bach', 'Beethoven', 'Wagner'],
+                        correct: 2,
+                        points: 20
+                    }
+                ],
+                'Turkey': [
+                    {
+                        question: 'Quelle est la capitale de la Turquie ?',
+                        options: ['Istanbul', 'Ankara', 'Izmir', 'Antalya'],
+                        correct: 1,
+                        points: 10
+                    },
+                    {
+                        question: 'Sur combien de continents s\'étend la Turquie ?',
+                        options: ['1', '2', '3', '4'],
+                        correct: 1,
+                        points: 20
+                    },
+                    {
+                        question: 'Quel détroit sépare l\'Europe de l\'Asie en Turquie ?',
+                        options: ['Dardanelles', 'Bosphore', 'Gibraltar', 'Manche'],
+                        correct: 1,
+                        points: 25
+                    },
+                    {
+                        question: 'Quel monument célèbre d\'Istanbul était à la fois église et mosquée ?',
+                        options: ['Mosquée Bleue', 'Sainte-Sophie', 'Topkapi', 'Galata'],
+                        correct: 1,
+                        points: 20
+                    }
+                ],
+                'Italy': [
+                    {
+                        question: 'Quelle est la capitale de l\'Italie ?',
+                        options: ['Milan', 'Naples', 'Rome', 'Florence'],
+                        correct: 2,
+                        points: 10
+                    },
+                    {
+                        question: 'Dans quelle ville italienne peut-on voir la tour de Pise ?',
+                        options: ['Pise', 'Florence', 'Bologne', 'Vérone'],
+                        correct: 0,
+                        points: 15
+                    },
+                    {
+                        question: 'Quel est le volcan actif le plus célèbre d\'Italie ?',
+                        options: ['Stromboli', 'Vésuve', 'Etna', 'Vulcano'],
+                        correct: 2,
+                        points: 20
+                    },
+                    {
+                        question: 'Quelle forme géographique caractérise l\'Italie ?',
+                        options: ['Botte', 'Étoile', 'Croissant', 'Triangle'],
+                        correct: 0,
+                        points: 15
+                    },
+                    {
+                        question: 'Quel artiste a peint la Joconde ?',
+                        options: ['Michel-Ange', 'Raphaël', 'Léonard de Vinci', 'Botticelli'],
+                        correct: 2,
+                        points: 20
+                    }
+                ],
+                'Spain': [
+                    {
+                        question: 'Quelle est la capitale de l\'Espagne ?',
+                        options: ['Barcelone', 'Madrid', 'Séville', 'Valence'],
+                        correct: 1,
+                        points: 10
+                    },
+                    {
+                        question: 'Quel monument célèbre de Barcelone n\'est toujours pas terminé ?',
+                        options: ['Park Güell', 'Sagrada Familia', 'Casa Batlló', 'Casa Milà'],
+                        correct: 1,
+                        points: 20
+                    },
+                    {
+                        question: 'Quelle danse traditionnelle espagnole est originaire d\'Andalousie ?',
+                        options: ['Tango', 'Flamenco', 'Salsa', 'Paso doble'],
+                        correct: 1,
+                        points: 15
+                    },
+                    {
+                        question: 'Combien de langues officielles y a-t-il en Espagne ?',
+                        options: ['2', '3', '4', '5'],
+                        correct: 2,
+                        points: 25
                     }
                 ],
                 'Japan': [
@@ -6531,6 +7124,238 @@
                         options: ['Osaka', 'Kyoto', 'Tokyo', 'Hiroshima'],
                         correct: 2,
                         points: 10
+                    },
+                    {
+                        question: 'Comment s\'appelle l\'art japonais du pliage de papier ?',
+                        options: ['Ikebana', 'Origami', 'Bonsaï', 'Sumi-e'],
+                        correct: 1,
+                        points: 15
+                    },
+                    {
+                        question: 'Quel est le mont le plus haut du Japon ?',
+                        options: ['Mont Aso', 'Mont Fuji', 'Mont Hakusan', 'Mont Ontake'],
+                        correct: 1,
+                        points: 15
+                    },
+                    {
+                        question: 'Comment dit-on "merci" en japonais ?',
+                        options: ['Konnichiwa', 'Sayonara', 'Arigato', 'Sumimasen'],
+                        correct: 2,
+                        points: 20
+                    },
+                    {
+                        question: 'Quel sport traditionnel japonais met en scène des lutteurs ?',
+                        options: ['Karaté', 'Judo', 'Sumo', 'Kendo'],
+                        correct: 2,
+                        points: 20
+                    }
+                ],
+                'United States': [
+                    {
+                        question: 'Quelle est la capitale des États-Unis ?',
+                        options: ['New York', 'Los Angeles', 'Washington D.C.', 'Chicago'],
+                        correct: 2,
+                        points: 10
+                    },
+                    {
+                        question: 'Combien d\'États comptent les États-Unis ?',
+                        options: ['48', '49', '50', '51'],
+                        correct: 2,
+                        points: 15
+                    },
+                    {
+                        question: 'Dans quel État se trouve la Statue de la Liberté ?',
+                        options: ['Californie', 'Texas', 'New York', 'Floride'],
+                        correct: 2,
+                        points: 15
+                    },
+                    {
+                        question: 'Quel fleuve traverse le Grand Canyon ?',
+                        options: ['Mississippi', 'Colorado', 'Missouri', 'Hudson'],
+                        correct: 1,
+                        points: 25
+                    }
+                ],
+                'United Kingdom': [
+                    {
+                        question: 'Quelle est la capitale du Royaume-Uni ?',
+                        options: ['Manchester', 'Londres', 'Birmingham', 'Liverpool'],
+                        correct: 1,
+                        points: 10
+                    },
+                    {
+                        question: 'Combien de pays forment le Royaume-Uni ?',
+                        options: ['3', '4', '5', '6'],
+                        correct: 1,
+                        points: 20
+                    },
+                    {
+                        question: 'Quel célèbre monument londonien abrite Big Ben ?',
+                        options: ['Buckingham Palace', 'Tower Bridge', 'Palais de Westminster', 'London Eye'],
+                        correct: 2,
+                        points: 20
+                    },
+                    {
+                        question: 'À quelle heure les Britanniques prennent-ils traditionnellement le thé ?',
+                        options: ['15h', '16h', '17h', '18h'],
+                        correct: 2,
+                        points: 15
+                    }
+                ],
+                'Brazil': [
+                    {
+                        question: 'Quelle est la capitale du Brésil ?',
+                        options: ['São Paulo', 'Rio de Janeiro', 'Brasília', 'Salvador'],
+                        correct: 2,
+                        points: 10
+                    },
+                    {
+                        question: 'Quelle langue officielle parle-t-on au Brésil ?',
+                        options: ['Espagnol', 'Portugais', 'Anglais', 'Français'],
+                        correct: 1,
+                        points: 15
+                    },
+                    {
+                        question: 'Quel fleuve traverse le Brésil d\'ouest en est ?',
+                        options: ['Nil', 'Mississippi', 'Amazone', 'Congo'],
+                        correct: 2,
+                        points: 20
+                    },
+                    {
+                        question: 'Quelle danse brésilienne est associée au carnaval de Rio ?',
+                        options: ['Samba', 'Tango', 'Salsa', 'Mambo'],
+                        correct: 0,
+                        points: 15
+                    }
+                ],
+                'Mexico': [
+                    {
+                        question: 'Quelle est la capitale du Mexique ?',
+                        options: ['Guadalajara', 'Monterrey', 'Mexico', 'Tijuana'],
+                        correct: 2,
+                        points: 10
+                    },
+                    {
+                        question: 'Quelle civilisation ancienne était présente au Mexique ?',
+                        options: ['Incas', 'Mayas', 'Aztèques', 'Mayas et Aztèques'],
+                        correct: 3,
+                        points: 20
+                    },
+                    {
+                        question: 'Quel jour férié mexicain honore les morts ?',
+                        options: ['Cinco de Mayo', 'Día de los Muertos', 'Día de la Independencia', 'Navidad'],
+                        correct: 1,
+                        points: 20
+                    },
+                    {
+                        question: 'Quelle boisson alcoolisée est traditionnelle au Mexique ?',
+                        options: ['Rhum', 'Whisky', 'Tequila', 'Vodka'],
+                        correct: 2,
+                        points: 15
+                    }
+                ],
+                'Canada': [
+                    {
+                        question: 'Quelle est la capitale du Canada ?',
+                        options: ['Toronto', 'Montréal', 'Vancouver', 'Ottawa'],
+                        correct: 3,
+                        points: 10
+                    },
+                    {
+                        question: 'Combien de langues officielles a le Canada ?',
+                        options: ['1', '2', '3', '4'],
+                        correct: 1,
+                        points: 15
+                    },
+                    {
+                        question: 'Quel symbole apparaît sur le drapeau canadien ?',
+                        options: ['Aigle', 'Feuille d\'érable', 'Castor', 'Ours'],
+                        correct: 1,
+                        points: 15
+                    },
+                    {
+                        question: 'Quelle province canadienne est majoritairement francophone ?',
+                        options: ['Ontario', 'Québec', 'Nouveau-Brunswick', 'Manitoba'],
+                        correct: 1,
+                        points: 20
+                    }
+                ],
+                'China': [
+                    {
+                        question: 'Quelle est la capitale de la Chine ?',
+                        options: ['Shanghai', 'Hong Kong', 'Pékin', 'Canton'],
+                        correct: 2,
+                        points: 10
+                    },
+                    {
+                        question: 'Comment s\'appelle la grande muraille chinoise en chinois ?',
+                        options: ['Chang Cheng', 'Da Qiang', 'Wei Qiang', 'Gao Qiang'],
+                        correct: 0,
+                        points: 25
+                    },
+                    {
+                        question: 'Combien d\'animaux compte le zodiaque chinois ?',
+                        options: ['10', '12', '14', '16'],
+                        correct: 1,
+                        points: 15
+                    },
+                    {
+                        question: 'Quel art martial est originaire de Chine ?',
+                        options: ['Karaté', 'Taekwondo', 'Kung Fu', 'Judo'],
+                        correct: 2,
+                        points: 20
+                    }
+                ],
+                'India': [
+                    {
+                        question: 'Quelle est la capitale de l\'Inde ?',
+                        options: ['Mumbai', 'Calcutta', 'New Delhi', 'Chennai'],
+                        correct: 2,
+                        points: 10
+                    },
+                    {
+                        question: 'Quel monument emblématique se trouve à Agra ?',
+                        options: ['Temple d\'or', 'Taj Mahal', 'Porte de l\'Inde', 'Fort Rouge'],
+                        correct: 1,
+                        points: 15
+                    },
+                    {
+                        question: 'Combien de langues officielles reconnait l\'Inde ?',
+                        options: ['2', '12', '22', '32'],
+                        correct: 2,
+                        points: 25
+                    },
+                    {
+                        question: 'Quelle religion est majoritaire en Inde ?',
+                        options: ['Bouddhisme', 'Islam', 'Hindouisme', 'Christianisme'],
+                        correct: 2,
+                        points: 15
+                    }
+                ],
+                'Russia': [
+                    {
+                        question: 'Quelle est la capitale de la Russie ?',
+                        options: ['Saint-Pétersbourg', 'Moscou', 'Volgograd', 'Kazan'],
+                        correct: 1,
+                        points: 10
+                    },
+                    {
+                        question: 'Sur combien de fuseaux horaires s\'étend la Russie ?',
+                        options: ['9', '11', '12', '15'],
+                        correct: 1,
+                        points: 25
+                    },
+                    {
+                        question: 'Comment s\'appelle le célèbre théâtre de Moscou ?',
+                        options: ['Mariinsky', 'Bolchoï', 'Vakhtangov', 'Maly'],
+                        correct: 1,
+                        points: 20
+                    },
+                    {
+                        question: 'Quel lac russe est le plus profond du monde ?',
+                        options: ['Lac Ladoga', 'Lac Baïkal', 'Lac Onega', 'Lac Peipous'],
+                        correct: 1,
+                        points: 20
                     }
                 ]
             };
