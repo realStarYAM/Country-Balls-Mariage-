@@ -1830,6 +1830,42 @@
             return parseOrigins(country).map(c => countries[c] || '🏳️').join('-');
         }
 
+        // Démonymes pour les prononciations
+        const countryDemonyms = {
+            'Lebanon': 'libanais',
+            'Morocco': 'marocain'
+        };
+
+        // Prononciations connues de certains prénoms
+        const namePronunciations = {
+            'Layla': {
+                'Lebanon': 'Lay-la',
+                'Morocco': 'Laï-la'
+            }
+        };
+
+        function formatPronunciation(pronObj) {
+            return Object.entries(pronObj)
+                .map(([lang, pron]) => `${lang}: ${pron}`)
+                .join(' • ');
+        }
+
+        function getNameInfo(firstName, country) {
+            const origins = parseOrigins(country);
+            const pron = {};
+            const mapping = namePronunciations[firstName];
+            origins.forEach(o => {
+                if (mapping && mapping[o] && countryDemonyms[o]) {
+                    pron[countryDemonyms[o]] = mapping[o];
+                }
+            });
+            return {
+                prenom: firstName,
+                origine: formatCountryName(country),
+                prononciation: pron
+            };
+        }
+
         // Prénoms par pays
         const namesByCountry = {
             'France': {
@@ -2624,6 +2660,7 @@
             const gender = gameState.player.gender === 'male' ? 'female' : 'male';
             const firstName = names[gender][Math.floor(Math.random() * names[gender].length)];
             const lastName = generateLastName(baseCountry);
+            const nameInfo = getNameInfo(firstName, randomCountry);
             
             const resultDiv = document.getElementById('exploreResult');
             resultDiv.classList.remove('hidden');
@@ -2636,7 +2673,10 @@
                     <div class="flag-heart w-24 h-24 mx-auto mb-4 flex items-center justify-center">
                         <span class="text-4xl">${countryFlag}</span>
                     </div>
-                    <h4 class="text-2xl font-bold mb-2">${genderEmoji} ${firstName} ${lastName}</h4>
+                    <h4 class="text-2xl font-bold mb-2">${genderEmoji} ${firstName}
+                        <span class="text-sm text-gray-500 dark:text-gray-400 ml-1">
+                            ${formatPronunciation(nameInfo.prononciation)}
+                        </span> ${lastName}</h4>
                     <p class="text-lg mb-2">${formatCountryName(randomCountry)}</p>
                     <p class="text-sm text-purple-600 dark:text-purple-400 mb-4">${genderText}</p>
             <p class="text-gray-600 dark:text-gray-300 mb-6">${generateDescription(baseCountry, firstName, gender)}</p>
@@ -2737,11 +2777,15 @@
             markUnsavedChanges();
         }
 
-        function addToMarriageHistory(firstName, lastName, country, gender) {
+       function addToMarriageHistory(firstName, lastName, country, gender) {
+            const nameInfo = getNameInfo(firstName, country);
             const marriage = {
                 partner: `${firstName} ${lastName}`,
+                partnerFirstName: firstName,
+                partnerLastName: lastName,
                 partnerCountry: country,
                 partnerGender: gender,
+                pronunciation: nameInfo.prononciation,
                 date: new Date().toLocaleDateString('fr-FR'),
                 flag: getFlags(country),
                 formattedCountry: formatCountryName(country)
@@ -2778,12 +2822,15 @@
                 marriageCard.className = 'country-card';
                 marriageCard.id = `marriage-${index}`;
                 
+                const pron = formatPronunciation(marriage.pronunciation || {});
                 marriageCard.innerHTML = `
                     <div class="flex items-center justify-between">
                         <div class="flex items-center gap-4">
                             <div class="text-4xl">${marriage.flag}</div>
                             <div>
-                                <h4 class="text-xl font-bold">${genderEmoji} ${marriage.partner}</h4>
+                                <h4 class="text-xl font-bold">${genderEmoji} ${marriage.partnerFirstName}
+                                    <span class="text-sm text-gray-500 dark:text-gray-400 ml-1">${pron}</span>
+                                    ${marriage.partnerLastName}</h4>
                                 <p class="text-gray-600 dark:text-gray-300">${marriage.formattedCountry}</p>
                                 <p class="text-sm text-purple-600 dark:text-purple-400">${genderText}</p>
                                 <p class="text-sm text-gray-500 dark:text-gray-400">Marié(e) le ${marriage.date}</p>
@@ -3555,9 +3602,13 @@
         ];
 
         // Initialiser le tchat lors d'un mariage réussi
-        function initializeChatWithPartner(firstName, lastName, country, gender) {
+       function initializeChatWithPartner(firstName, lastName, country, gender) {
+            const nameInfo = getNameInfo(firstName, country);
             const partner = {
                 name: `${firstName} ${lastName}`,
+                firstName,
+                lastName,
+                pronunciation: nameInfo.prononciation,
                 country: formatCountryName(country),
                 gender: gender,
                 flag: getFlags(country),
@@ -3578,9 +3629,11 @@
         }
 
         // Mettre à jour l'en-tête du tchat
-        function updateChatHeader(partner) {
+       function updateChatHeader(partner) {
             document.getElementById('chatAvatar').textContent = partner.flag;
-            document.getElementById('chatPartnerName').textContent = `${partner.avatar} ${partner.name}`;
+            document.getElementById('chatPartnerName').innerHTML = `${partner.avatar} ${partner.firstName}
+                <span class="text-sm text-gray-500 dark:text-gray-400 ml-1">${formatPronunciation(partner.pronunciation)}</span>
+                ${partner.lastName}`;
             document.getElementById('chatPartnerStatus').innerHTML = `
                 <span class="online-indicator" style="width: 8px; height: 8px; background: #28a745; border-radius: 50%; display: inline-block; margin-right: 5px;"></span>
                 ${partner.country}
