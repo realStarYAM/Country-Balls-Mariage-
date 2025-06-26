@@ -1286,8 +1286,9 @@
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <div>
                         <label class="block text-lg font-semibold mb-3">👤 Prénom :</label>
-                        <input type="text" id="firstName" placeholder="Votre prénom..." 
-                               class="w-full p-4 border-2 border-purple-300 rounded-lg text-base focus:border-purple-500 focus:outline-none transition-colors duration-300 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                        <input type="text" id="firstName" placeholder="Votre prénom..."
+                               class="w-full p-4 border-2 border-purple-300 rounded-lg text-base focus:border-purple-500 focus:outline-none transition-colors duration-300 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                               oninput="updatePronunciationZone()">
                     </div>
                     
                     <div>
@@ -1418,7 +1419,19 @@
                         <option value="Angola">🇦🇴 Angola</option>
                     </select>
                 </div>
-                
+
+                <div class="mt-6">
+                    <label class="block text-lg font-semibold mb-3">🗣️ Origines pour la prononciation :</label>
+                    <select id="pronunciationOrigins" multiple
+                            class="w-full p-4 border-2 border-purple-300 rounded-lg text-base focus:border-purple-500 focus:outline-none transition-colors duration-300 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                            onchange="updatePronunciationZone()">
+                        <option value="Kabylia">ⵣ Kabyle</option>
+                        <option value="Morocco">🇲🇦 Maroc</option>
+                        <option value="Lebanon">🇱🇧 Liban</option>
+                    </select>
+                    <div id="pronunciationZone" class="text-sm text-purple-600 dark:text-purple-400 mt-2"></div>
+                </div>
+
                 <button id="startGameBtn" class="btn btn-primary mt-8 text-xl px-8 py-4" onclick="startMainGame()">
                     🚀 Commencer l'aventure !
                 </button>
@@ -3123,6 +3136,28 @@
             const selectedPronunciationLanguage = document.getElementById('pronunciationSelect').value;
             gameState.pronunciationLanguage = selectedPronunciationLanguage;
             markUnsavedChanges();
+        }
+
+        // Met à jour l'affichage dynamique des prononciations selon les origines sélectionnées
+        function updatePronunciationZone() {
+            const select = document.getElementById('pronunciationOrigins');
+            const zone = document.getElementById('pronunciationZone');
+            const name = document.getElementById('firstName').value.trim();
+
+            if (!select || !zone) return;
+
+            const origins = Array.from(select.selectedOptions).map(o => o.value);
+            if (origins.length === 0 || !name) {
+                zone.textContent = '';
+                return;
+            }
+
+            const parts = origins.map(origin => {
+                const pron = adaptPronunciationToLanguage(name, origin) || 'N/A';
+                return `${origin} : [${pron}]`;
+            });
+
+            zone.innerHTML = `<strong>Prononciation :</strong> ${parts.join(' • ')}`;
         }
 
         // Fonction pour mettre à jour l'interface selon la langue
