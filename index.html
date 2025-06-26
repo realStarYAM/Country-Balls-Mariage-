@@ -1669,11 +1669,12 @@
                     </div>
                 </div>
 
-                <!-- Personnalisation visuelle -->
+                <!-- Personnalisation visuelle avancée -->
                 <div class="mb-8">
-                    <label class="block text-lg font-semibold mb-3">🎨 Style de votre Country Ball :</label>
-                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                        <!-- Couleur de fond -->
+                    <label class="block text-lg font-semibold mb-3">🎨 Personnalisation Avancée de votre Country Ball :</label>
+                    
+                    <!-- Première rangée : Couleur et Expression -->
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
                         <div>
                             <label class="block text-sm font-medium mb-2">🌈 Couleur :</label>
                             <select id="ballColor" onchange="updateCharacterPreview()" 
@@ -1686,44 +1687,12 @@
                                 <option value="#4CAF50">💚 Vert</option>
                                 <option value="#FF9800">🧡 Orange</option>
                                 <option value="#9C27B0">💜 Violet foncé</option>
+                                <option value="linear-gradient(45deg, #FF6B9D, #5D5CDE)">🌈 Dégradé rose-violet</option>
+                                <option value="linear-gradient(45deg, #4ECDC4, #44A08D)">🌊 Dégradé océan</option>
+                                <option value="linear-gradient(45deg, #FFD93D, #FF9800)">🌅 Dégradé coucher de soleil</option>
                             </select>
                         </div>
                         
-                        <!-- Accessoire -->
-                        <div>
-                            <label class="block text-sm font-medium mb-2">👒 Accessoire :</label>
-                            <select id="ballAccessory" onchange="updateCharacterPreview()" 
-                                    class="w-full p-2 border-2 border-purple-300 rounded-lg text-sm focus:border-purple-500 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:text-white">
-                                <option value="">Aucun</option>
-                                <option value="🧢">🧢 Casquette</option>
-                                <option value="👑">👑 Couronne</option>
-                                <option value="🎩">🎩 Haut-de-forme</option>
-                                <option value="👒">👒 Chapeau</option>
-                                <option value="🧣">🧣 Écharpe</option>
-                                <option value="👓">👓 Lunettes</option>
-                                <option value="😎">😎 Lunettes de soleil</option>
-                                <option value="🎀">🎀 Nœud</option>
-                            </select>
-                        </div>
-                        
-                        <!-- Style spécial selon origine -->
-                        <div>
-                            <label class="block text-sm font-medium mb-2">🏺 Style culturel :</label>
-                            <select id="culturalStyle" onchange="updateCharacterPreview()" 
-                                    class="w-full p-2 border-2 border-purple-300 rounded-lg text-sm focus:border-purple-500 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:text-white">
-                                <option value="">Standard</option>
-                                <option value="🧕">🧕 Hijab (style arabe)</option>
-                                <option value="ⵣ">ⵣ Tatouage kabyle</option>
-                                <option value="🥖">🥖 Baguette française</option>
-                                <option value="🍕">🍕 Style italien</option>
-                                <option value="🌮">🌮 Style mexicain</option>
-                                <option value="🍁">🍁 Style canadien</option>
-                                <option value="🗾">🗾 Style japonais</option>
-                                <option value="🏰">🏰 Style européen</option>
-                            </select>
-                        </div>
-                        
-                        <!-- Expression -->
                         <div>
                             <label class="block text-sm font-medium mb-2">😊 Expression :</label>
                             <select id="ballExpression" onchange="updateCharacterPreview()" 
@@ -1736,6 +1705,104 @@
                                 <option value="🥰">🥰 Adorable</option>
                                 <option value="😋">😋 Gourmand</option>
                                 <option value="🤩">🤩 Émerveillé</option>
+                                <option value="😏">😏 Malicieux</option>
+                                <option value="🤔">🤔 Pensif</option>
+                                <option value="😇">😇 Angélique</option>
+                                <option value="🥳">🥳 Fête</option>
+                            </select>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium mb-2">🎬 Animation :</label>
+                            <select id="ballAnimation" onchange="updateCharacterPreview()" 
+                                    class="w-full p-2 border-2 border-purple-300 rounded-lg text-sm focus:border-purple-500 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                <option value="">Statique</option>
+                                <option value="bounce">🦘 Rebond</option>
+                                <option value="blink">👁️ Clignement</option>
+                                <option value="rotate">🌀 Rotation</option>
+                                <option value="pulse">💓 Pulsation</option>
+                                <option value="shake">⚡ Tremblement</option>
+                                <option value="float">🎈 Flottement</option>
+                                <option value="wiggle">🐍 Ondulation</option>
+                                <option value="glow">✨ Lueur</option>
+                            </select>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium mb-2">🖼️ Fond du portrait :</label>
+                            <select id="portraitBackground" onchange="updateCharacterPreview()" 
+                                    class="w-full p-2 border-2 border-purple-300 rounded-lg text-sm focus:border-purple-500 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                <option value="default">🎨 Dégradé par défaut</option>
+                                <option value="mountain">🏔️ Montagne</option>
+                                <option value="beach">🏖️ Plage</option>
+                                <option value="city">🏙️ Ville</option>
+                                <option value="flags">🏳️ Drapeaux mixtes</option>
+                                <option value="desert">🏜️ Désert</option>
+                                <option value="forest">🌲 Forêt</option>
+                                <option value="space">🌌 Espace</option>
+                                <option value="sunset">🌅 Coucher de soleil</option>
+                                <option value="hearts">💕 Cœurs</option>
+                                <option value="stars">⭐ Étoiles</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <!-- Deuxième rangée : Accessoires spécialisés -->
+                    <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium mb-2">👒 Accessoire principal :</label>
+                            <select id="ballAccessory" onchange="updateCharacterPreview()" 
+                                    class="w-full p-2 border-2 border-purple-300 rounded-lg text-sm focus:border-purple-500 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                <option value="">Aucun</option>
+                                <option value="🧢">🧢 Casquette</option>
+                                <option value="👑">👑 Couronne</option>
+                                <option value="🎩">🎩 Haut-de-forme</option>
+                                <option value="👒">👒 Chapeau</option>
+                                <option value="🧣">🧣 Écharpe</option>
+                                <option value="👓">👓 Lunettes</option>
+                                <option value="😎">😎 Lunettes de soleil</option>
+                                <option value="🎀">🎀 Nœud</option>
+                                <option value="🎭">🎭 Masque</option>
+                                <option value="⛑️">⛑️ Casque</option>
+                                <option value="🎪">🎪 Chapeau de cirque</option>
+                            </select>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium mb-2">🌍 Accessoire culturel :</label>
+                            <select id="culturalAccessory" onchange="updateCharacterPreview()" 
+                                    class="w-full p-2 border-2 border-purple-300 rounded-lg text-sm focus:border-purple-500 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                <option value="">Standard</option>
+                                <option value="beret">🇫🇷 Béret français</option>
+                                <option value="chech">🇲🇦 Chèche marocain</option>
+                                <option value="taqiyah">🕌 Taqiyah kabyle</option>
+                                <option value="tarboush">🇹🇳 Tarbouch tunisien</option>
+                                <option value="keffiyeh">🇱🇧 Keffieh libanais</option>
+                                <option value="lederhosen">🇩🇪 Lederhosen bavarois</option>
+                                <option value="fez">🇹🇷 Fez turc</option>
+                                <option value="borsalino">🇮🇹 Borsalino italien</option>
+                                <option value="sombrero">🇪🇸 Sombrero espagnol</option>
+                                <option value="kimono">🇯🇵 Kimono japonais</option>
+                                <option value="cowboy">🇺🇸 Chapeau cowboy</option>
+                                <option value="toque">🇨🇦 Toque canadienne</option>
+                            </select>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium mb-2">✨ Effet spécial :</label>
+                            <select id="specialEffect" onchange="updateCharacterPreview()" 
+                                    class="w-full p-2 border-2 border-purple-300 rounded-lg text-sm focus:border-purple-500 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                <option value="">Aucun</option>
+                                <option value="sparkles">✨ Étincelles</option>
+                                <option value="hearts">💕 Cœurs flottants</option>
+                                <option value="stars">⭐ Étoiles</option>
+                                <option value="rainbow">🌈 Arc-en-ciel</option>
+                                <option value="fire">🔥 Flammes</option>
+                                <option value="snow">❄️ Neige</option>
+                                <option value="flowers">🌸 Fleurs</option>
+                                <option value="lightning">⚡ Éclairs</option>
+                                <option value="crown-glow">👑 Aura royale</option>
+                                <option value="magic">🪄 Magie</option>
                             </select>
                         </div>
                     </div>
@@ -1892,9 +1959,87 @@
 
             <!-- Section Missions -->
             <div id="missionsSection" class="section hidden">
-                <div class="country-card">
-                    <h3 class="text-2xl font-bold mb-6 text-center">🎯 Missions 🎯</h3>
-                    <div id="missionsList"></div>
+                <div class="space-y-6">
+                    <!-- Système de Classement (Leaderboard) -->
+                    <div class="country-card">
+                        <h3 class="text-2xl font-bold mb-6 text-center">🏆 Classement Global 🏆</h3>
+                        <div id="leaderboardList">
+                            <div class="text-center text-gray-500 dark:text-gray-400">
+                                Chargement du classement...
+                            </div>
+                        </div>
+                        <div class="text-center mt-4">
+                            <button class="btn btn-primary" onclick="refreshLeaderboard()">
+                                🔄 Actualiser le classement
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Mode Surprise -->
+                    <div class="country-card">
+                        <h3 class="text-2xl font-bold mb-6 text-center">🎲 Mode Surprise 🎲</h3>
+                        <div class="text-center">
+                            <p class="text-gray-600 dark:text-gray-300 mb-4">
+                                Créez un couple complètement aléatoire avec des combinaisons improbables !
+                            </p>
+                            <div id="surpriseResult" class="mb-4 hidden"></div>
+                            <button class="btn btn-warning text-xl px-8 py-4" onclick="createSurpriseCouple()">
+                                🎲 Couple Surprise Total !
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Quiz en Duel -->
+                    <div class="country-card">
+                        <h3 class="text-2xl font-bold mb-6 text-center">⚔️ Quiz en Duel ⚔️</h3>
+                        <div class="text-center">
+                            <p class="text-gray-600 dark:text-gray-300 mb-4">
+                                Défiez votre partenaire ou un autre joueur sur vos cultures respectives !
+                            </p>
+                            <div id="duelResult" class="mb-4 hidden"></div>
+                            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                                <button class="btn btn-success" onclick="startDuelQuiz('collaborative')">
+                                    🤝 Quiz Collaboratif
+                                </button>
+                                <button class="btn btn-warning" onclick="startDuelQuiz('competitive')">
+                                    ⚔️ Duel Compétitif
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Anecdotes Culturelles -->
+                    <div class="country-card">
+                        <h3 class="text-2xl font-bold mb-6 text-center">📚 Anecdotes Culturelles 📚</h3>
+                        <div id="culturalAnecdoteDisplay" class="mb-4">
+                            <div class="text-center text-gray-500 dark:text-gray-400">
+                                Cliquez sur le bouton pour découvrir une anecdote !
+                            </div>
+                        </div>
+                        <div class="text-center">
+                            <button class="btn btn-primary" onclick="showRandomAnecdote()">
+                                📖 Découvrir une anecdote
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Objectifs Journaliers -->
+                    <div class="country-card">
+                        <h3 class="text-2xl font-bold mb-6 text-center">🎯 Objectifs du Jour 🎯</h3>
+                        <div id="dailyObjectivesList"></div>
+                    </div>
+                    
+                    <!-- Quêtes Principales -->
+                    <div class="country-card">
+                        <h3 class="text-2xl font-bold mb-6 text-center">📜 Journal de Quêtes 📜</h3>
+                        <div id="questsList"></div>
+                    </div>
+                    
+                    <!-- Missions Classiques -->
+                    <div class="country-card">
+                        <h3 class="text-2xl font-bold mb-6 text-center">🏆 Défis de Progression 🏆</h3>
+                        <div id="missionsList"></div>
+                    </div>
                 </div>
             </div>
 
@@ -1975,14 +2120,28 @@
                 
                 <!-- Zone de saisie -->
                 <div class="chat-input-area">
-                    <!-- Messages rapides -->
+                    <!-- Messages rapides et Mini-jeux -->
                     <div class="quick-messages">
                         <button class="quick-msg-btn" onclick="sendQuickMessage('💕 Je t\'aime')">💕 Je t'aime</button>
                         <button class="quick-msg-btn" onclick="sendQuickMessage('😍 Tu es magnifique')">😍 Magnifique</button>
                         <button class="quick-msg-btn" onclick="sendQuickMessage('🌹 Pour toi')">🌹 Pour toi</button>
                         <button class="quick-msg-btn" onclick="sendQuickMessage('💑 Ensemble pour toujours')">💑 Ensemble</button>
-                        <button class="quick-msg-btn" onclick="createPoll()">📊 Sondage</button>
-                        <button class="quick-msg-btn" onclick="triggerDramaCard()">🎭 Drama</button>
+                    </div>
+                    
+                    <!-- Mini-jeux Section -->
+                    <div class="mini-games-section" style="margin: 10px 0; padding: 12px; background: rgba(93, 92, 222, 0.1); border-radius: 12px; border: 1px solid rgba(93, 92, 222, 0.3);">
+                        <div style="font-size: 12px; font-weight: 600; color: #5D5CDE; margin-bottom: 8px; text-align: center;">🎮 MINI-JEUX</div>
+                        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px;">
+                            <button class="mini-game-btn" onclick="startFlagGuessGame()" title="Devine le drapeau">🚩 Drapeau</button>
+                            <button class="mini-game-btn" onclick="startSpeedChallengeGame()" title="Défi de vitesse">⚡ Vitesse</button>
+                            <button class="mini-game-btn" onclick="startCultureQuizGame()" title="Quiz culture">🧠 Culture</button>
+                            <button class="mini-game-btn" onclick="startMemoryCardGame()" title="Jeu de mémoire">🃏 Mémoire</button>
+                            <button class="mini-game-btn" onclick="startWordAssociationGame()" title="Association de mots">💭 Mots</button>
+                            <button class="mini-game-btn" onclick="startNumberGuessingGame()" title="Devine le nombre">🔢 Nombre</button>
+                            <button class="mini-game-btn" onclick="createPoll()" title="Créer un sondage">📊 Sondage</button>
+                            <button class="mini-game-btn" onclick="startCoopMission()" title="Mission à deux">🤝 Mission</button>
+                            <button class="mini-game-btn" onclick="triggerDramaCard()" title="Carte drama">🎭 Drama</button>
+                        </div>
                     </div>
                     
                     <!-- Barre de saisie -->
@@ -5257,6 +5416,674 @@
         });
 
         // ============================================
+        // SYSTÈME DE CLASSEMENT ET BADGE "CHAMPION DU MOIS"
+        // ============================================
+
+        // Structure des données du classement
+        let leaderboardData = {
+            currentMonth: new Date().getMonth(),
+            currentYear: new Date().getFullYear(),
+            players: [], // Joueurs simulés + joueur réel
+            monthlyChampion: null,
+            championHistory: []
+        };
+
+        // Système de badges avancé
+        const badgeSystem = {
+            'champion_month': {
+                id: 'champion_month',
+                name: 'Champion du Mois',
+                emoji: '👑',
+                description: 'Meilleur joueur du mois en cours',
+                rarity: 'legendary',
+                color: '#FFD700',
+                glowEffect: true,
+                exclusive: true, // Seul le champion peut l'avoir
+                rewards: {
+                    xp: 500,
+                    title: 'Champion',
+                    specialPrivileges: ['golden_name', 'priority_matching', 'exclusive_emojis']
+                }
+            },
+            'culture_plus': {
+                id: 'culture_plus',
+                name: 'Culture+',
+                emoji: '🏆',
+                description: 'Score parfait au quiz culturel',
+                rarity: 'rare',
+                color: '#5D5CDE',
+                rewards: { xp: 100 }
+            },
+            'love_guru': {
+                id: 'love_guru',
+                name: 'Gourou de l\'Amour',
+                emoji: '💕',
+                description: '10+ mariages réussis',
+                rarity: 'epic',
+                color: '#FF69B4',
+                rewards: { xp: 250 }
+            },
+            'diplomat_master': {
+                id: 'diplomat_master',
+                name: 'Maître Diplomate',
+                emoji: '🤝',
+                description: '5+ conflits résolus pacifiquement',
+                rarity: 'rare',
+                color: '#4ECDC4',
+                rewards: { xp: 200 }
+            },
+            'world_explorer': {
+                id: 'world_explorer',
+                name: 'Explorateur Mondial',
+                emoji: '🌍',
+                description: 'Tous les pays visités',
+                rarity: 'epic',
+                color: '#32CD32',
+                rewards: { xp: 300 }
+            }
+        };
+
+        // Critères pour devenir Champion du Mois
+        const championCriteria = {
+            weights: {
+                totalXP: 0.4,           // 40% du score
+                marriageCount: 0.25,    // 25% du score
+                quizSuccess: 0.15,      // 15% du score
+                conflictResolution: 0.1, // 10% du score
+                culturalKnowledge: 0.1   // 10% du score
+            },
+            minimumRequirements: {
+                totalXP: 200,
+                marriageCount: 3,
+                daysActive: 5
+            }
+        };
+
+        // Générer le classement avec joueurs simulés
+        function generateLeaderboard() {
+            // Joueurs simulés avec statistiques réalistes
+            const simulatedPlayers = [
+                {
+                    name: 'Emma_Parisienne',
+                    country: 'France',
+                    flag: '🇫🇷',
+                    totalXP: 2847,
+                    level: 28,
+                    marriageCount: 23,
+                    quizScore: 94,
+                    conflictsResolved: 8,
+                    culturalScore: 89,
+                    daysActive: 42,
+                    joinDate: '2024-01-15',
+                    isChampion: false,
+                    badges: ['culture_plus', 'love_guru', 'world_explorer']
+                },
+                {
+                    name: 'Ahmed_Casablanca',
+                    country: 'Morocco',
+                    flag: '🇲🇦',
+                    totalXP: 3156,
+                    level: 31,
+                    marriageCount: 19,
+                    quizScore: 87,
+                    conflictsResolved: 12,
+                    culturalScore: 96,
+                    daysActive: 38,
+                    joinDate: '2024-01-08',
+                    isChampion: true, // Champion actuel
+                    badges: ['champion_month', 'diplomat_master', 'culture_plus']
+                },
+                {
+                    name: 'Yuki_Tokyo',
+                    country: 'Japan',
+                    flag: '🇯🇵',
+                    totalXP: 2654,
+                    level: 26,
+                    marriageCount: 15,
+                    quizScore: 98,
+                    conflictsResolved: 5,
+                    culturalScore: 92,
+                    daysActive: 35,
+                    joinDate: '2024-01-20',
+                    isChampion: false,
+                    badges: ['culture_plus', 'world_explorer']
+                },
+                {
+                    name: 'Sofia_Barcelona',
+                    country: 'Spain',
+                    flag: '🇪🇸',
+                    totalXP: 2198,
+                    level: 21,
+                    marriageCount: 17,
+                    quizScore: 76,
+                    conflictsResolved: 6,
+                    culturalScore: 83,
+                    daysActive: 29,
+                    joinDate: '2024-02-01',
+                    isChampion: false,
+                    badges: ['love_guru']
+                },
+                {
+                    name: 'Marco_Milano',
+                    country: 'Italy',
+                    flag: '🇮🇹',
+                    totalXP: 1987,
+                    level: 19,
+                    marriageCount: 14,
+                    quizScore: 82,
+                    conflictsResolved: 4,
+                    culturalScore: 78,
+                    daysActive: 26,
+                    joinDate: '2024-02-05',
+                    isChampion: false,
+                    badges: ['culture_plus']
+                },
+                {
+                    name: 'Leila_Tunis',
+                    country: 'Tunisia',
+                    flag: '🇹🇳',
+                    totalXP: 1756,
+                    level: 17,
+                    marriageCount: 12,
+                    quizScore: 91,
+                    conflictsResolved: 7,
+                    culturalScore: 85,
+                    daysActive: 23,
+                    joinDate: '2024-02-10',
+                    isChampion: false,
+                    badges: ['diplomat_master']
+                },
+                {
+                    name: 'Klaus_Berlin',
+                    country: 'Germany',
+                    flag: '🇩🇪',
+                    totalXP: 1654,
+                    level: 16,
+                    marriageCount: 11,
+                    quizScore: 79,
+                    conflictsResolved: 3,
+                    culturalScore: 74,
+                    daysActive: 21,
+                    joinDate: '2024-02-12',
+                    isChampion: false,
+                    badges: []
+                },
+                {
+                    name: 'Fatima_Alger',
+                    country: 'Algeria',
+                    flag: '🇩🇿',
+                    totalXP: 1523,
+                    level: 15,
+                    marriageCount: 9,
+                    quizScore: 88,
+                    conflictsResolved: 5,
+                    culturalScore: 91,
+                    daysActive: 19,
+                    joinDate: '2024-02-15',
+                    isChampion: false,
+                    badges: ['culture_plus']
+                },
+                {
+                    name: 'David_Toronto',
+                    country: 'Canada',
+                    flag: '🇨🇦',
+                    totalXP: 1398,
+                    level: 13,
+                    marriageCount: 8,
+                    quizScore: 73,
+                    conflictsResolved: 2,
+                    culturalScore: 69,
+                    daysActive: 17,
+                    joinDate: '2024-02-18',
+                    isChampion: false,
+                    badges: []
+                }
+            ];
+
+            // Ajouter le joueur réel s'il a commencé le jeu
+            if (gameState.player && gameState.player.fullName) {
+                const playerData = {
+                    name: gameState.player.fullName.replace(' ', '_'),
+                    country: gameState.player.country || 'Inconnu',
+                    flag: countries[gameState.player.country] || '🏳️',
+                    totalXP: gameState.player.xp || 0,
+                    level: gameState.player.level || 1,
+                    marriageCount: marriageHistory.length,
+                    quizScore: quizData.score || 0,
+                    conflictsResolved: calculateConflictsResolved(),
+                    culturalScore: calculateCulturalScore(),
+                    daysActive: calculateDaysActive(),
+                    joinDate: new Date().toISOString().split('T')[0],
+                    isChampion: false,
+                    badges: gameState.player.badges || []
+                };
+
+                // Calculer si le joueur mérite d'être champion
+                const playerScore = calculateChampionScore(playerData);
+                const currentChampionScore = calculateChampionScore(simulatedPlayers.find(p => p.isChampion));
+
+                if (playerScore > currentChampionScore && meetsMinimumRequirements(playerData)) {
+                    // Le joueur devient champion !
+                    simulatedPlayers.forEach(p => p.isChampion = false);
+                    playerData.isChampion = true;
+                    awardChampionBadge(playerData);
+                }
+
+                simulatedPlayers.push(playerData);
+            }
+
+            // Trier par score de champion (algorithme complexe)
+            simulatedPlayers.sort((a, b) => calculateChampionScore(b) - calculateChampionScore(a));
+
+            leaderboardData.players = simulatedPlayers;
+            leaderboardData.monthlyChampion = simulatedPlayers.find(p => p.isChampion);
+
+            return simulatedPlayers;
+        }
+
+        // Calculer le score de champion selon les critères pondérés
+        function calculateChampionScore(player) {
+            if (!player) return 0;
+
+            const weights = championCriteria.weights;
+            
+            // Normaliser les valeurs pour le calcul
+            const normalizedXP = Math.min(player.totalXP / 3000, 1);
+            const normalizedMarriages = Math.min(player.marriageCount / 25, 1);
+            const normalizedQuiz = player.quizScore / 100;
+            const normalizedConflicts = Math.min(player.conflictsResolved / 15, 1);
+            const normalizedCultural = player.culturalScore / 100;
+
+            const score = (
+                normalizedXP * weights.totalXP +
+                normalizedMarriages * weights.marriageCount +
+                normalizedQuiz * weights.quizSuccess +
+                normalizedConflicts * weights.conflictResolution +
+                normalizedCultural * weights.culturalKnowledge
+            ) * 1000; // Multiplier pour avoir des scores lisibles
+
+            return Math.round(score);
+        }
+
+        // Vérifier si un joueur remplit les conditions minimales
+        function meetsMinimumRequirements(player) {
+            const req = championCriteria.minimumRequirements;
+            return player.totalXP >= req.totalXP && 
+                   player.marriageCount >= req.marriageCount && 
+                   player.daysActive >= req.daysActive;
+        }
+
+        // Attribuer le badge de Champion du Mois
+        function awardChampionBadge(player) {
+            if (!gameState.player.badges) {
+                gameState.player.badges = [];
+            }
+
+            // Retirer l'ancien badge champion s'il existe
+            gameState.player.badges = gameState.player.badges.filter(badge => badge.id !== 'champion_month');
+
+            // Ajouter le nouveau badge champion
+            const championBadge = {
+                ...badgeSystem.champion_month,
+                awardedDate: new Date().toISOString(),
+                month: new Date().getMonth(),
+                year: new Date().getFullYear()
+            };
+
+            gameState.player.badges.push(championBadge);
+
+            // Appliquer les récompenses
+            const rewards = badgeSystem.champion_month.rewards;
+            gameState.player.xp += rewards.xp;
+            
+            // Ajouter le titre spécial
+            gameState.player.title = rewards.title;
+
+            // Effet spécial d'annonce
+            showChampionAnnouncement();
+
+            // Sauvegarder
+            markUnsavedChanges();
+
+            console.log('👑 Badge Champion du Mois attribué au joueur !');
+        }
+
+        // Affichage de l'annonce de champion
+        function showChampionAnnouncement() {
+            const announcementDiv = document.createElement('div');
+            announcementDiv.className = 'champion-announcement';
+            announcementDiv.style.position = 'fixed';
+            announcementDiv.style.top = '0';
+            announcementDiv.style.left = '0';
+            announcementDiv.style.width = '100%';
+            announcementDiv.style.height = '100%';
+            announcementDiv.style.background = 'linear-gradient(45deg, rgba(255, 215, 0, 0.95), rgba(255, 140, 0, 0.95))';
+            announcementDiv.style.zIndex = '10000';
+            announcementDiv.style.display = 'flex';
+            announcementDiv.style.alignItems = 'center';
+            announcementDiv.style.justifyContent = 'center';
+            announcementDiv.style.animation = 'championEntrance 2s ease-out';
+
+            announcementDiv.innerHTML = `
+                <div style="text-align: center; color: white; text-shadow: 3px 3px 6px rgba(0,0,0,0.7);">
+                    <div style="font-size: 8em; margin-bottom: 20px; animation: championGlow 2s ease-in-out infinite;">👑</div>
+                    <h1 style="font-size: 4em; margin-bottom: 20px; font-weight: bold;">FÉLICITATIONS !</h1>
+                    <h2 style="font-size: 2.5em; margin-bottom: 30px;">Vous êtes le nouveau</h2>
+                    <h2 style="font-size: 3em; margin-bottom: 40px; background: linear-gradient(45deg, #FFD700, #FFA500); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: bold;">CHAMPION DU MOIS !</h2>
+                    
+                    <div style="background: rgba(255, 255, 255, 0.2); padding: 30px; border-radius: 20px; margin: 30px auto; max-width: 600px;">
+                        <h3 style="font-size: 1.8em; margin-bottom: 20px;">🎁 Récompenses du Champion :</h3>
+                        <ul style="font-size: 1.3em; list-style: none; padding: 0;">
+                            <li style="margin: 10px 0;">✨ +500 XP Bonus</li>
+                            <li style="margin: 10px 0;">👑 Titre "Champion" permanent</li>
+                            <li style="margin: 10px 0;">🌟 Nom doré dans le classement</li>
+                            <li style="margin: 10px 0;">💫 Priorité dans les matchmaking</li>
+                            <li style="margin: 10px 0;">🎭 Émojis exclusifs débloqués</li>
+                        </ul>
+                    </div>
+                    
+                    <button class="btn btn-success" style="font-size: 1.5em; padding: 15px 40px; margin-top: 30px;" onclick="closeChampionAnnouncement()">
+                        🎉 Merci ! Continuer à jouer
+                    </button>
+                </div>
+            `;
+
+            document.body.appendChild(announcementDiv);
+
+            // Ajouter les animations CSS
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes championEntrance {
+                    0% { opacity: 0; transform: scale(0.5); }
+                    50% { opacity: 1; transform: scale(1.1); }
+                    100% { opacity: 1; transform: scale(1); }
+                }
+                @keyframes championGlow {
+                    0%, 100% { transform: scale(1); filter: brightness(1); }
+                    50% { transform: scale(1.2); filter: brightness(1.5) drop-shadow(0 0 20px #FFD700); }
+                }
+            `;
+            document.head.appendChild(style);
+
+            // Jouer le son de victoire champion
+            playChampionSound();
+        }
+
+        // Fermer l'annonce de champion
+        function closeChampionAnnouncement() {
+            const announcement = document.querySelector('.champion-announcement');
+            if (announcement) {
+                announcement.style.animation = 'fadeOut 0.5s ease-out';
+                setTimeout(() => announcement.remove(), 500);
+            }
+        }
+
+        // Son spécial pour le champion
+        function playChampionSound() {
+            try {
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                
+                // Fanfare de victoire élaborée
+                const fanfareNotes = [
+                    { frequency: 523.25, time: 0, duration: 0.2 },      // Do
+                    { frequency: 659.25, time: 0.2, duration: 0.2 },   // Mi
+                    { frequency: 783.99, time: 0.4, duration: 0.2 },   // Sol
+                    { frequency: 1046.5, time: 0.6, duration: 0.4 },   // Do aigu
+                    { frequency: 1318.5, time: 1.0, duration: 0.2 },   // Mi aigu
+                    { frequency: 1567.98, time: 1.2, duration: 0.6 }   // Sol aigu
+                ];
+                
+                fanfareNotes.forEach(note => {
+                    const oscillator = audioContext.createOscillator();
+                    const gainNode = audioContext.createGain();
+                    
+                    oscillator.connect(gainNode);
+                    gainNode.connect(audioContext.destination);
+                    
+                    oscillator.type = 'triangle';
+                    oscillator.frequency.setValueAtTime(note.frequency, audioContext.currentTime + note.time);
+                    
+                    gainNode.gain.setValueAtTime(0, audioContext.currentTime + note.time);
+                    gainNode.gain.linearRampToValueAtTime(0.3, audioContext.currentTime + note.time + 0.05);
+                    gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + note.time + note.duration);
+                    
+                    oscillator.start(audioContext.currentTime + note.time);
+                    oscillator.stop(audioContext.currentTime + note.time + note.duration);
+                });
+                
+            } catch (error) {
+                console.log('Audio champion non supporté:', error);
+            }
+        }
+
+        // Fonctions utilitaires pour calculer les statistiques du joueur
+        function calculateConflictsResolved() {
+            // Compter les résolutions de conflits réussies (variables globales existantes)
+            let count = 0;
+            if (typeof missionCompletions !== 'undefined') {
+                count += missionCompletions.peace_maker || 0;
+                count += missionCompletions.diplomat || 0;
+            }
+            return count;
+        }
+
+        function calculateCulturalScore() {
+            let score = 0;
+            if (quizData.completed) {
+                score = quizData.score || 0;
+            }
+            // Ajouter bonus pour origines multiples
+            if (gameState.player.origins && gameState.player.origins.length > 1) {
+                score += 20;
+            }
+            return Math.min(score, 100);
+        }
+
+        function calculateDaysActive() {
+            // Simuler les jours d'activité basés sur les actions du joueur
+            let days = 1; // Jour actuel
+            if (marriageHistory.length > 0) days += Math.min(marriageHistory.length * 2, 30);
+            if (quizData.completed) days += 3;
+            return days;
+        }
+
+        // Afficher le classement avec mise en forme spéciale
+        function refreshLeaderboard() {
+            const leaderboardList = document.getElementById('leaderboardList');
+            if (!leaderboardList) return;
+
+            leaderboardList.innerHTML = '<div class="text-center">🔄 Actualisation du classement...</div>';
+
+            // Simulation d'un délai de chargement
+            setTimeout(() => {
+                const players = generateLeaderboard();
+                displayLeaderboard(players, leaderboardList);
+            }, 1500);
+        }
+
+        // Affichage formaté du classement
+        function displayLeaderboard(players, container) {
+            const currentMonth = new Date().toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' });
+            
+            let html = `
+                <div class="text-center mb-6">
+                    <h4 class="text-xl font-bold text-purple-700 dark:text-purple-300 mb-2">
+                        📅 Classement de ${currentMonth}
+                    </h4>
+                    <div class="text-sm text-gray-600 dark:text-gray-400">
+                        Le champion est couronné chaque mois !
+                    </div>
+                </div>
+            `;
+
+            players.slice(0, 10).forEach((player, index) => {
+                const position = index + 1;
+                const isChampion = player.isChampion;
+                const isPlayerSelf = gameState.player && player.name === gameState.player.fullName?.replace(' ', '_');
+                
+                // Couleurs selon la position
+                let rankColor = '#666';
+                let rankEmoji = '🏅';
+                let specialClass = '';
+                
+                if (position === 1) {
+                    rankColor = '#FFD700';
+                    rankEmoji = '🥇';
+                    specialClass = 'champion-entry';
+                }
+                else if (position === 2) {
+                    rankColor = '#C0C0C0';
+                    rankEmoji = '🥈';
+                }
+                else if (position === 3) {
+                    rankColor = '#CD7F32';
+                    rankEmoji = '🥉';
+                }
+
+                // Badges du joueur
+                const badgesHtml = player.badges.map(badgeId => {
+                    const badge = typeof badgeId === 'string' ? badgeSystem[badgeId] : badgeId;
+                    return badge ? `<span title="${badge.description}" style="font-size: 1.2em;">${badge.emoji}</span>` : '';
+                }).join(' ');
+
+                // Score de champion
+                const championScore = calculateChampionScore(player);
+
+                html += `
+                    <div class="country-card ${specialClass} ${isPlayerSelf ? 'border-4 border-blue-500' : ''}" 
+                         style="${isChampion ? 'background: linear-gradient(135deg, rgba(255, 215, 0, 0.2), rgba(255, 140, 0, 0.2)); border: 2px solid #FFD700;' : ''}">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-4">
+                                <div class="text-center">
+                                    <div style="color: ${rankColor}; font-size: 2em;">${rankEmoji}</div>
+                                    <div style="color: ${rankColor}; font-weight: bold; font-size: 1.2em;">#${position}</div>
+                                </div>
+                                
+                                <div class="flex items-center gap-3">
+                                    <div class="text-3xl">${player.flag}</div>
+                                    <div>
+                                        <h4 class="text-lg font-bold ${isChampion ? 'text-yellow-600' : ''} ${isPlayerSelf ? 'text-blue-600' : ''}">
+                                            ${isChampion ? '👑 ' : ''}${player.name}${isPlayerSelf ? ' (Vous)' : ''}
+                                        </h4>
+                                        <p class="text-sm text-gray-600 dark:text-gray-300">
+                                            ${player.country} • Niveau ${player.level}
+                                        </p>
+                                        <div class="flex items-center gap-2 mt-1">
+                                            <span class="text-xs bg-purple-100 dark:bg-purple-900 px-2 py-1 rounded">
+                                                ${player.totalXP} XP
+                                            </span>
+                                            <span class="text-xs bg-pink-100 dark:bg-pink-900 px-2 py-1 rounded">
+                                                ${player.marriageCount} 💕
+                                            </span>
+                                            <span class="text-xs bg-green-100 dark:bg-green-900 px-2 py-1 rounded">
+                                                Score: ${championScore}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="text-right">
+                                <div class="text-2xl mb-2">${badgesHtml}</div>
+                                ${isChampion ? '<div class="text-sm font-bold text-yellow-600">👑 CHAMPION DU MOIS</div>' : ''}
+                                <div class="text-xs text-gray-500 dark:text-gray-400">
+                                    Quiz: ${player.quizScore}% • Conflits: ${player.conflictsResolved}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        ${isChampion ? `
+                            <div class="mt-4 p-3 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg border border-yellow-200 dark:border-yellow-700">
+                                <div class="text-center text-yellow-800 dark:text-yellow-300 font-semibold">
+                                    🏆 Règne depuis le ${new Date().getDate()} ${new Date().toLocaleDateString('fr-FR', { month: 'long' })} 🏆
+                                </div>
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+            });
+
+            // Informations sur les critères de champion
+            html += `
+                <div class="mt-6 p-4 bg-gradient-to-r from-yellow-50 to-orange-50 dark:from-yellow-900/20 dark:to-orange-900/20 rounded-xl border-2 border-yellow-200 dark:border-yellow-700">
+                    <h4 class="text-lg font-bold text-center text-yellow-800 dark:text-yellow-300 mb-3">
+                        👑 Comment devenir Champion du Mois ?
+                    </h4>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                        <div>
+                            <strong>📊 Critères de calcul :</strong>
+                            <ul class="mt-2 space-y-1 text-yellow-700 dark:text-yellow-400">
+                                <li>• XP Total (40%)</li>
+                                <li>• Nombre de mariages (25%)</li>
+                                <li>• Réussites aux quiz (15%)</li>
+                                <li>• Résolution de conflits (10%)</li>
+                                <li>• Connaissances culturelles (10%)</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <strong>✅ Conditions minimales :</strong>
+                            <ul class="mt-2 space-y-1 text-yellow-700 dark:text-yellow-400">
+                                <li>• 200+ XP minimum</li>
+                                <li>• 3+ mariages réussis</li>
+                                <li>• 5+ jours d'activité</li>
+                                <li>• Score combiné le plus élevé</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="text-center mt-4 text-yellow-800 dark:text-yellow-300 font-semibold">
+                        🎁 Récompenses : +500 XP, titre "Champion", privilèges spéciaux !
+                    </div>
+                </div>
+            `;
+
+            container.innerHTML = html;
+
+            // Ajouter l'animation spéciale pour le champion
+            const championEntry = document.querySelector('.champion-entry');
+            if (championEntry) {
+                championEntry.style.animation = 'championGlow 3s ease-in-out infinite';
+            }
+        }
+
+        // Vérification mensuelle automatique du champion
+        function checkMonthlyChampionUpdate() {
+            const currentMonth = new Date().getMonth();
+            const currentYear = new Date().getFullYear();
+            
+            if (leaderboardData.currentMonth !== currentMonth || leaderboardData.currentYear !== currentYear) {
+                // Nouveau mois - réinitialiser le championnat
+                console.log('📅 Nouveau mois détecté - réinitialisation du championnat');
+                
+                // Archiver l'ancien champion
+                if (leaderboardData.monthlyChampion) {
+                    leaderboardData.championHistory.push({
+                        ...leaderboardData.monthlyChampion,
+                        month: leaderboardData.currentMonth,
+                        year: leaderboardData.currentYear
+                    });
+                }
+                
+                // Réinitialiser pour le nouveau mois
+                leaderboardData.currentMonth = currentMonth;
+                leaderboardData.currentYear = currentYear;
+                leaderboardData.monthlyChampion = null;
+                
+                // Retirer les badges champion du mois précédent
+                if (gameState.player && gameState.player.badges) {
+                    gameState.player.badges = gameState.player.badges.filter(badge => 
+                        badge.id !== 'champion_month' || 
+                        (badge.month === currentMonth && badge.year === currentYear)
+                    );
+                }
+                
+                // Recalculer le classement
+                generateLeaderboard();
+                
+                showMessage('📅 Nouveau mois ! Le championnat a été réinitialisé. Bonne chance ! 🏆', 'special');
+            }
+        }
+
+        // ============================================
         // NOUVELLES FONCTIONNALITÉS CHAT AVANCÉES
         // ============================================
 
@@ -7849,3 +8676,4 @@
     </script>
 </body>
 </html>
+```
