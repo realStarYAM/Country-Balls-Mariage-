@@ -1,0 +1,3765 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Country Balls: Mariage</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Reset et base */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%, #f093fb 200%);
+            background-attachment: fixed;
+            min-height: 100vh;
+            color: #1d1d1f;
+            overflow-x: hidden;
+        }
+
+        /* Container principal */
+        .game-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            animation: bounce 2s infinite;
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        /* Animations */
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        /* Interface principale - Glassmorphism */
+        .game-screen {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            border-radius: 24px;
+            padding: 32px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12), 
+                        inset 0 1px 0 rgba(255, 255, 255, 0.25);
+            margin-bottom: 24px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .game-screen::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+        }
+
+        /* XP Bar - Style iOS */
+        .xp-container {
+            background: rgba(0, 122, 255, 0.15);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(0, 122, 255, 0.2);
+            color: #ffffff;
+            padding: 18px;
+            border-radius: 20px;
+            margin-bottom: 24px;
+            text-align: center;
+            box-shadow: 0 8px 24px rgba(0, 122, 255, 0.15),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        }
+
+        .xp-bar {
+            background: rgba(255,255,255,0.3);
+            height: 20px;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+
+        .xp-fill {
+            background: linear-gradient(45deg, #FFE66D, #FF6B6B);
+            height: 100%;
+            transition: width 0.5s ease;
+            border-radius: 10px;
+        }
+
+        /* Boutons - Style iOS Aero */
+        .btn {
+            background: rgba(0, 122, 255, 0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 14px 28px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            margin: 8px;
+            box-shadow: 0 4px 16px rgba(0, 122, 255, 0.3),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 8px 24px rgba(0, 122, 255, 0.4),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.5);
+            background: rgba(0, 122, 255, 0.9);
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn:active {
+            transform: translateY(-1px) scale(0.98);
+            box-shadow: 0 4px 12px rgba(0, 122, 255, 0.3);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Formulaires - Style iOS Glassmorphism */
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 12px;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.95);
+            font-size: 15px;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-group select,
+        .form-group input {
+            width: 100%;
+            padding: 16px 20px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 16px;
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.9);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        }
+
+        .form-group select::placeholder,
+        .form-group input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .form-group select:focus,
+        .form-group input:focus {
+            outline: none;
+            border-color: rgba(0, 122, 255, 0.6);
+            background: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 4px 20px rgba(0, 122, 255, 0.2),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.3),
+                        0 0 0 3px rgba(0, 122, 255, 0.1);
+            transform: translateY(-1px);
+        }
+
+        .form-group select option {
+            background: rgba(45, 55, 72, 0.95);
+            color: white;
+            padding: 12px;
+        }
+
+        /* Country Ball - Glassmorphism Style */
+        .country-ball {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 50px;
+            margin: 12px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .country-ball::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, 
+                transparent, 
+                rgba(255,255,255,0.1), 
+                transparent);
+            transform: rotate(45deg);
+            transition: transform 0.6s;
+            opacity: 0;
+        }
+
+        .country-ball:hover {
+            transform: translateY(-4px) scale(1.05);
+            box-shadow: 0 8px 32px rgba(0, 122, 255, 0.2),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.4);
+            background: rgba(0, 122, 255, 0.1);
+        }
+
+        .country-ball:hover::before {
+            opacity: 1;
+            transform: rotate(45deg) translate(50%, 50%);
+        }
+
+        .country-ball.selected {
+            border: 2px solid rgba(0, 122, 255, 0.8);
+            background: rgba(0, 122, 255, 0.15);
+            box-shadow: 0 8px 32px rgba(0, 122, 255, 0.3),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.5),
+                        0 0 0 4px rgba(0, 122, 255, 0.2);
+            animation: selectedPulse 2s infinite;
+        }
+
+        @keyframes selectedPulse {
+            0%, 100% { 
+                box-shadow: 0 8px 32px rgba(0, 122, 255, 0.3),
+                           inset 0 1px 0 rgba(255, 255, 255, 0.5),
+                           0 0 0 4px rgba(0, 122, 255, 0.2);
+            }
+            50% { 
+                box-shadow: 0 12px 40px rgba(0, 122, 255, 0.4),
+                           inset 0 1px 0 rgba(255, 255, 255, 0.6),
+                           0 0 0 6px rgba(0, 122, 255, 0.3);
+            }
+        }
+
+        /* Grid des pays - Glassmorphism */
+        .countries-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 8px;
+            max-height: 400px;
+            overflow-y: auto;
+            padding: 24px;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 20px;
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+
+        .countries-grid::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .countries-grid::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+        }
+
+        .countries-grid::-webkit-scrollbar-thumb {
+            background: rgba(0, 122, 255, 0.3);
+            border-radius: 4px;
+        }
+
+        .countries-grid::-webkit-scrollbar-thumb:hover {
+            background: rgba(0, 122, 255, 0.5);
+        }
+
+        /* Cartes de personnages */
+        .character-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 10px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .character-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        .character-card.selected {
+            border: 3px solid #4ECDC4;
+            background: linear-gradient(45deg, #f8f9fa, #e9ecef);
+        }
+
+        /* Messages */
+        .message {
+            padding: 15px;
+            border-radius: 10px;
+            margin: 10px 0;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .message.success {
+            background: linear-gradient(45deg, #4ECDC4, #44A08D);
+            color: white;
+        }
+
+        .message.error {
+            background: linear-gradient(45deg, #FF6B6B, #FF8E53);
+            color: white;
+        }
+
+        /* Navigation */
+        .nav-buttons {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .game-container {
+                padding: 10px;
+            }
+
+            .header h1 {
+                font-size: 2em;
+            }
+
+            .countries-grid {
+                grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+            }
+
+            .country-ball {
+                width: 60px;
+                height: 60px;
+                font-size: 35px;
+            }
+
+            .btn {
+                padding: 12px 25px;
+                font-size: 14px;
+            }
+        }
+
+        /* Styles spéciaux */
+        .player-info {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .partner-search {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        /* Mode sombre */
+        .dark {
+            background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
+            color: #e2e8f0;
+        }
+
+        .dark .game-screen {
+            background: #2d3748;
+            color: #e2e8f0;
+        }
+
+        .dark .form-group label {
+            color: #cbd5e0;
+        }
+
+        .dark .form-group select,
+        .dark .form-group input {
+            background: #4a5568;
+            border-color: #718096;
+            color: #e2e8f0;
+        }
+
+        .dark .form-group select:focus,
+        .dark .form-group input:focus {
+            border-color: #4ECDC4;
+            background: #2d3748;
+        }
+
+        .dark .countries-grid {
+            background: #4a5568;
+        }
+
+        .dark .character-card {
+            background: #4a5568;
+            color: #e2e8f0;
+        }
+
+        .dark .character-card.selected {
+            background: linear-gradient(45deg, #4a5568, #2d3748);
+        }
+
+        /* Bouton mode sombre */
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .dark .theme-toggle {
+            background: rgba(45, 55, 72, 0.9);
+            color: #e2e8f0;
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.3);
+        }
+
+        /* Bouton partager */
+        .share-btn {
+            background: linear-gradient(45deg, #10B981, #059669);
+            margin-left: 10px;
+            font-size: 14px;
+            padding: 10px 20px;
+        }
+
+        .share-options {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 15px 0;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            display: none;
+        }
+
+        .dark .share-options {
+            background: #4a5568;
+            color: #e2e8f0;
+        }
+
+        .share-options.show {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .share-option {
+            display: inline-block;
+            margin: 5px;
+            padding: 10px 15px;
+            background: #f0f0f0;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: #333;
+        }
+
+        .dark .share-option {
+            background: #2d3748;
+            color: #e2e8f0;
+        }
+
+        .share-option:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        /* Nouvelles fonctionnalités CSS */
+        
+        /* Messages spéciaux pour couples légendaires */
+        .special-message {
+            background: linear-gradient(45deg, #FFD700, #FFA500);
+            color: #fff;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 15px 0;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(255, 215, 0, 0.3);
+            animation: specialGlow 2s infinite alternate;
+        }
+
+        .impossible-message {
+            background: linear-gradient(45deg, #FF4444, #CC0000);
+            color: #fff;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 15px 0;
+            text-align: center;
+            animation: shake 0.5s ease-in-out;
+        }
+
+        .rivalry-message {
+            background: linear-gradient(45deg, #FF8C00, #FF6347);
+            color: #fff;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 15px 0;
+            text-align: center;
+            animation: tension 1s ease-in-out;
+        }
+
+        @keyframes specialGlow {
+            0% { box-shadow: 0 10px 25px rgba(255, 215, 0, 0.3); }
+            100% { box-shadow: 0 15px 35px rgba(255, 215, 0, 0.6); }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        @keyframes tension {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(1); }
+        }
+
+        /* Anecdotes culturelles */
+        .cultural-anecdote {
+            background: linear-gradient(45deg, #87CEEB, #4682B4);
+            color: white;
+            padding: 15px;
+            border-radius: 12px;
+            margin: 10px 0;
+            font-style: italic;
+            text-align: center;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(-20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        /* Missions et succès */
+        .missions-panel {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 15px 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .dark .missions-panel {
+            background: #4a5568;
+            color: #e2e8f0;
+        }
+
+        .mission-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            margin: 5px 0;
+            background: #f8f9fa;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .dark .mission-item {
+            background: #2d3748;
+        }
+
+        .mission-item.completed {
+            background: linear-gradient(45deg, #28a745, #20c997);
+            color: white;
+        }
+
+        .mission-progress {
+            background: #e9ecef;
+            height: 8px;
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 5px 0;
+        }
+
+        .mission-progress-fill {
+            background: linear-gradient(45deg, #4ECDC4, #44A08D);
+            height: 100%;
+            transition: width 0.5s ease;
+        }
+
+        /* Effets visuels spéciaux */
+        .fireworks {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        .heart-animation {
+            position: absolute;
+            color: #FF69B4;
+            font-size: 30px;
+            animation: floatUp 2s ease-out forwards;
+            pointer-events: none;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(0) scale(1); opacity: 1; }
+            100% { transform: translateY(-100px) scale(0.5); opacity: 0; }
+        }
+
+        /* Chat fictif interactif */
+        .chat-container {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 15px 0;
+            max-height: 400px;
+            overflow-y: auto;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .dark .chat-container {
+            background: #4a5568;
+            color: #e2e8f0;
+        }
+
+        .chat-message {
+            padding: 12px 15px;
+            margin: 8px 0;
+            border-radius: 15px;
+            animation: messageAppear 0.5s ease-out;
+            max-width: 80%;
+            word-wrap: break-word;
+        }
+
+        .chat-message.player {
+            background: linear-gradient(45deg, #4ECDC4, #44A08D);
+            color: white;
+            margin-left: auto;
+            text-align: right;
+        }
+
+        .chat-message.partner {
+            background: #f1f3f4;
+            color: #333;
+            margin-right: auto;
+            text-align: left;
+        }
+
+        .dark .chat-message.partner {
+            background: #2d3748;
+            color: #e2e8f0;
+        }
+
+        .chat-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin: 15px 0;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+
+        .dark .chat-options {
+            background: #2d3748;
+        }
+
+        .chat-option-btn {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 25px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: left;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+        }
+
+        .chat-option-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        .chat-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e9ecef;
+        }
+
+        .dark .chat-header {
+            border-bottom-color: #4a5568;
+        }
+
+        .partner-avatar {
+            font-size: 40px;
+            background: linear-gradient(45deg, #FF6B6B, #4ECDC4);
+            border-radius: 50%;
+            padding: 10px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+        }
+
+        .typing-indicator {
+            display: flex;
+            align-items: center;
+            padding: 10px 15px;
+            background: #f1f3f4;
+            border-radius: 15px;
+            margin: 8px 0;
+            max-width: 80px;
+            animation: messageAppear 0.5s ease-out;
+        }
+
+        .dark .typing-indicator {
+            background: #2d3748;
+        }
+
+        .typing-dots {
+            display: flex;
+            gap: 3px;
+        }
+
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            background: #999;
+            border-radius: 50%;
+            animation: typingDot 1.4s infinite;
+        }
+
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes typingDot {
+            0%, 60%, 100% { opacity: 0.3; }
+            30% { opacity: 1; }
+        }
+
+        @keyframes messageAppear {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        /* Boutons supplémentaires */
+        .btn-secondary {
+            background: linear-gradient(45deg, #6c757d, #495057);
+        }
+
+        .btn-success {
+            background: linear-gradient(45deg, #28a745, #20c997);
+        }
+
+        .btn-warning {
+            background: linear-gradient(45deg, #ffc107, #fd7e14);
+        }
+    </style>
+</head>
+<body>
+    <!-- Bouton mode sombre -->
+    <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()">🌙</button>
+
+    <div class="game-container">
+        <!-- Header -->
+        <div class="header">
+            <h1>🌍 Country Balls: Mariage 💕</h1>
+            <p>Trouvez l'amour à travers le monde !</p>
+        </div>
+
+        <!-- XP Container -->
+        <div class="xp-container">
+            <div>💎 Niveau: <span id="level">1</span> | 🏆 XP: <span id="xp">0</span>/100</div>
+            <div class="xp-bar">
+                <div class="xp-fill" id="xpFill" style="width: 0%"></div>
+            </div>
+        </div>
+
+        <!-- Écran de sélection du pays -->
+        <div id="countrySelection" class="game-screen">
+            <h2 class="text-center">🌍 Choisissez votre pays d'origine</h2>
+            <div class="countries-grid" id="countriesGrid">
+                <!-- Les pays seront générés par JavaScript -->
+            </div>
+            <div class="nav-buttons">
+                <button class="btn" id="nextToCharacter" disabled>Continuer →</button>
+            </div>
+        </div>
+
+        <!-- Écran de création de personnage -->
+        <div id="characterCreation" class="game-screen hidden">
+            <h2 class="text-center">👤 Créez votre personnage</h2>
+            <div class="form-group">
+                <label>Genre:</label>
+                <select id="genderSelect">
+                    <option value="">Choisissez votre genre</option>
+                    <option value="male">🧑 Homme</option>
+                    <option value="female">👩 Femme</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Prénom:</label>
+                <select id="firstNameSelect">
+                    <option value="">Choisissez d'abord votre genre</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Nom de famille:</label>
+                <select id="lastNameSelect">
+                    <option value="">Choisissez votre nom</option>
+                </select>
+            </div>
+            <div class="nav-buttons">
+                <button class="btn" onclick="showCountrySelection()">← Retour</button>
+                <button class="btn" id="startGame" disabled>Commencer le jeu →</button>
+            </div>
+        </div>
+
+        <!-- Écran principal du jeu -->
+        <div id="gameMain" class="game-screen hidden">
+            <div class="player-info">
+                <h3>🎯 Votre personnage</h3>
+                <div id="playerInfo"></div>
+            </div>
+
+            <h3 class="text-center">💕 Rechercher un(e) partenaire</h3>
+            <div class="form-group">
+                <label>Pays de recherche:</label>
+                <select id="searchCountry">
+                    <option value="">Choisissez un pays</option>
+                </select>
+            </div>
+            <div class="nav-buttons">
+                <button class="btn" id="searchPartners">🔍 Chercher des partenaires</button>
+            </div>
+
+            <div id="partnersResults" class="partner-search hidden">
+                <h4 class="text-center">💖 Partenaires disponibles</h4>
+                <div id="partnersList"></div>
+            </div>
+
+            <div id="messageContainer"></div>
+
+            <div class="nav-buttons">
+                <button class="btn" onclick="showSaveMenu()">💾 Sauvegarder</button>
+                <button class="btn" onclick="showLoadMenu()">📂 Charger</button>
+                <button class="btn" onclick="resetGame()">🔄 Nouveau jeu</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Base de données des pays avec leurs emojis de drapeaux
+        const countries = {
+            // Mondes Dragon Ball
+            'Namek': '🟢',
+            'Planète Vegeta': '🔴', 
+            'Terre Dragon Ball': '🌍',
+            'Yardrat': '🟡',
+            'Vampa': '🟤',
+            'Arlia': '🟣',
+            'Zoon': '🔵',
+            'Planète des Kais': '🌸',
+            'Planète de Beerus': '🟠',
+            'Monde Suprême': '💜',
+            'Enfer': '🔥',
+            'Autre Monde': '☁️',
+            'Palais de Zeno': '🌟',
+            'Arène Universelle': '🏟️',
+            'Planète Tuffle': '⚫',
+            
+            // Pays terrestres classiques
+            'France': '🇫🇷',
+            'Germany': '🇩🇪',
+            'Italy': '🇮🇹',
+            'Spain': '🇪🇸',
+            'United Kingdom': '🇬🇧',
+            'Russia': '🇷🇺',
+            'United States': '🇺🇸',
+            'Canada': '🇨🇦',
+            'Mexico': '🇲🇽',
+            'Brazil': '🇧🇷',
+            'Argentina': '🇦🇷',
+            'Chile': '🇨🇱',
+            'Japan': '🇯🇵',
+            'China': '🇨🇳',
+            'South Korea': '🇰🇷',
+            'India': '🇮🇳',
+            'Thailand': '🇹🇭',
+            'Australia': '🇦🇺',
+            'New Zealand': '🇳🇿',
+            'Egypt': '🇪🇬',
+            'South Africa': '🇿🇦',
+            'Nigeria': '🇳🇬',
+            'Morocco': '🇲🇦',
+            'Turkey': '🇹🇷',
+            'Greece': '🇬🇷',
+            'Netherlands': '🇳🇱',
+            'Belgium': '🇧🇪',
+            'Switzerland': '🇨🇭',
+            'Austria': '🇦🇹',
+            'Sweden': '🇸🇪',
+            'Norway': '🇳🇴',
+            'Denmark': '🇩🇰',
+            'Finland': '🇫🇮',
+            'Poland': '🇵🇱',
+            'Czech Republic': '🇨🇿',
+            'Hungary': '🇭🇺',
+            'Portugal': '🇵🇹',
+            'Ireland': '🇮🇪',
+            'Ukraine': '🇺🇦',
+            'Romania': '🇷🇴',
+            'Bulgaria': '🇧🇬',
+            'Croatia': '🇭🇷',
+            'Serbia': '🇷🇸',
+            'Slovenia': '🇸🇮',
+            'Slovakia': '🇸🇰',
+            'Lithuania': '🇱🇹',
+            'Latvia': '🇱🇻',
+            'Estonia': '🇪🇪',
+            'Iceland': '🇮🇸',
+            'Malta': '🇲🇹',
+            'Cyprus': '🇨🇾',
+            'Luxembourg': '🇱🇺',
+            'Monaco': '🇲🇨',
+            'Andorra': '🇦🇩',
+            'San Marino': '🇸🇲',
+            'Vatican': '🇻🇦',
+            'Liechtenstein': '🇱🇮',
+            'Albania': '🇦🇱',
+            'Bosnia': '🇧🇦',
+            'Montenegro': '🇲🇪',
+            'North Macedonia': '🇲🇰',
+            'Moldova': '🇲🇩',
+            'Belarus': '🇧🇾',
+            'Georgia': '🇬🇪',
+            'Armenia': '🇦🇲',
+            'Azerbaijan': '🇦🇿',
+            'Kazakhstan': '🇰🇿',
+            'Uzbekistan': '🇺🇿',
+            'Turkmenistan': '🇹🇲',
+            'Kyrgyzstan': '🇰🇬',
+            'Tajikistan': '🇹🇯',
+            'Afghanistan': '🇦🇫',
+            'Pakistan': '🇵🇰',
+            'Bangladesh': '🇧🇩',
+            'Sri Lanka': '🇱🇰',
+            'Nepal': '🇳🇵',
+            'Bhutan': '🇧🇹',
+            'Maldives': '🇲🇻',
+            'Myanmar': '🇲🇲',
+            'Laos': '🇱🇦',
+            'Cambodia': '🇰🇭',
+            'Vietnam': '🇻🇳',
+            'Philippines': '🇵🇭',
+            'Indonesia': '🇮🇩',
+            'Malaysia': '🇲🇾',
+            'Singapore': '🇸🇬',
+            'Brunei': '🇧🇳',
+            'Mongolia': '🇲🇳',
+            'North Korea': '🇰🇵',
+            'Taiwan': '🇹🇼',
+            'Hong Kong': '🇭🇰',
+            'Macau': '🇲🇴',
+            'Iran': '🇮🇷',
+            'Iraq': '🇮🇶',
+            'Syria': '🇸🇾',
+            'Lebanon': '🇱🇧',
+            'Jordan': '🇯🇴',
+            'Palestine': '🇵🇸',
+            'Saudi Arabia': '🇸🇦',
+            'UAE': '🇦🇪',
+            'Qatar': '🇶🇦',
+            'Kuwait': '🇰🇼',
+            'Bahrain': '🇧🇭',
+            'Oman': '🇴🇲',
+            'Yemen': '🇾🇪',
+            'Algeria': '🇩🇿',
+            'Tunisia': '🇹🇳',
+            'Libya': '🇱🇾',
+            'Sudan': '🇸🇩',
+            'Ethiopia': '🇪🇹',
+            'Kenya': '🇰🇪',
+            'Uganda': '🇺🇬',
+            'Tanzania': '🇹🇿',
+            'Rwanda': '🇷🇼',
+            'Burundi': '🇧🇮',
+            'Somalia': '🇸🇴',
+            'Djibouti': '🇩🇯',
+            'Eritrea': '🇪🇷',
+            'Ghana': '🇬🇭',
+            'Ivory Coast': '🇨🇮',
+            'Senegal': '🇸🇳',
+            'Mali': '🇲🇱',
+            'Burkina Faso': '🇧🇫',
+            'Niger': '🇳🇪',
+            'Chad': '🇹🇩',
+            'Cameroon': '🇨🇲',
+            'Gabon': '🇬🇦',
+            'Congo': '🇨🇬',
+            'DR Congo': '🇨🇩',
+            'Angola': '🇦🇴',
+            'Zambia': '🇿🇲',
+            'Zimbabwe': '🇿🇼',
+            'Botswana': '🇧🇼',
+            'Namibia': '🇳🇦',
+            'Lesotho': '🇱🇸',
+            'Swaziland': '🇸🇿',
+            'Madagascar': '🇲🇬',
+            'Mauritius': '🇲🇺',
+            'Seychelles': '🇸🇨',
+            'Comoros': '🇰🇲',
+            'Cape Verde': '🇨🇻',
+            'Guinea': '🇬🇳',
+            'Guinea-Bissau': '🇬🇼',
+            'Sierra Leone': '🇸🇱',
+            'Liberia': '🇱🇷',
+            'Togo': '🇹🇬',
+            'Benin': '🇧🇯',
+            'Mauritania': '🇲🇷',
+            'Gambia': '🇬🇲',
+            'Peru': '🇵🇪',
+            'Colombia': '🇨🇴',
+            'Venezuela': '🇻🇪',
+            'Ecuador': '🇪🇨',
+            'Bolivia': '🇧🇴',
+            'Paraguay': '🇵🇾',
+            'Uruguay': '🇺🇾',
+            'Guyana': '🇬🇾',
+            'Suriname': '🇸🇷',
+            'Jamaica': '🇯🇲',
+            'Haiti': '🇭🇹',
+            'Dominican Republic': '🇩🇴',
+            'Cuba': '🇨🇺',
+            'Bahamas': '🇧🇸',
+            'Barbados': '🇧🇧',
+            'Trinidad': '🇹🇹',
+            'Grenada': '🇬🇩',
+            'Saint Lucia': '🇱🇨',
+            'Saint Vincent': '🇻🇨',
+            'Antigua': '🇦🇬',
+            'Dominica': '🇩🇲',
+            'Saint Kitts': '🇰🇳',
+            'Belize': '🇧🇿',
+            'Guatemala': '🇬🇹',
+            'Honduras': '🇭🇳',
+            'El Salvador': '🇸🇻',
+            'Nicaragua': '🇳🇮',
+            'Costa Rica': '🇨🇷',
+            'Panama': '🇵🇦',
+            'Fiji': '🇫🇯',
+            'Papua New Guinea': '🇵🇬',
+            'Solomon Islands': '🇸🇧',
+            'Vanuatu': '🇻🇺',
+            'Samoa': '🇼🇸',
+            'Tonga': '🇹🇴',
+            'Tuvalu': '🇹🇻',
+            'Kiribati': '🇰🇮',
+            'Nauru': '🇳🇷',
+            'Palau': '🇵🇼',
+            'Micronesia': '🇫🇲',
+            'Marshall Islands': '🇲🇭',
+            'Kabyle': '🏔️'
+        };
+
+        // Base de données des prénoms par pays et genre
+        const names = {
+            'France': {
+                male: ['Jean', 'Pierre', 'Michel', 'Alain', 'Patrick', 'Philippe', 'Jacques', 'Christian', 'Christophe', 'Daniel'],
+                female: ['Marie', 'Nathalie', 'Isabelle', 'Sylvie', 'Catherine', 'Françoise', 'Anne', 'Brigitte', 'Martine', 'Christine'],
+                lastNames: ['Martin', 'Bernard', 'Dubois', 'Thomas', 'Robert', 'Richard', 'Petit', 'Durand', 'Leroy', 'Moreau']
+            },
+            'Germany': {
+                male: ['Hans', 'Klaus', 'Wolfgang', 'Jürgen', 'Dieter', 'Manfred', 'Heinrich', 'Günter', 'Peter', 'Michael'],
+                female: ['Ursula', 'Ingrid', 'Helga', 'Gisela', 'Monika', 'Renate', 'Christa', 'Brigitte', 'Angelika', 'Petra'],
+                lastNames: ['Müller', 'Schmidt', 'Schneider', 'Fischer', 'Weber', 'Meyer', 'Wagner', 'Becker', 'Schulz', 'Hoffmann']
+            },
+            'Italy': {
+                male: ['Giuseppe', 'Antonio', 'Mario', 'Francesco', 'Giovanni', 'Luigi', 'Angelo', 'Vincenzo', 'Pietro', 'Salvatore'],
+                female: ['Maria', 'Anna', 'Giuseppina', 'Rosa', 'Angela', 'Giovanna', 'Teresa', 'Lucia', 'Carmela', 'Caterina'],
+                lastNames: ['Rossi', 'Russo', 'Ferrari', 'Esposito', 'Bianchi', 'Romano', 'Colombo', 'Ricci', 'Marino', 'Greco']
+            },
+            'Spain': {
+                male: ['Antonio', 'José', 'Manuel', 'Francisco', 'Juan', 'David', 'José Antonio', 'José Luis', 'Jesús', 'Javier'],
+                female: ['Carmen', 'María', 'Josefa', 'Isabel', 'Ana', 'Dolores', 'Pilar', 'Teresa', 'Rosa', 'Francisca'],
+                lastNames: ['García', 'Rodríguez', 'González', 'Fernández', 'López', 'Martínez', 'Sánchez', 'Pérez', 'Gómez', 'Martín']
+            },
+            'United States': {
+                male: ['James', 'Robert', 'John', 'Michael', 'David', 'William', 'Richard', 'Thomas', 'Christopher', 'Daniel'],
+                female: ['Mary', 'Patricia', 'Jennifer', 'Linda', 'Elizabeth', 'Barbara', 'Susan', 'Jessica', 'Sarah', 'Karen'],
+                lastNames: ['Smith', 'Johnson', 'Williams', 'Brown', 'Jones', 'Garcia', 'Miller', 'Davis', 'Rodriguez', 'Martinez']
+            },
+            'Japan': {
+                male: ['Hiroshi', 'Takeshi', 'Satoshi', 'Kenji', 'Yuki', 'Akira', 'Taro', 'Masashi', 'Kazuki', 'Daiki'],
+                female: ['Yuki', 'Akiko', 'Mayumi', 'Keiko', 'Naoko', 'Miyuki', 'Emi', 'Yoko', 'Tomoko', 'Sachiko'],
+                lastNames: ['Sato', 'Suzuki', 'Takahashi', 'Tanaka', 'Watanabe', 'Ito', 'Yamamoto', 'Nakamura', 'Kobayashi', 'Kato']
+            },
+            'China': {
+                male: ['Wei', 'Fang', 'Lei', 'Jun', 'Ming', 'Jian', 'Gang', 'Qiang', 'Bin', 'Dong'],
+                female: ['Li', 'Wang', 'Zhang', 'Liu', 'Chen', 'Yang', 'Huang', 'Zhao', 'Wu', 'Zhou'],
+                lastNames: ['Wang', 'Li', 'Zhang', 'Liu', 'Chen', 'Yang', 'Huang', 'Zhao', 'Wu', 'Zhou']
+            },
+            'Brazil': {
+                male: ['José', 'João', 'Antonio', 'Francisco', 'Carlos', 'Paulo', 'Pedro', 'Lucas', 'Luiz', 'Marcos'],
+                female: ['Maria', 'Ana', 'Francisca', 'Antonia', 'Adriana', 'Juliana', 'Marcia', 'Fernanda', 'Patricia', 'Aline'],
+                lastNames: ['Silva', 'Santos', 'Oliveira', 'Souza', 'Rodrigues', 'Ferreira', 'Alves', 'Pereira', 'Lima', 'Gomes']
+            },
+            'Russia': {
+                male: ['Alexander', 'Vladimir', 'Sergey', 'Dmitry', 'Andrey', 'Alexey', 'Mikhail', 'Ivan', 'Nikolay', 'Pavel'],
+                female: ['Elena', 'Tatyana', 'Olga', 'Irina', 'Natasha', 'Svetlana', 'Anna', 'Maria', 'Lyudmila', 'Galina'],
+                lastNames: ['Ivanov', 'Petrov', 'Smirnov', 'Kuznetsov', 'Popov', 'Volkov', 'Sokolov', 'Lebedev', 'Kozlov', 'Novikov']
+            },
+            'United Kingdom': {
+                male: ['David', 'John', 'Paul', 'Mark', 'James', 'Andrew', 'Scott', 'Steven', 'Robert', 'Stephen'],
+                female: ['Susan', 'Julie', 'Karen', 'Sarah', 'Claire', 'Jacqueline', 'Helen', 'Amanda', 'Sharon', 'Donna'],
+                lastNames: ['Smith', 'Jones', 'Taylor', 'Williams', 'Brown', 'Davies', 'Evans', 'Wilson', 'Thomas', 'Roberts']
+            },
+            'Algeria': {
+                male: ['Ahmed', 'Mohamed', 'Ali', 'Omar', 'Hassan', 'Ibrahim', 'Yusuf', 'Khalid', 'Samir', 'Tariq',
+                       'Abderrahim', 'Abdallah', 'Said', 'Mustapha', 'Karim', 'Youcef', 'Rachid', 'Farid', 'Hamid', 'Djamel'],
+                female: ['Fatima', 'Aicha', 'Khadija', 'Zahra', 'Amina', 'Yasmin', 'Leila', 'Sara', 'Maryam', 'Nadia',
+                         'Zohra', 'Samia', 'Farida', 'Malika', 'Djamila', 'Nouhaila', 'Souheila', 'Hayat', 'Ghania', 'Houria', 'Cherifa'],
+                lastNames: ['Benali', 'Benaissa', 'Benmohamed', 'Bencherif', 'Benabdallah', 'Belaidi', 'Belkacem', 'Belhadj', 'Yahiaoui', 'Haddad']
+            },
+            'Tunisia': {
+                male: ['Ahmed', 'Mohamed', 'Ali', 'Omar', 'Hassan', 'Ibrahim', 'Yusuf', 'Khalid', 'Samir', 'Tariq',
+                       'Abdesslem', 'Abdallah', 'Said', 'Mustapha', 'Karim', 'Youcef', 'Rachid', 'Farid', 'Hamid', 'Djamel'],
+                female: ['Fatima', 'Aicha', 'Khadija', 'Zahra', 'Amina', 'Yasmin', 'Leila', 'Sara', 'Maryam', 'Nadia',
+                         'Zohra', 'Samia', 'Farida', 'Malika', 'Djamila', 'Nouhaila', 'Souheila', 'Hayat', 'Ghania', 'Houria', 'Cherifa'],
+                lastNames: ['Ben Ahmed', 'Ben Mohamed', 'Ben Ali', 'Trabelsi', 'Belhaj', 'Yahiaoui', 'Sassi', 'Jebali', 'Khemiri', 'Bouazizi']
+            },
+            'Morocco': {
+                male: ['Ahmed', 'Mohamed', 'Ali', 'Omar', 'Hassan', 'Ibrahim', 'Yusuf', 'Khalid', 'Samir', 'Tariq',
+                       'Abderrahim', 'Abdallah', 'Said', 'Mustapha', 'Karim', 'Youcef', 'Rachid', 'Farid', 'Hamid', 'Djamel'],
+                female: ['Fatima', 'Aicha', 'Khadija', 'Zahra', 'Amina', 'Yasmin', 'Leila', 'Sara', 'Maryam', 'Nadia',
+                         'Zohra', 'Samia', 'Farida', 'Malika', 'Djamila', 'Nouhaila', 'Souheila', 'Hayat', 'Ghania', 'Houria', 'Cherifa'],
+                lastNames: ['Benali', 'El Alami', 'Bennani', 'Berrada', 'Bouchaib', 'Yahiaoui', 'Cherkaoui', 'Fassi', 'Idrissi', 'Lahlou']
+            },
+            'Kabyle': {
+                male: ['Yugurtha.Adel', 'Massinissa', 'Dihya', 'Tarik', 'Amayas', 'Aksil', 'Ameqran', 'Azwaw', 'Firmus', 'Tacfarinas', 
+                       'Amirouche', 'Akli', 'Arezki', 'Meziane', 'Mohand', 'Lounis', 'Saïd', 'Karim', 'Youcef', 'Lyes', 
+                       'Amazigh', 'Tahar', 'Omar', 'Slimane', 'Madjid', 'Djamel', 'Hamid', 'Farid', 'Rachid', 'Mustapha',
+                       'Idir', 'Aitouche', 'Mouloud', 'Mohia', 'Belkacem', 'Hocine', 'Abderrahmane', 'Abdelkader', 'Boualem', 'Rabah',
+                       'Micipsa', 'Adherbal', 'Hiempsal', 'Juba', 'Ptolémée', 'Syphax', 'Gaia', 'Zilalsan', 'Masaesyli', 'Gauda',
+                       'Hiarbas', 'Capussa', 'Lacumazes', 'Vermina', 'Mazaetullus', 'Aguellid', 'Amagar', 'Anir', 'Akal', 'Ifri',
+                       'Agawa', 'Amellal', 'Azakal', 'Imenan', 'Atlassi', 'Numida', 'Garama', 'Asagas', 'Tamurt', 'Adrar'],
+                female: ['Tassadit', 'Malika', 'Kahina', 'Tamazight', 'Lynda', 'Nadia', 'Fadhma', 'Ouardia', 'Djamila', 'Yasmine',
+                        'Lila', 'Dihya', 'Tanina', 'Katia', 'Nacera', 'Farida', 'Zohra', 'Kenza', 'Samia', 'Sadia', 'Nouhaila', 'Souheila',
+                        'Taous', 'Massa', 'Thiziri', 'Kamelia', 'Wardia', 'Tinhinane', 'Itri', 'Tafat', 'Amina', 'Zouina',
+                        'Ferroudja', 'Houria', 'Cherifa', 'Zahra', 'Fatima', 'Aicha', 'Zoubida', 'Ghania', 'Hayat', 'Noura',
+                        'Sophonisbe', 'Salambô', 'Dido', 'Elissa', 'Gamilath', 'Amanitore', 'Tadukhepa', 'Tuya', 'Anippe', 'Gala',
+                        'Tilelli', 'Yemma', 'Lalla', 'Tizizwa', 'Aziza', 'Agurzil', 'Taghzut', 'Ifassen', 'Tafrara', 'Azul'],
+                lastNames: ['MEHENNI', 'AMELLAL', 'AIT-AHMED', 'MAMMERI', 'AMAZIGH', 'TAMAZGHA', 'KABYLE', 'IMAZIGHEN', 'ATLASSI', 'BERBERE',
+                           'AIT-SAID', 'AIT-ALI', 'AIT-HAMOU', 'AIT-OMAR', 'AIT-KACI', 'AIT-YAHIA', 'AIT-LARBI', 'AIT-BRAHAM', 'AIT-AMARA', 'AIT-HAKIM',
+                           'BENALI', 'BENAISSA', 'BENMOHAMED', 'BENCHERIF', 'BENABDALLAH', 'BELAIDI', 'BELKACEM', 'BELHADJ', 'BELHOCINE', 'BELAID',
+                           'OUALI', 'OULHADJ', 'OUAMAR', 'OUKACI', 'OUYAHIA', 'FERHAT', 'HADDAD', 'HAMIDI', 'KACI', 'MEZIANI', 'YAHIAOUI',
+                           'MOULAI', 'MOUHOUB', 'MOKRANE', 'MATOUB', 'MEDJAHED', 'MOHAND', 'AMROUCHE', 'FERAOUN', 'KATEB', 'DJAOUT',
+                           'MASSINISSA', 'JUGURTHA', 'MICIPSA', 'JUBA', 'SYPHAX', 'GAIA', 'NUMIDA', 'ATLASSI', 'GARAMA', 'LIBYA',
+                           'TINHINANE', 'DIHYA-KAHINA', 'AKSIL', 'KUSAYLA', 'YABDES', 'ANTALAS', 'MASTIES', 'ORTHAIAS', 'CARCASAN', 'IFREN']
+            }
+        };
+
+        // Noms Dragon Ball par monde
+        const dragonBallNames = {
+            'Namek': {
+                male: ['Piccolo', 'Nail', 'Guru', 'Dende', 'Cargo', 'Moori', 'Tsuno', 'Kami', 'King Piccolo', 'Slug'],
+                female: ['Necke', 'Maima', 'Tanishe', 'Namole', 'Kideen', 'Tsumuri', 'Namira', 'Porunga', 'Zalama', 'Nameka'],
+                lastNames: ['of Namek', 'the Green', 'the Wise', 'Dragon Clan', 'Warrior Clan', 'the Elder', 'Guardian', 'Healer', 'of Porunga', 'the Pure']
+            },
+            'Planète Vegeta': {
+                male: ['Vegeta', 'Goku', 'Broly', 'Bardock', 'Raditz', 'Nappa', 'Turles', 'Paragus', 'Tarble', 'King Vegeta'],
+                female: ['Gine', 'Fasha', 'Seripa', 'Celipa', 'Vegeta-sei', 'Bulla', 'Pan', 'Caulifla', 'Kale', 'Tora'],
+                lastNames: ['Prince', 'Elite', 'Low-Class', 'Royal', 'Warrior', 'Saiyan', 'Super', 'Legendary', 'of Planet Vegeta', 'the Proud']
+            },
+            'Terre Dragon Ball': {
+                male: ['Gohan', 'Goten', 'Trunks', 'Yamcha', 'Krillin', 'Tien', 'Chiaotzu', 'Master Roshi', 'Yajirobe', 'Uub'],
+                female: ['Bulma', 'Chi-Chi', 'Android 18', 'Videl', 'Launch', 'Mai', 'Maron', 'Bulla', 'Pan', 'Marron'],
+                lastNames: ['Son', 'Brief', 'Satan', 'Turtle Hermit', 'Crane', 'Capsule Corp', 'Orange Star', 'Ox-King', 'World Champion', 'Z-Fighter']
+            },
+            'Yardrat': {
+                male: ['Pybara', 'Soba', 'Yugure', 'Yuzun', 'Yakkon', 'Yardos', 'Yakon', 'Yamu', 'Yetti', 'Yoroi'],
+                female: ['Yuki', 'Yara', 'Yume', 'Yuna', 'Yolanda', 'Yamira', 'Yasmin', 'Yara', 'Yoruka', 'Yumeko'],
+                lastNames: ['Spirit Control', 'Instant', 'Teleporter', 'the Peaceful', 'Technique Master', 'Meditation', 'Balance', 'Harmony', 'Wisdom', 'Serenity']
+            },
+            'Planète de Beerus': {
+                male: ['Beerus', 'Whis', 'Oracle Fish', 'Vados', 'Champa', 'Angel', 'Destroyer', 'Divine', 'Godly', 'Cosmic'],
+                female: ['Vados', 'Marcarita', 'Cus', 'Mojito', 'Cognac', 'Kusu', 'Camparri', 'Awamo', 'Sour', 'Korn'],
+                lastNames: ['God of Destruction', 'Angel', 'Divine', 'Destroyer', 'Universal', 'Cosmic', 'Sacred', 'Eternal', 'Omnipotent', 'Supreme']
+            }
+        };
+
+        // Fonction pour générer des noms pour les pays non listés
+        function getDefaultNames(country) {
+            // Vérifier si c'est un monde Dragon Ball
+            if (dragonBallNames[country]) {
+                return dragonBallNames[country];
+            }
+            
+            // Noms par défaut pour pays terrestres
+            return {
+                male: ['Ahmed', 'Mohamed', 'Ali', 'Omar', 'Hassan', 'Ibrahim', 'Yusuf', 'Khalid', 'Samir', 'Tariq'],
+                female: ['Fatima', 'Aisha', 'Zara', 'Layla', 'Nadia', 'Amina', 'Yasmin', 'Leila', 'Sara', 'Maryam'],
+                lastNames: ['Al-Rashid', 'Al-Mahmud', 'Al-Hassan', 'Al-Qadir', 'Al-Nasser', 'Al-Zahra', 'Al-Farouk', 'Al-Kabir', 'Al-Saeed', 'Al-Malik']
+            };
+        }
+
+        // Variables du jeu
+        let gameState = {
+            selectedCountry: '',
+            player: {
+                country: '',
+                gender: '',
+                firstName: '',
+                lastName: '',
+                fullName: ''
+            },
+            xp: 0,
+            level: 1,
+            marriages: 0,
+            totalPlayTime: 0,
+            startTime: Date.now(),
+            achievements: [],
+            statistics: {
+                totalMarriages: 0,
+                countriesVisited: new Set(),
+                bossesDefeated: 0,
+                recipesLearned: 0,
+                maxLevel: 1
+            }
+        };
+
+        // Variable pour le thème (pas de localStorage dans l'environnement sandboxé)
+        let currentTheme = 'light';
+
+        // Base de données des couples spéciaux et anecdotes
+        const specialCouples = {
+            'France_Italy': {
+                type: 'legendary',
+                title: '🍷 Romance Méditerranéenne',
+                message: 'France et Italie : une union parfaite entre l\'art de vivre français et la passion italienne !',
+                bonus: 100
+            },
+            'USA_North Korea': {
+                type: 'impossible',
+                title: '💥 Tension Diplomatique',
+                message: 'Mariage impossible ! Les relations sont trop tendues entre ces deux pays...',
+                animation: 'explosion'
+            },
+            'Japan_Germany': {
+                type: 'legendary',
+                title: '⚙️ Union Technologique',
+                message: 'Japon et Allemagne : quand la précision allemande rencontre l\'innovation japonaise !',
+                bonus: 80
+            },
+            'Brazil_Argentina': {
+                type: 'rivalry',
+                title: '⚽ Rivalité Footballistique',
+                message: 'Mariage sous haute tension ! La rivalité footballistique est légendaire...',
+                animation: 'soccer'
+            },
+            'India_Pakistan': {
+                type: 'impossible',
+                title: '🚫 Conflit Historique',
+                message: 'Ces deux pays ont une histoire compliquée... Mariage très difficile !',
+                animation: 'tension'
+            },
+            'United Kingdom_Ireland': {
+                type: 'rivalry',
+                title: '🍀 Histoire Complexe',
+                message: 'Une union délicate entre voisins à l\'histoire mouvementée...',
+                bonus: 60
+            }
+        };
+
+        // Anecdotes culturelles par pays
+        const culturalAnecdotes = {
+            'France': 'En France, on mange 13 desserts le jour de Noël en Provence !',
+            'Italy': 'En Italie, porter du rouge le jour du nouvel an porte bonheur !',
+            'Japan': 'Au Japon, les mariages traditionnels peuvent coûter plus de 30 000€ !',
+            'India': 'En Inde, les mariages durent souvent plusieurs jours avec de nombreuses cérémonies !',
+            'China': 'En Chine, la couleur rouge est symbole de bonheur et chance pour les mariages !',
+            'Brazil': 'Au Brésil, les mariages incluent souvent la "bem-casado", une pâtisserie porte-bonheur !',
+            'Germany': 'En Allemagne, casser de la vaisselle avant le mariage porte bonheur !',
+            'Russia': 'En Russie, les mariés doivent visiter les monuments locaux après la cérémonie !',
+            'Egypt': 'En Égypte, les mariages incluent la danse traditionnelle du "Zaffa" !',
+            'Morocco': 'Au Maroc, la mariée change jusqu\'à 7 tenues différentes le jour J !',
+            'Kabyle': 'Chez les Kabyles, le henné est une tradition importante avant le mariage !',
+            
+            // Anecdotes Dragon Ball
+            'Namek': 'Sur Namek, les mariages se font sous trois soleils et durent 130 jours nameks !',
+            'Planète Vegeta': 'Chez les Saiyans, seuls les guerriers élites peuvent se marier au palais royal !',
+            'Terre Dragon Ball': 'Sur Terre DB, les mariages incluent souvent un tournoi d\'arts martiaux !',
+            'Yardrat': 'Les Yardrats utilisent la téléportation instantanée pour leurs lunes de miel cosmiques !',
+            'Vampa': 'Sur Vampa, les mariages se font pendant les tempêtes pour tester le courage des époux !',
+            'Planète de Beerus': 'Les mariages divins nécessitent l\'approbation du Dieu de la Destruction !',
+            'Monde Suprême': 'Dans le monde des Kaioshins, les unions durent des millénaires !',
+            'Enfer': 'En Enfer, les mariages sont... éternellement compliqués ! 😈',
+            'Autre Monde': 'Dans l\'Autre Monde, les âmes peuvent se remarier avec leur forme spirituelle !',
+            'Palais de Zeno': 'Seul Zeno-sama peut autoriser les mariages entre univers différents !',
+            'Arène Universelle': 'Dans l\'Arène, les mariages se font par combat... le plus fort gagne !',
+            'Planète Tuffle': 'Les anciens Tuffles avaient des mariages technologiques très avancés !'
+        };
+
+        // Réponses culinaires personnalisées par pays
+        const culinaryResponses = {
+            'Japan': {
+                question: `🍜 Tu as déjà goûté les ramens authentiques ou les sushis frais ? 🍣`,
+                enthusiasm: `🇯🇵 Oh ! La cuisine japonaise, c'est tout un art ! Les ramens de Hokkaido, les sushis d'Edo, le tempura croustillant... 🍤 Ma grand-mère fait le meilleur miso de tout Tokyo ! 👵✨`
+            },
+            'Italy': {
+                question: `🍕 La pizza, la pasta, tu connais ? Mais la VRAIE cuisine italienne ? 🍝`,
+                enthusiasm: `🇮🇹 Mamma mia ! La vraie pizza napolitaine, les pâtes fraîches de nonna, le risotto crémeux... 🧀 En Italie, on dit : "L'amore passa per lo stomaco !" (L'amour passe par l'estomac !) 💕`
+            },
+            'Morocco': {
+                question: `🫖 Chez moi on boit le thé à la menthe, tu veux essayer ? Et le tajine ? 🍲`,
+                enthusiasm: `🇲🇦 Ah ! Le thé à la menthe, c'est notre tradition ! Trois verres : le premier amer comme la vie, le deuxième doux comme l'amour, le troisième sucré comme la mort ! ☕ Et nos tajines... un délice ! 🌟`
+            },
+            'France': {
+                question: `🥖 Le fromage, le vin, les croissants... tu apprécies la gastronomie française ? 🧀`,
+                enthusiasm: `🇫🇷 Ah, la gastronomie française ! Plus de 400 fromages, nos vins, la baguette croustillante... 🍷 "Bien manger, c'est le commencement du bonheur !" comme on dit chez nous ! ✨`
+            },
+            'India': {
+                question: `🌶️ Les épices, le curry, tu supportes le piment ? Et les naans ? 🫓`,
+                enthusiasm: `🇮🇳 Les épices sont notre âme ! Curcuma, cardamome, garam masala... 🌟 Ma mère dit : "Celui qui mange nos épices gardera notre chaleur dans son cœur pour toujours !" 💖`
+            },
+            'Mexico': {
+                question: `🌮 Tacos, guacamole, piment jalapeño... tu aimes le mexique épicé ? 🔥`,
+                enthusiasm: `🇲🇽 ¡Órale ! Les vrais tacos, pas ceux des fast-foods ! Avec salsa verde, cilantro fresco... 🌿 Et notre guacamole secret de familia ! ¡Está súper sabroso! 🥑✨`
+            },
+            'China': {
+                question: `🥟 Dumplings, riz sauté, thé vert... tu connais la vraie cuisine chinoise ? 🍚`,
+                enthusiasm: `🇨🇳 La cuisine chinoise, c'est 5000 ans d'histoire ! Dim sum, hot pot, nouilles tirées à la main... 🍜 On dit : "民以食为天" - Le peuple considère la nourriture comme le ciel ! 🌟`
+            },
+            'Thailand': {
+                question: `🍜 Pad Thai, curry vert, mangue sticky rice... tu aimes les saveurs thaï ? 🥭`,
+                enthusiasm: `🇹🇭 Sabai sabai ! Notre cuisine, c'est l'équilibre parfait : sucré, salé, acide, épicé ! 🌶️ Et notre street food... un paradis pour les papilles ! 😋✨`
+            },
+            'Brazil': {
+                question: `🍖 Churrasco, caipirinha, açaí... tu veux goûter le vrai Brésil ? 🇧🇷`,
+                enthusiasm: `🇧🇷 Nossa ! Le churrasco gaúcho, la feijoada du samedi, l'açaí de Rio... 🏖️ Au Brésil, on mange avec alegria (joie) ! Vem cá, vou te ensinar ! 💃`
+            }
+        };
+
+        // Base de données des recettes rapides
+        const quickRecipes = {
+            'Kabyle': {
+                name: 'Couscous Kabyle Express',
+                ingredients: '• Semoule moyenne • Courgettes • Carottes • Pois chiches • Huile d\'olive • Harissa douce',
+                steps: '1️⃣ Faire gonfler la semoule à la vapeur 2️⃣ Mijoter les légumes 3️⃣ Mélanger avec amour berbère ! 💕'
+            },
+            'Japan': {
+                name: 'Ramen Instantané Authentique',
+                ingredients: '• Nouilles ramen • Miso • Œuf mollet • Nori • Oignons verts • Huile de sésame',
+                steps: '1️⃣ Bouillon miso chaud 2️⃣ Nouilles al dente 3️⃣ Garnir avec zen japonais ! 🍜'
+            },
+            'Italy': {
+                name: 'Pasta Aglio e Olio',
+                ingredients: '• Spaghetti • Ail • Huile d\'olive • Piment • Persil • Parmesan',
+                steps: '1️⃣ Ail doré dans l\'huile 2️⃣ Pasta al dente 3️⃣ Mantecatura con amore ! 🍝'
+            },
+            'Morocco': {
+                name: 'Thé à la Menthe Parfait',
+                ingredients: '• Thé vert • Menthe fraîche • Sucre • Eau bouillante',
+                steps: '1️⃣ Rincer le thé 2️⃣ Infuser avec menthe 3️⃣ Verser de haut pour la mousse ! 🫖'
+            },
+            'France': {
+                name: 'Croque-Monsieur Express',
+                ingredients: '• Pain de mie • Jambon • Gruyère • Béchamel • Beurre',
+                steps: '1️⃣ Assemblage gourmand 2️⃣ Four gratiné 3️⃣ Dégustation à la française ! 🥪'
+            },
+            'India': {
+                name: 'Curry Express Maison',
+                ingredients: '• Légumes • Lait de coco • Curcuma • Garam masala • Gingembre • Coriandre',
+                steps: '1️⃣ Épices grillées 2️⃣ Mijotage parfumé 3️⃣ Magie des saveurs indiennes ! 🍛'
+            }
+        };
+
+        // Système de missions et succès
+        let missions = {
+            continentalUnion: { name: 'Union Continentale', description: 'Marier des pays de 3 continents différents', progress: 0, target: 3, reward: 200, completed: false },
+            speedMarriage: { name: 'Mariages Express', description: 'Réaliser 5 mariages en moins de 2 minutes', progress: 0, target: 5, reward: 150, completed: false },
+            culturalBridge: { name: 'Pont Culturel', description: 'Marier un pays européen avec un pays africain', progress: 0, target: 1, reward: 100, completed: false },
+            legendary: { name: 'Couples Légendaires', description: 'Découvrir 3 couples spéciaux', progress: 0, target: 3, reward: 300, completed: false },
+            // Nouvelles missions culinaires
+            masterChef: { name: 'Master Chef International', description: 'Apprendre 5 recettes de pays différents', progress: 0, target: 5, reward: 250, completed: false },
+            culinaryAmbassador: { name: 'Ambassadeur Culinaire', description: 'Partager 3 échanges culinaires', progress: 0, target: 3, reward: 180, completed: false },
+            spiceTrader: { name: 'Marchand d\'Épices', description: 'Découvrir la cuisine de 8 pays asiatiques', progress: 0, target: 8, reward: 300, completed: false }
+        };
+
+        // Historique culinaire
+        let culinaryExchanges = [];
+        let learnedRecipes = new Set();
+
+        // Système Dragon Ball Z - Boss Fights et Mini-jeux
+        const dragonBallFamilies = {
+            'Terre Dragon Ball': {
+                'Bulla': { father: 'Vegeta', mother: 'Bulma', type: 'princess' },
+                'Pan': { father: 'Gohan', mother: 'Videl', type: 'fighter' },
+                'Marron': { father: 'Krillin', mother: 'Android 18', type: 'android' },
+                'Chi-Chi': { father: 'Ox-King', type: 'warrior_princess' },
+                'Bulma': { father: 'Dr. Brief', type: 'genius' },
+                'Android 18': { type: 'android_boss' },
+                'Videl': { father: 'Mr. Satan', type: 'champion' }
+            },
+            'Planète Vegeta': {
+                'Gine': { husband: 'Bardock', type: 'saiyan_mother' },
+                'Fasha': { type: 'elite_warrior' },
+                'Caulifla': { type: 'super_saiyan' },
+                'Kale': { type: 'legendary_saiyan' }
+            }
+        };
+
+        // Questions Quiz Capsule Corp
+        const capsuleCorpQuiz = [
+            {
+                question: "🔮 Combien de Dragon Balls faut-il pour invoquer Shenron ?",
+                answers: ["5", "7", "9", "12"],
+                correct: 1,
+                explanation: "Il faut 7 Dragon Balls pour invoquer le dragon sacré !"
+            },
+            {
+                question: "🍜 Quel est le plat préféré de Goku ?",
+                answers: ["Sushi", "Ramen", "Riz au curry", "Pizza"],
+                correct: 2,
+                explanation: "Goku adore le riz au curry, surtout celui de Chi-Chi !"
+            },
+            {
+                question: "🌍 Quelle planète natale de Vegeta a été détruite ?",
+                answers: ["Namek", "Planète Vegeta", "Kanassa", "Arlia"],
+                correct: 1,
+                explanation: "La Planète Vegeta a été détruite par Frieza !"
+            },
+            {
+                question: "⚡ Quelle transformation Goku a-t-il atteinte en premier ?",
+                answers: ["Super Saiyan", "Kaioken", "Super Saiyan 2", "Ultra Instinct"],
+                correct: 1,
+                explanation: "Le Kaioken était la première transformation de Goku !"
+            },
+            {
+                question: "🏢 Qui dirige Capsule Corporation ?",
+                answers: ["Vegeta", "Goku", "Bulma", "Trunks"],
+                correct: 2,
+                explanation: "Bulma est la présidente de Capsule Corporation !"
+            },
+            {
+                question: "💪 Combien de temps dure un jour dans la Salle du Temps ?",
+                answers: ["1 an", "2 ans", "6 mois", "3 ans"],
+                correct: 0,
+                explanation: "Un jour dans la Salle du Temps équivaut à 1 an !"
+            }
+        ];
+
+        // Niveaux de difficulté des boss DBZ
+        const bossDifficulty = {
+            'Vegeta': { 
+                level: 'LEGENDAIRE', 
+                powerLevel: 18000000, 
+                successChance: 0.2, 
+                xpReward: 300,
+                color: '#FF0000',
+                aura: '👑⚡💥'
+            },
+            'Bulma': { 
+                level: 'DIFFICILE', 
+                powerLevel: 5, 
+                successChance: 0.4, 
+                xpReward: 200,
+                color: '#0066FF',
+                aura: '🔬💡🧠'
+            },
+            'Gohan': { 
+                level: 'DIFFICILE', 
+                powerLevel: 15000000, 
+                successChance: 0.35, 
+                xpReward: 250,
+                color: '#FFD700',
+                aura: '📚⚡🔥'
+            },
+            'Android 18': { 
+                level: 'EXTREME', 
+                powerLevel: 'INFINI', 
+                successChance: 0.25, 
+                xpReward: 350,
+                color: '#8A2BE2',
+                aura: '🤖⚡💎'
+            },
+            'Krillin': { 
+                level: 'FACILE', 
+                powerLevel: 75000, 
+                successChance: 0.7, 
+                xpReward: 100,
+                color: '#32CD32',
+                aura: '😅💪✨'
+            },
+            'Mr. Satan': { 
+                level: 'MOYEN', 
+                powerLevel: 139, 
+                successChance: 0.6, 
+                xpReward: 150,
+                color: '#FFA500',
+                aura: '🏆💪🎬'
+            },
+            'Gine': { 
+                level: 'MOYEN', 
+                powerLevel: 100, 
+                successChance: 0.5, 
+                xpReward: 180,
+                color: '#FF69B4',
+                aura: '🍲💕🌟'
+            },
+            'Bardock': { 
+                level: 'DIFFICILE', 
+                powerLevel: 10000, 
+                successChance: 0.4, 
+                xpReward: 220,
+                color: '#8B0000',
+                aura: '👊🔮⚔️'
+            }
+        };
+
+        // Messages de difficulté
+        const difficultyMessages = {
+            'FACILE': {
+                intro: '🟢 Niveau FACILE - Vous avez de bonnes chances !',
+                success: '😊 Victoire facile ! Comme prévu !',
+                failure: '😅 Même en mode facile, ça n\'a pas marché...'
+            },
+            'MOYEN': {
+                intro: '🟡 Niveau MOYEN - Concentrez-vous bien !',
+                success: '😎 Bonne victoire ! Vous vous en sortez bien !',
+                failure: '😐 Défaite... Il faut vous améliorer !'
+            },
+            'DIFFICILE': {
+                intro: '🟠 Niveau DIFFICILE - Préparez-vous à souffrir !',
+                success: '🔥 Victoire impressionnante ! Vous êtes fort !',
+                failure: '😵 Défaite cuisante ! Ce boss ne rigole pas !'
+            },
+            'EXTREME': {
+                intro: '🔴 Niveau EXTRÊME - Que Shenron vous protège !',
+                success: '🌟 VICTOIRE LÉGENDAIRE ! Vous êtes exceptionnel !',
+                failure: '💀 Anéantissement total ! Ce boss est trop puissant !'
+            },
+            'LEGENDAIRE': {
+                intro: '💀 Niveau LÉGENDAIRE - Impossible pour un mortel !',
+                success: '🐉 MIRACLE COSMIQUE ! Vous avez l\'étoffe d\'un héros !',
+                failure: '⚡ Pulvérisé en un instant ! Vegeta ne pardonne pas !'
+            }
+        };
+
+        // Répliques spéciales par personnage
+        const specialRepliques = {
+            'Vegeta': [
+                "🥊 Qui ose demander la main de ma fille ? Prépare-toi à l'entraînement dans la salle du temps !",
+                "👑 Tu veux épouser une princesse Saiyan ? Prouve d'abord que tu n'es pas un faible !",
+                "⚡ Si tu survis à mon Final Flash, on verra... MAIS J'EN DOUTE !"
+            ],
+            'Bulma': [
+                "🔬 Ici, on n'épouse pas sans passer un entretien technique !",
+                "💡 Tu connais la différence entre un réacteur à fusion et un moteur à capsules ?",
+                "🏢 Bienvenue chez Capsule Corp ! Espérons que tu es plus intelligent que Goku !"
+            ],
+            'Gohan': [
+                "📚 Ma fille doit épouser quelqu'un d'intelligent ! Voyons ton niveau...",
+                "🥋 Je protège ma famille comme j'ai protégé la Terre !",
+                "⚡ Great Saiyaman n'approuve pas facilement les prétendants !"
+            ],
+            'Krillin': [
+                "😅 Euh... tu es sûr ? Android 18 est plus forte que moi...",
+                "💪 Si Android 18 t'accepte, c'est qu'elle a ses raisons !",
+                "🏃 Bonne chance... moi j'ai survécu par miracle !"
+            ],
+            'Android 18': [
+                "🤖 Tu oses défier un androïde ? Intéressant...",
+                "⚡ Je pourrais te détruire d'un claquement de doigts.",
+                "💎 J'espère que tu as de l'argent, j'aime les belles choses."
+            ],
+            'Mr. Satan': [
+                "🏆 Tu veux ma fille ? Tu dois d'abord battre le Champion du Monde !",
+                "💪 DYNAMITE KICK ! Ha ha ha ! Tu as survécu ? Impressionnant !",
+                "🎬 Cette histoire fera un excellent film d'action !"
+            ],
+            'Gine': [
+                "🍲 Tu cuisines ? Sinon, tu ne survivras pas chez les Saiyans !",
+                "💕 Mon fils Kakarot a épousé une terrienne... l'amour n'a pas de frontières !",
+                "🌟 Les Saiyans ont le cœur tendre, contrairement à ce qu'on dit !"
+            ],
+            'Bardock': [
+                "👊 Un autre terrien ? Mon fils a déjà donné l'exemple...",
+                "🔮 Je vois l'avenir... et tu vas souffrir pendant l'entraînement !",
+                "⚔️ Prouve que tu peux protéger ma lignée !"
+            ]
+        };
+
+        // Historique des boss fights
+        let defeatedBosses = new Set();
+        let passedQuizzes = new Set();
+
+        // Historique des mariages
+        let marriageHistory = [];
+        let discoveredCouples = new Set();
+
+        // Continents par pays (pour les missions)
+        const countryContinents = {
+            'France': 'Europe', 'Germany': 'Europe', 'Italy': 'Europe', 'Spain': 'Europe', 'United Kingdom': 'Europe',
+            'Russia': 'Europe', 'Poland': 'Europe', 'Netherlands': 'Europe', 'Sweden': 'Europe', 'Norway': 'Europe',
+            'USA': 'North America', 'Canada': 'North America', 'Mexico': 'North America',
+            'Brazil': 'South America', 'Argentina': 'South America', 'Chile': 'South America', 'Peru': 'South America',
+            'China': 'Asia', 'Japan': 'Asia', 'India': 'Asia', 'South Korea': 'Asia', 'Thailand': 'Asia',
+            'Egypt': 'Africa', 'South Africa': 'Africa', 'Nigeria': 'Africa', 'Morocco': 'Africa', 'Algeria': 'Africa',
+            'Australia': 'Oceania', 'New Zealand': 'Oceania', 'Fiji': 'Oceania',
+            'Kabyle': 'Africa'
+        };
+
+        // Initialisation du jeu
+        function initGame() {
+            generateCountriesGrid();
+            updateXPDisplay();
+            setupEventListeners();
+        }
+
+        // Génération de la grille des pays
+        function generateCountriesGrid() {
+            const grid = document.getElementById('countriesGrid');
+            grid.innerHTML = '';
+
+            Object.entries(countries).forEach(([country, flag]) => {
+                const countryBall = document.createElement('div');
+                countryBall.className = 'country-ball';
+                countryBall.innerHTML = flag;
+                countryBall.title = country;
+                countryBall.onclick = () => selectCountry(country, countryBall);
+                grid.appendChild(countryBall);
+            });
+        }
+
+        // Sélection du pays
+        function selectCountry(country, element) {
+            // Enlever la sélection précédente
+            document.querySelectorAll('.country-ball').forEach(ball => {
+                ball.classList.remove('selected');
+            });
+
+            // Sélectionner le nouveau pays
+            element.classList.add('selected');
+            gameState.selectedCountry = country;
+            gameState.player.country = country;
+
+            // Activer le bouton suivant
+            document.getElementById('nextToCharacter').disabled = false;
+
+            // Mettre à jour les sélecteurs de noms
+            updateNameSelectors();
+        }
+
+        // Mise à jour des sélecteurs de noms
+        function updateNameSelectors() {
+            const country = gameState.selectedCountry;
+            const countryNames = names[country] || getDefaultNames(country);
+
+            // Vider les sélecteurs
+            document.getElementById('firstNameSelect').innerHTML = '<option value="">Choisissez d\'abord votre genre</option>';
+            document.getElementById('lastNameSelect').innerHTML = '<option value="">Choisissez votre nom</option>';
+
+            // Remplir les noms de famille
+            countryNames.lastNames.forEach(lastName => {
+                const option = document.createElement('option');
+                option.value = lastName;
+                option.textContent = lastName;
+                document.getElementById('lastNameSelect').appendChild(option);
+            });
+        }
+
+        // Mise à jour des prénoms selon le genre
+        function updateFirstNames() {
+            const gender = document.getElementById('genderSelect').value;
+            const country = gameState.selectedCountry;
+            const countryNames = names[country] || getDefaultNames(country);
+
+            const firstNameSelect = document.getElementById('firstNameSelect');
+            firstNameSelect.innerHTML = '<option value="">Choisissez votre prénom</option>';
+
+            if (gender && countryNames[gender]) {
+                countryNames[gender].forEach(firstName => {
+                    const option = document.createElement('option');
+                    option.value = firstName;
+                    option.textContent = firstName;
+                    firstNameSelect.appendChild(option);
+                });
+            }
+
+            gameState.player.gender = gender;
+            checkCharacterComplete();
+        }
+
+        // Vérification si le personnage est complet
+        function checkCharacterComplete() {
+            const gender = document.getElementById('genderSelect').value;
+            const firstName = document.getElementById('firstNameSelect').value;
+            const lastName = document.getElementById('lastNameSelect').value;
+
+            if (gender && firstName && lastName) {
+                gameState.player.gender = gender;
+                gameState.player.firstName = firstName;
+                gameState.player.lastName = lastName;
+                gameState.player.fullName = `${firstName} ${lastName}`;
+                document.getElementById('startGame').disabled = false;
+            } else {
+                document.getElementById('startGame').disabled = true;
+            }
+        }
+
+        // Configuration des écouteurs d'événements
+        function setupEventListeners() {
+            document.getElementById('nextToCharacter').onclick = showCharacterCreation;
+            document.getElementById('startGame').onclick = startMainGame;
+            document.getElementById('genderSelect').onchange = updateFirstNames;
+            document.getElementById('firstNameSelect').onchange = checkCharacterComplete;
+            document.getElementById('lastNameSelect').onchange = checkCharacterComplete;
+            document.getElementById('searchPartners').onclick = searchPartners;
+        }
+
+        // Affichage de la création de personnage
+        function showCharacterCreation() {
+            document.getElementById('countrySelection').classList.add('hidden');
+            document.getElementById('characterCreation').classList.remove('hidden');
+        }
+
+        // Retour à la sélection du pays
+        function showCountrySelection() {
+            document.getElementById('characterCreation').classList.add('hidden');
+            document.getElementById('countrySelection').classList.remove('hidden');
+        }
+
+        // Démarrage du jeu principal
+        function startMainGame() {
+            document.getElementById('characterCreation').classList.add('hidden');
+            document.getElementById('gameMain').classList.remove('hidden');
+
+            // Afficher les informations du joueur
+            const playerInfo = document.getElementById('playerInfo');
+            playerInfo.innerHTML = `
+                <div style="font-size: 3em; margin-bottom: 10px;">${countries[gameState.player.country]}</div>
+                <div><strong>${gameState.player.fullName}</strong></div>
+                <div>${gameState.player.gender === 'male' ? '🧑' : '👩'} ${gameState.player.country}</div>
+            `;
+
+            // Remplir la liste des pays pour la recherche
+            populateSearchCountries();
+        }
+
+        // Remplir la liste des pays pour la recherche
+        function populateSearchCountries() {
+            const searchSelect = document.getElementById('searchCountry');
+            searchSelect.innerHTML = '<option value="">Choisissez un pays</option>';
+
+            Object.keys(countries).forEach(country => {
+                if (country !== gameState.player.country) {
+                    const option = document.createElement('option');
+                    option.value = country;
+                    option.textContent = `${countries[country]} ${country}`;
+                    searchSelect.appendChild(option);
+                }
+            });
+        }
+
+        // Recherche de partenaires
+        function searchPartners() {
+            const selectedCountry = document.getElementById('searchCountry').value;
+            if (!selectedCountry) {
+                showMessage('Veuillez sélectionner un pays!', 'error');
+                return;
+            }
+
+            const partnersList = document.getElementById('partnersList');
+            const partnersResults = document.getElementById('partnersResults');
+            
+            partnersList.innerHTML = '';
+            partnersResults.classList.remove('hidden');
+
+            // Générer des partenaires aléatoirement
+            const countryNames = names[selectedCountry] || getDefaultNames(selectedCountry);
+            const oppositeGender = gameState.player.gender === 'male' ? 'female' : 'male';
+            const partnersCount = Math.floor(Math.random() * 4) + 2; // 2-5 partenaires
+
+            for (let i = 0; i < partnersCount; i++) {
+                const firstName = countryNames[oppositeGender][Math.floor(Math.random() * countryNames[oppositeGender].length)];
+                const lastName = countryNames.lastNames[Math.floor(Math.random() * countryNames.lastNames.length)];
+                
+                const partnerCard = document.createElement('div');
+                partnerCard.className = 'character-card';
+                partnerCard.innerHTML = `
+                    <div style="font-size: 4em; margin-bottom: 10px;">${countries[selectedCountry]}</div>
+                    <div style="font-size: 2em; margin-bottom: 5px;">${oppositeGender === 'male' ? '🧑' : '👩'}</div>
+                    <div><strong>${firstName} ${lastName}</strong></div>
+                    <div style="margin-top: 10px;">
+                        <button class="btn" onclick="proposeMarriage('${firstName}', '${lastName}', '${selectedCountry}')">
+                            💕 Demander en mariage
+                        </button>
+                    </div>
+                `;
+                partnersList.appendChild(partnerCard);
+            }
+
+            showMessage(`🔍 ${partnersCount} partenaires trouvés en ${selectedCountry}!`, 'success');
+        }
+
+        // Vérifier si c'est un personnage Dragon Ball avec boss fight
+        function checkDragonBallBossFight(firstName, lastName, country) {
+            const familyData = dragonBallFamilies[country];
+            if (!familyData || !familyData[firstName]) {
+                return null;
+            }
+            
+            const characterData = familyData[firstName];
+            let bossName = null;
+            
+            // Déterminer le boss selon le personnage
+            if (characterData.father) {
+                bossName = characterData.father;
+            } else if (characterData.husband) {
+                bossName = characterData.husband;
+            } else if (characterData.type === 'android_boss') {
+                bossName = 'Android 18';
+            }
+            
+            return {
+                boss: bossName,
+                character: firstName,
+                type: characterData.type,
+                country: country
+            };
+        }
+
+        // Lancer le boss fight DBZ avec niveaux de difficulté
+        function startDragonBallBossFight(firstName, lastName, country, bossData) {
+            const messageContainer = document.getElementById('messageContainer');
+            const bossContainer = document.createElement('div');
+            bossContainer.className = 'special-message';
+            
+            // Récupérer les données de difficulté du boss
+            const difficulty = bossDifficulty[bossData.boss] || bossDifficulty['Krillin']; // Défaut facile
+            const difficultyMsg = difficultyMessages[difficulty.level];
+            
+            // Couleur selon la difficulté
+            bossContainer.style.background = `linear-gradient(45deg, ${difficulty.color}, #FF8C00, #FFD700)`;
+            bossContainer.style.boxShadow = `0 0 30px ${difficulty.color}50`;
+            bossContainer.style.animation = 'dragonBallGlow 2s infinite';
+            
+            // Choisir une réplique selon le boss
+            const bossRepliques = specialRepliques[bossData.boss] || ["Tu veux épouser ma famille ? Prouve ta valeur !"];
+            const randomReplique = bossRepliques[Math.floor(Math.random() * bossRepliques.length)];
+            
+            bossContainer.innerHTML = `
+                <div style="text-align: center;">
+                    <h2>⚡ BOSS FIGHT ! ⚡</h2>
+                    <div style="font-size: 3em; margin: 10px 0;">
+                        ${getBossEmoji(bossData.boss)} ${bossData.boss} ${difficulty.aura}
+                    </div>
+                    
+                    <div style="background: rgba(0,0,0,0.3); padding: 15px; border-radius: 10px; margin: 15px 0;">
+                        <div style="font-size: 18px; font-weight: bold; margin-bottom: 8px;">
+                            ${difficultyMsg.intro}
+                        </div>
+                        <div style="font-size: 14px; opacity: 0.9;">
+                            💪 Niveau de Puissance : ${difficulty.powerLevel.toLocaleString()}<br>
+                            🎯 Chances de succès : ${Math.round(difficulty.successChance * 100)}%<br>
+                            🏆 XP en cas de victoire : ${difficulty.xpReward}
+                        </div>
+                    </div>
+                    
+                    <div style="margin: 15px 0; font-style: italic; background: rgba(255,255,255,0.1); padding: 12px; border-radius: 8px;">
+                        "${randomReplique}"
+                    </div>
+                    
+                    <div style="margin: 15px 0;">
+                        Vous voulez épouser <strong>${firstName} ${lastName}</strong> !<br>
+                        ${bossData.boss} vous défie !
+                    </div>
+                    
+                    <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; margin-top: 20px;">
+                        <button class="btn btn-warning" onclick="acceptBossFight('${firstName.replace(/'/g, "\\'")}', '${lastName.replace(/'/g, "\\'")}', '${country.replace(/'/g, "\\'")}', '${bossData.boss.replace(/'/g, "\\'")}', '${bossData.type}')">
+                            💪 Accepter le défi !
+                        </button>
+                        <button class="btn btn-secondary" onclick="declineBossFight('${firstName.replace(/'/g, "\\'")}', '${lastName.replace(/'/g, "\\'")}', '${country.replace(/'/g, "\\'")}')">
+                            🏃 Fuir en courant !
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            messageContainer.appendChild(bossContainer);
+            
+            // Ajouter styles CSS pour l'animation DBZ
+            if (!document.getElementById('dbz-styles')) {
+                const style = document.createElement('style');
+                style.id = 'dbz-styles';
+                style.textContent = `
+                    @keyframes dragonBallGlow {
+                        0% { box-shadow: 0 0 30px rgba(255, 69, 0, 0.5); }
+                        50% { box-shadow: 0 0 50px rgba(255, 215, 0, 0.8); }
+                        100% { box-shadow: 0 0 30px rgba(255, 69, 0, 0.5); }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+        }
+
+        // Obtenir emoji du boss
+        function getBossEmoji(bossName) {
+            const bossEmojis = {
+                'Vegeta': '👑',
+                'Bulma': '🔬',
+                'Gohan': '📚',
+                'Krillin': '😅',
+                'Android 18': '🤖',
+                'Mr. Satan': '🏆',
+                'Gine': '🍲',
+                'Bardock': '👊'
+            };
+            return bossEmojis[bossName] || '💪';
+        }
+
+        // Accepter le boss fight
+        function acceptBossFight(firstName, lastName, country, bossName, characterType) {
+            // Supprimer le message de défi
+            document.querySelectorAll('.special-message').forEach(msg => {
+                if (msg.textContent.includes('BOSS FIGHT')) {
+                    msg.remove();
+                }
+            });
+            
+            // Selon le type de personnage, lancer différents défis
+            switch (characterType) {
+                case 'princess':
+                case 'genius':
+                    startCapsuleCorpQuiz(firstName, lastName, country, bossName);
+                    break;
+                case 'fighter':
+                case 'champion':
+                    startCombatChallenge(firstName, lastName, country, bossName);
+                    break;
+                case 'android':
+                case 'android_boss':
+                    startTechnicalChallenge(firstName, lastName, country, bossName);
+                    break;
+                case 'saiyan_mother':
+                case 'warrior_princess':
+                    startCookingChallenge(firstName, lastName, country, bossName);
+                    break;
+                default:
+                    startRandomChallenge(firstName, lastName, country, bossName);
+            }
+        }
+
+        // Refuser le boss fight
+        function declineBossFight(firstName, lastName, country) {
+            // Supprimer le message de défi
+            document.querySelectorAll('.special-message').forEach(msg => {
+                if (msg.textContent.includes('BOSS FIGHT')) {
+                    msg.remove();
+                }
+            });
+            
+            showMessage(`🏃 Vous avez fui le combat ! ${firstName} ${lastName} comprend votre prudence... mais vous avez raté une opportunité légendaire !`, 'error');
+        }
+
+        // Quiz Capsule Corp
+        function startCapsuleCorpQuiz(firstName, lastName, country, bossName) {
+            const messageContainer = document.getElementById('messageContainer');
+            const quizContainer = document.createElement('div');
+            quizContainer.className = 'special-message';
+            quizContainer.style.background = 'linear-gradient(45deg, #0066CC, #0088FF)';
+            
+            // Sélectionner 3 questions aléatoires
+            const selectedQuestions = [];
+            const availableQuestions = [...capsuleCorpQuiz];
+            for (let i = 0; i < 3; i++) {
+                const randomIndex = Math.floor(Math.random() * availableQuestions.length);
+                selectedQuestions.push(availableQuestions.splice(randomIndex, 1)[0]);
+            }
+            
+            let currentQuestionIndex = 0;
+            let correctAnswers = 0;
+            
+            function showQuestion() {
+                const question = selectedQuestions[currentQuestionIndex];
+                quizContainer.innerHTML = `
+                    <div style="text-align: center;">
+                        <h3>🏢 Quiz Capsule Corporation ! 🏢</h3>
+                        <div style="margin: 15px 0;">
+                            <strong>${bossName} :</strong> "Répondez correctement à 2 questions sur 3 !"
+                        </div>
+                        <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 10px; margin: 15px 0;">
+                            <div style="font-size: 18px; margin-bottom: 15px;">
+                                <strong>Question ${currentQuestionIndex + 1}/3 :</strong><br>
+                                ${question.question}
+                            </div>
+                            <div style="display: flex; flex-direction: column; gap: 10px;">
+                                ${question.answers.map((answer, index) => `
+                                    <button class="btn" onclick="answerQuestion(${index}, ${question.correct}, '${firstName.replace(/'/g, "\\'")}', '${lastName.replace(/'/g, "\\'")}', '${country.replace(/'/g, "\\'")}', '${bossName.replace(/'/g, "\\'")}', ${currentQuestionIndex}, ${correctAnswers}, '${question.explanation.replace(/'/g, "\\'")}')">
+                                        ${String.fromCharCode(65 + index)}) ${answer}
+                                    </button>
+                                `).join('')}
+                            </div>
+                        </div>
+                        <div style="margin-top: 15px;">
+                            Score actuel : ${correctAnswers}/${currentQuestionIndex} ✅
+                        </div>
+                    </div>
+                `;
+            }
+            
+            // Fonction globale pour répondre aux questions
+            window.answerQuestion = function(selectedIndex, correctIndex, firstName, lastName, country, bossName, questionIndex, score, explanation) {
+                let newScore = score;
+                const isCorrect = selectedIndex === correctIndex;
+                
+                if (isCorrect) {
+                    newScore++;
+                    showMessage(`✅ Bonne réponse ! ${explanation}`, 'success');
+                } else {
+                    showMessage(`❌ Mauvaise réponse... ${explanation}`, 'error');
+                }
+                
+                if (questionIndex + 1 < 3) {
+                    // Question suivante
+                    currentQuestionIndex = questionIndex + 1;
+                    correctAnswers = newScore;
+                    setTimeout(() => {
+                        showQuestion();
+                    }, 2000);
+                } else {
+                    // Fin du quiz
+                    setTimeout(() => {
+                        quizContainer.remove();
+                        finishCapsuleCorpQuiz(newScore, firstName, lastName, country, bossName);
+                    }, 2000);
+                }
+            };
+            
+            messageContainer.appendChild(quizContainer);
+            showQuestion();
+        }
+
+        // Terminer le quiz Capsule Corp
+        function finishCapsuleCorpQuiz(score, firstName, lastName, country, bossName) {
+            if (score >= 2) {
+                // Succès !
+                gainXP(150);
+                defeatedBosses.add(bossName);
+                showGalacticMarriage(firstName, lastName, country, `🧠 Test d'Intelligence Réussi ! ${bossName} est impressionné(e) par vos connaissances !`);
+            } else {
+                // Échec
+                showMessage(`🤓 ${bossName} secoue la tête : "Désolé, mais ${firstName} mérite quelqu'un de plus intelligent... Étudiez et revenez !"`, 'error');
+            }
+        }
+
+        // Défi de combat
+        function startCombatChallenge(firstName, lastName, country, bossName) {
+            const messageContainer = document.getElementById('messageContainer');
+            const combatContainer = document.createElement('div');
+            combatContainer.className = 'special-message';
+            combatContainer.style.background = 'linear-gradient(45deg, #FF4500, #FF6347)';
+            
+            combatContainer.innerHTML = `
+                <div style="text-align: center;">
+                    <h3>🥊 Défi de Combat ! 🥊</h3>
+                    <div style="margin: 15px 0;">
+                        <strong>${bossName} :</strong> "Montrez-moi votre force !"
+                    </div>
+                    <div style="font-size: 4em; margin: 20px 0;">
+                        💪 VS 💪
+                    </div>
+                    <div style="margin: 20px 0;">
+                        <button class="btn btn-warning" onclick="rollCombatDice('${firstName.replace(/'/g, "\\'")}', '${lastName.replace(/'/g, "\\'")}', '${country.replace(/'/g, "\\'")}', '${bossName.replace(/'/g, "\\'")}')">
+                            🎲 Lancer le dé du destin !
+                        </button>
+                    </div>
+                    <div style="font-size: 14px; opacity: 0.8;">
+                        Vous devez obtenir 4, 5 ou 6 pour gagner !
+                    </div>
+                </div>
+            `;
+            
+            messageContainer.appendChild(combatContainer);
+        }
+
+        // Lancer le dé de combat avec système de difficulté
+        window.rollCombatDice = function(firstName, lastName, country, bossName) {
+            const combatContainer = document.querySelector('.special-message');
+            const difficulty = bossDifficulty[bossName] || bossDifficulty['Krillin'];
+            const difficultyMsg = difficultyMessages[difficulty.level];
+            
+            // Simuler le combat avec la chance de succès du boss
+            const randomValue = Math.random();
+            const success = randomValue < difficulty.successChance;
+            
+            // Simuler le résultat du dé pour l'affichage
+            const diceResult = Math.floor(Math.random() * 6) + 1;
+            
+            // Animation du dé avec couleur selon la difficulté
+            combatContainer.style.background = `linear-gradient(45deg, ${difficulty.color}, #FF6347)`;
+            combatContainer.innerHTML = `
+                <div style="text-align: center;">
+                    <h3>🥊 Résultat du Combat ${difficulty.level}! 🥊</h3>
+                    
+                    <div style="background: rgba(0,0,0,0.3); padding: 10px; border-radius: 8px; margin: 15px 0; font-size: 14px;">
+                        Puissance de ${bossName} : ${difficulty.powerLevel.toLocaleString()} 💪<br>
+                        Votre chance : ${Math.round(difficulty.successChance * 100)}% 🎯
+                    </div>
+                    
+                    <div style="font-size: 5em; margin: 20px 0; animation: pulse 1s ease-in-out;">
+                        🎲 ${diceResult}
+                    </div>
+                    
+                    <div style="margin: 15px 0; padding: 15px; border-radius: 10px; background: rgba(255,255,255,0.1);">
+                        ${success ? 
+                            `🏆 ${difficultyMsg.success}` : 
+                            `💥 ${difficultyMsg.failure}`
+                        }
+                    </div>
+                    
+                    <div style="font-size: 12px; opacity: 0.8; margin-top: 10px;">
+                        Combat ${difficulty.level} terminé !
+                    </div>
+                </div>
+            `;
+            
+            setTimeout(() => {
+                combatContainer.remove();
+                if (success) {
+                    gainXP(difficulty.xpReward);
+                    defeatedBosses.add(bossName);
+                    showGalacticMarriage(firstName, lastName, country, `💪 Victoire ${difficulty.level} ! ${bossName} respecte votre force exceptionnelle !`);
+                } else {
+                    // Messages d'échec personnalisés selon la difficulté
+                    const failureMessages = {
+                        'FACILE': `😅 ${bossName} : "Même en mode facile, vous n'y arrivez pas ? Allez vous entraîner !"`,
+                        'MOYEN': `😐 ${bossName} : "Pas mal, mais pas assez ! Revenez plus fort !"`,
+                        'DIFFICILE': `😵 ${bossName} : "Vous pensiez vraiment pouvoir me battre ? Entraînez-vous 1000 ans !"`,
+                        'EXTREME': `💀 ${bossName} : "Pathétique ! Un mortel ne peut pas défier ce niveau de puissance !"`,
+                        'LEGENDAIRE': `⚡ ${bossName} : "FINAL FLASH ! Vous avez été pulvérisé en un instant ! HAHAHA !"`
+                    };
+                    showMessage(failureMessages[difficulty.level] || `💥 ${bossName} vous a vaincu !`, 'error');
+                }
+            }, 3000);
+        };
+
+        // Défi technique
+        function startTechnicalChallenge(firstName, lastName, country, bossName) {
+            const messageContainer = document.getElementById('messageContainer');
+            const techContainer = document.createElement('div');
+            techContainer.className = 'special-message';
+            techContainer.style.background = 'linear-gradient(45deg, #8A2BE2, #9370DB)';
+            
+            const techQuestions = [
+                "Quelle est la différence entre un réacteur à fusion et un moteur à capsules ?",
+                "Comment fonctionne la technologie de miniaturisation de Capsule Corp ?",
+                "Quel est le principe de fonctionnement d'un détecteur de puissance ?"
+            ];
+            
+            const randomQuestion = techQuestions[Math.floor(Math.random() * techQuestions.length)];
+            
+            techContainer.innerHTML = `
+                <div style="text-align: center;">
+                    <h3>🔧 Défi Technique ! 🔧</h3>
+                    <div style="margin: 15px 0;">
+                        <strong>${bossName} :</strong> "Question technique :"
+                    </div>
+                    <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 10px; margin: 15px 0;">
+                        ${randomQuestion}
+                    </div>
+                    <div style="margin: 20px 0;">
+                        <button class="btn btn-success" onclick="techAnswer(true, '${firstName.replace(/'/g, "\\'")}', '${lastName.replace(/'/g, "\\'")}', '${country.replace(/'/g, "\\'")}', '${bossName.replace(/'/g, "\\'")}')">
+                            🤓 Réponse savante
+                        </button>
+                        <button class="btn btn-warning" onclick="techAnswer(false, '${firstName.replace(/'/g, "\\'")}', '${lastName.replace(/'/g, "\\'")}', '${country.replace(/'/g, "\\'")}', '${bossName.replace(/'/g, "\\'")}')">
+                            😅 Improviser une réponse
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            messageContainer.appendChild(techContainer);
+        }
+
+        // Réponse technique
+        window.techAnswer = function(isGoodAnswer, firstName, lastName, country, bossName) {
+            const techContainer = document.querySelector('.special-message');
+            const success = isGoodAnswer ? Math.random() > 0.3 : Math.random() > 0.7;
+            
+            setTimeout(() => {
+                techContainer.remove();
+                if (success) {
+                    gainXP(130);
+                    defeatedBosses.add(bossName);
+                    showGalacticMarriage(firstName, lastName, country, `🔬 Défi Technique Réussi ! ${bossName} approuve votre intelligence !`);
+                } else {
+                    showMessage(`🤖 ${bossName} analyse votre réponse : "Insuffisant. Revenez quand vous maîtriserez la technologie."`, 'error');
+                }
+            }, 2000);
+        };
+
+        // Défi de cuisine
+        function startCookingChallenge(firstName, lastName, country, bossName) {
+            const messageContainer = document.getElementById('messageContainer');
+            const cookingContainer = document.createElement('div');
+            cookingContainer.className = 'special-message';
+            cookingContainer.style.background = 'linear-gradient(45deg, #FF69B4, #FFB6C1)';
+            
+            cookingContainer.innerHTML = `
+                <div style="text-align: center;">
+                    <h3>🍲 Défi Culinaire Saiyan ! 🍲</h3>
+                    <div style="margin: 15px 0;">
+                        <strong>${bossName} :</strong> "Cuisinez pour survivre chez les Saiyans !"
+                    </div>
+                    <div style="font-size: 3em; margin: 20px 0;">
+                        👨‍🍳 🍜 👩‍🍳
+                    </div>
+                    <div style="margin: 20px 0;">
+                        <button class="btn btn-warning" onclick="cookForSaiyans('${firstName.replace(/'/g, "\\'")}', '${lastName.replace(/'/g, "\\'")}', '${country.replace(/'/g, "\\'")}', '${bossName.replace(/'/g, "\\'")}')">
+                            🍽️ Préparer un festin !
+                        </button>
+                    </div>
+                    <div style="font-size: 14px; opacity: 0.8;">
+                        Les Saiyans mangent ÉNORMÉMENT !
+                    </div>
+                </div>
+            `;
+            
+            messageContainer.appendChild(cookingContainer);
+        }
+
+        // Cuisiner pour les Saiyans
+        window.cookForSaiyans = function(firstName, lastName, country, bossName) {
+            const cookingContainer = document.querySelector('.special-message');
+            const success = Math.random() > 0.4; // 60% de chance
+            
+            cookingContainer.innerHTML = `
+                <div style="text-align: center;">
+                    <h3>🍲 Résultat Culinaire ! 🍲</h3>
+                    <div style="font-size: 4em; margin: 20px 0; animation: pulse 1s ease-in-out;">
+                        ${success ? '😋' : '🤢'}
+                    </div>
+                    <div style="margin: 15px 0;">
+                        ${success ? 
+                            `🏆 Délicieux ! Même Goku en redemanderait !` : 
+                            `💀 Immangeable ! Même Yajirobe refuse !`
+                        }
+                    </div>
+                </div>
+            `;
+            
+            setTimeout(() => {
+                cookingContainer.remove();
+                if (success) {
+                    gainXP(140);
+                    defeatedBosses.add(bossName);
+                    showGalacticMarriage(firstName, lastName, country, `🍲 Défi Culinaire Réussi ! ${bossName} vous admet dans la famille Saiyan !`);
+                } else {
+                    showMessage(`🤢 ${bossName} recrache : "Apprenez à cuisiner avant de revenir ! Un Saiyan ne peut pas mourir de faim !"`, 'error');
+                }
+            }, 3000);
+        };
+
+        // Défi aléatoire
+        function startRandomChallenge(firstName, lastName, country, bossName) {
+            const challenges = [
+                () => startCombatChallenge(firstName, lastName, country, bossName),
+                () => startTechnicalChallenge(firstName, lastName, country, bossName),
+                () => startCookingChallenge(firstName, lastName, country, bossName)
+            ];
+            
+            const randomChallenge = challenges[Math.floor(Math.random() * challenges.length)];
+            randomChallenge();
+        }
+
+        // Mariage galactique
+        function showGalacticMarriage(firstName, lastName, country, victoryMessage) {
+            gainXP(100); // Bonus mariage galactique
+            
+            const messageContainer = document.getElementById('messageContainer');
+            const marriageContainer = document.createElement('div');
+            marriageContainer.className = 'special-message';
+            marriageContainer.style.background = 'linear-gradient(45deg, #FFD700, #FFA500, #FF4500)';
+            marriageContainer.style.animation = 'dragonBallGlow 2s infinite';
+            
+            marriageContainer.innerHTML = `
+                <div style="text-align: center;">
+                    <h2>🌟 MARIAGE GALACTIQUE ! 🌟</h2>
+                    <div style="margin: 15px 0;">
+                        ${victoryMessage}
+                    </div>
+                    <div style="font-size: 3em; margin: 20px 0;">
+                        💒 ${countries[gameState.player.country]} 💕 ${countries[country]} 💒
+                    </div>
+                    <div style="margin: 15px 0;">
+                        <strong>Félicitations ! Vous avez épousé ${firstName} ${lastName} !</strong><br>
+                        Vous devez maintenant inviter tous les Saiyans à la fête ! 🎉
+                    </div>
+                    <div style="margin: 15px 0; font-style: italic; font-size: 14px;">
+                        +100 XP Bonus "Événement Universel" !<br>
+                        Vous avez survécu à la belle-famille la plus dangereuse de l'univers !
+                    </div>
+                    <div style="margin-top: 20px;">
+                        <button class="btn share-btn" onclick="shareMarriage('${firstName.replace(/'/g, "\\'")}', '${lastName.replace(/'/g, "\\'")}', '${country.replace(/'/g, "\\'")}')">
+                            📤 Partager ce mariage légendaire !
+                        </button>
+                        <button class="btn btn-secondary" onclick="this.parentElement.parentElement.remove()">
+                            ✖️ Fermer
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            messageContainer.appendChild(marriageContainer);
+            
+            // Ajouter au historique
+            addToMarriageHistory(firstName, lastName, country);
+            
+            // Effets spéciaux
+            createFireworks();
+            createHeartAnimation();
+            playVictorySound();
+            
+            // Vérifier missions
+            checkMissions(country);
+            
+            // Mission spéciale DBZ
+            if (!missions.dragonBallLegend) {
+                missions.dragonBallLegend = { name: 'Légende Dragon Ball', description: 'Épouser 3 personnages DBZ après boss fight', progress: 0, target: 3, reward: 500, completed: false };
+            }
+            updateMissions('dragonBallLegend');
+        }
+
+        // Demande en mariage avec nouveaux easter eggs
+        function proposeMarriage(firstName, lastName, country) {
+            // Vérifier d'abord s'il s'agit d'un personnage Dragon Ball Z
+            const bossData = checkDragonBallBossFight(firstName, lastName, country);
+            if (bossData && bossData.boss) {
+                // Lancer le boss fight !
+                startDragonBallBossFight(firstName, lastName, country, bossData);
+                return; // Arrêter ici, le boss fight prend le contrôle
+            }
+            
+            // Vérifier s'il s'agit d'un couple spécial
+            const coupleKey1 = `${gameState.player.country}_${country}`;
+            const coupleKey2 = `${country}_${gameState.player.country}`;
+            const specialCouple = specialCouples[coupleKey1] || specialCouples[coupleKey2];
+            
+            let success = Math.random() > 0.3; // 70% de chance de succès de base
+            
+            // Modifier les chances selon le type de couple
+            if (specialCouple) {
+                if (specialCouple.type === 'impossible') {
+                    success = Math.random() > 0.9; // 10% de chance seulement
+                } else if (specialCouple.type === 'rivalry') {
+                    success = Math.random() > 0.5; // 50% de chance
+                }
+            }
+
+            if (success) {
+                let xpGained = Math.floor(Math.random() * 50) + 30; // 30-79 XP de base
+                
+                // Bonus XP pour couples spéciaux
+                if (specialCouple && specialCouple.bonus) {
+                    xpGained += specialCouple.bonus;
+                }
+                
+                gainXP(xpGained);
+                gameState.marriages++;
+                
+                // Ajouter à l'historique
+                addToMarriageHistory(firstName, lastName, country);
+                
+                // Jouer le son de victoire
+                playVictorySound();
+                
+                // Effets visuels spéciaux
+                if (specialCouple && specialCouple.type === 'legendary') {
+                    createFireworks();
+                    createHeartAnimation();
+                }
+                
+                // Afficher message spécial ou normal
+                if (specialCouple) {
+                    showSpecialCoupleMessage(specialCouple, firstName, lastName, country, xpGained);
+                    discoveredCouples.add(coupleKey1);
+                    updateMissions('legendary');
+                } else {
+                    showMarriageSuccessMessage(firstName, lastName, country, xpGained);
+                }
+                
+                // Afficher anecdote culturelle
+                showCulturalAnecdote(country);
+                
+                // Afficher chat fictif
+                showChatConversation(firstName, lastName, country);
+                
+                // Vérifier missions
+                checkMissions(country);
+                
+                // Masquer les résultats de recherche
+                document.getElementById('partnersResults').classList.add('hidden');
+                document.getElementById('searchCountry').selectedIndex = 0;
+                
+            } else {
+                if (specialCouple && specialCouple.type === 'impossible') {
+                    showSpecialCoupleMessage(specialCouple, firstName, lastName, country, 0);
+                    createExplosionEffect();
+                } else {
+                    showMessage(`💔 ${firstName} ${lastName} a refusé votre demande. Réessayez!`, 'error');
+                }
+            }
+        }
+
+        // Afficher message pour couples spéciaux
+        function showSpecialCoupleMessage(specialCouple, firstName, lastName, country, xpGained) {
+            const messageContainer = document.getElementById('messageContainer');
+            const messageClass = specialCouple.type === 'legendary' ? 'special-message' : 
+                               specialCouple.type === 'impossible' ? 'impossible-message' : 'rivalry-message';
+            
+            const message = document.createElement('div');
+            message.className = messageClass;
+            
+            if (specialCouple.type === 'impossible') {
+                message.innerHTML = `
+                    <h3>${specialCouple.title}</h3>
+                    <p>${specialCouple.message}</p>
+                `;
+            } else {
+                message.innerHTML = `
+                    <h3>${specialCouple.title}</h3>
+                    <p>${specialCouple.message}</p>
+                    <p><strong>Vous avez épousé ${firstName} ${lastName} ! +${xpGained} XP</strong></p>
+                    <button class="btn share-btn" onclick="shareMarriage('${firstName.replace(/'/g, "\\'")}', '${lastName.replace(/'/g, "\\'")}', '${country.replace(/'/g, "\\'")}')">
+                        📤 Partager ce couple légendaire
+                    </button>
+                `;
+            }
+            
+            // Ajouter bouton fermer pour tous les types de messages spéciaux
+            if (specialCouple.type !== 'impossible') {
+                message.innerHTML += `
+                    <div style="margin-top: 15px;">
+                        <button class="btn btn-secondary" onclick="this.parentElement.parentElement.remove()">
+                            ✖️ Fermer
+                        </button>
+                    </div>
+                `;
+            } else {
+                // Pour les messages impossibles, ajouter aussi un bouton fermer
+                message.innerHTML += `
+                    <div style="margin-top: 15px;">
+                        <button class="btn btn-secondary" onclick="this.parentElement.parentElement.remove()">
+                            ✖️ Fermer
+                        </button>
+                    </div>
+                `;
+            }
+            
+            messageContainer.appendChild(message);
+            
+            // La fermeture automatique a été supprimée - le message reste jusqu'à ce que l'utilisateur clique sur "Fermer"
+        }
+
+        // Afficher anecdote culturelle
+        function showCulturalAnecdote(country) {
+            const anecdote = culturalAnecdotes[country];
+            if (anecdote) {
+                const messageContainer = document.getElementById('messageContainer');
+                const anecdoteElement = document.createElement('div');
+                anecdoteElement.className = 'cultural-anecdote';
+                anecdoteElement.innerHTML = `
+                    <div>
+                        <strong>💡 Le saviez-vous ?</strong><br>${anecdote}
+                    </div>
+                    <button class="btn btn-secondary" onclick="this.parentElement.remove()" style="margin-top: 10px; padding: 8px 15px; font-size: 12px;">
+                        ✖️ Fermer
+                    </button>
+                `;
+                messageContainer.appendChild(anecdoteElement);
+                
+                // La fermeture automatique a été supprimée - le message reste jusqu'à ce que l'utilisateur clique sur "Fermer"
+            }
+        }
+
+        // Chat interactif entre les country balls
+        function showChatConversation(firstName, lastName, country) {
+            const messageContainer = document.getElementById('messageContainer');
+            const chatContainer = document.createElement('div');
+            chatContainer.className = 'chat-container';
+            
+            // Header avec avatar
+            chatContainer.innerHTML = `
+                <div class="chat-header">
+                    <div class="partner-avatar">${countries[country]}</div>
+                    <div>
+                        <h4>💬 ${firstName} ${lastName}</h4>
+                        <small>Marié(e) avec ${gameState.player.fullName} depuis quelques secondes ! 💕</small>
+                    </div>
+                </div>
+            `;
+            
+            messageContainer.appendChild(chatContainer);
+            
+            // État de la conversation
+            let chatState = {
+                step: 0,
+                partnerName: firstName,
+                partnerCountry: country,
+                container: chatContainer
+            };
+            
+            // Démarrer la conversation
+            setTimeout(() => startInteractiveChat(chatState), 500);
+        }
+
+        // Chat interactif avec choix
+        function startInteractiveChat(chatState) {
+            const { container, partnerName, partnerCountry } = chatState;
+            
+            // Message d'introduction du partenaire
+            addChatMessage(container, 'partner', 
+                `Salut ! Je suis ${partnerName} ${countries[partnerCountry]} Comment ça va ? 😊`);
+            
+            setTimeout(() => {
+                showChatOptions(chatState, [
+                    { text: `💖 Salut ${partnerName} ! Je suis ravi(e) de t'épouser !`, action: 'romantic' },
+                    { text: `🌍 Dis-moi, qu'est-ce que tu aimes dans ${partnerCountry} ?`, action: 'country' },
+                    { text: `🗺️ Tu veux visiter ${gameState.player.country} un jour ?`, action: 'visit' }
+                ]);
+            }, 1500);
+        }
+
+        // Afficher les options de chat
+        function showChatOptions(chatState, options) {
+            const optionsContainer = document.createElement('div');
+            optionsContainer.className = 'chat-options';
+            
+            options.forEach(option => {
+                const button = document.createElement('button');
+                button.className = 'chat-option-btn';
+                button.textContent = option.text;
+                button.onclick = () => handleChatChoice(chatState, option.action, option.text, optionsContainer);
+                optionsContainer.appendChild(button);
+            });
+            
+            chatState.container.appendChild(optionsContainer);
+        }
+
+        // Gérer le choix du joueur
+        function handleChatChoice(chatState, action, playerText, optionsContainer) {
+            // Supprimer les options
+            optionsContainer.remove();
+            
+            // Ajouter le message du joueur
+            addChatMessage(chatState.container, 'player', playerText);
+            
+            // Afficher indicateur de frappe
+            showTypingIndicator(chatState.container);
+            
+            // Réponse du partenaire selon l'action
+            setTimeout(() => {
+                removeTypingIndicator(chatState.container);
+                respondToChoice(chatState, action);
+            }, 2000);
+        }
+
+        // Réponses du partenaire selon les choix
+        function respondToChoice(chatState, action) {
+            const { container, partnerName, partnerCountry } = chatState;
+            
+            switch (action) {
+                case 'romantic':
+                    addChatMessage(container, 'partner', 
+                        `💕 Moi aussi ! Tu as l'air formidable ! J'ai hâte de découvrir ${gameState.player.country} avec toi ! 🥰`);
+                    
+                    setTimeout(() => {
+                        showChatOptions(chatState, [
+                            { text: `🏠 On pourrait vivre entre nos deux pays !`, action: 'living' },
+                            { text: `🍽️ Tu connais la cuisine de ${partnerCountry} ?`, action: 'food' },
+                            { text: `💐 Comment dit-on "je t'aime" en ${partnerCountry} ?`, action: 'language' }
+                        ]);
+                    }, 2000);
+                    break;
+                    
+                case 'food':
+                    // Utiliser les réponses culinaires personnalisées
+                    const culinaryResponse = culinaryResponses[partnerCountry];
+                    if (culinaryResponse) {
+                        // D'abord poser la question personnalisée
+                        addChatMessage(container, 'partner', culinaryResponse.question);
+                        
+                        setTimeout(() => {
+                            // Puis montrer l'enthousiasme
+                            addChatMessage(container, 'partner', culinaryResponse.enthusiasm);
+                            
+                            setTimeout(() => {
+                                showChatOptions(chatState, [
+                                    { text: `😋 Ça a l'air délicieux ! J'ai hâte de goûter !`, action: 'taste' },
+                                    { text: `👨‍🍳 Tu pourrais m'apprendre à cuisiner ?`, action: 'learn' },
+                                    { text: `🎉 On organisera un grand festin pour notre mariage !`, action: 'feast' },
+                                    { text: `📜 Tu as une recette à me partager ?`, action: 'recipe' }
+                                ]);
+                            }, 2000);
+                        }, 2000);
+                    } else if (partnerCountry === 'Kabyle') {
+                        addChatMessage(container, 'partner', 
+                            `🤔 Hmm, tu ne connais pas encore ? Oh là là, tu rates quelque chose d'extraordinaire ! 😍 La cuisine kabyle, c'est un festival de saveurs ! 🎉 On a le couscous aux légumes de montagne 🥕🥬, la galette kabyle (aghroum) croustillante 🫓, le tajine aux olives 🫒, et surtout... les figues sèches au miel de nos montagnes ! 🍯🏔️ Ma grand-mère dit toujours : "Celui qui goûte notre cuisine devient de la famille pour la vie !" 👵💕 Je vais te faire découvrir tout ça, tu vas voir, c'est magique ! ✨`);
+                        
+                        setTimeout(() => {
+                            showChatOptions(chatState, [
+                                { text: `😋 Ça a l'air délicieux ! J'ai hâte de goûter !`, action: 'taste' },
+                                { text: `👨‍🍳 Tu pourrais m'apprendre à cuisiner ?`, action: 'learn' },
+                                { text: `🎉 On organisera un grand festin pour notre mariage !`, action: 'feast' },
+                                { text: `📜 Tu as une recette à me partager ?`, action: 'recipe' }
+                            ]);
+                        }, 2000);
+                    } else {
+                        addChatMessage(container, 'partner', 
+                            `🍽️ Oh oui ! La cuisine de ${partnerCountry} est délicieuse ! J'adore nos plats traditionnels ! Tu veux que je t'apprenne à cuisiner ? 👨‍🍳👩‍🍳`);
+                        
+                        setTimeout(() => {
+                            showChatOptions(chatState, [
+                                { text: `😋 Ça a l'air délicieux ! J'ai hâte de goûter !`, action: 'taste' },
+                                { text: `👨‍🍳 Tu pourrais m'apprendre à cuisiner ?`, action: 'learn' },
+                                { text: `🎉 On organisera un grand festin pour notre mariage !`, action: 'feast' },
+                                { text: `📜 Tu as une recette à me partager ?`, action: 'recipe' }
+                            ]);
+                        }, 2000);
+                    }
+                    break;
+                    
+                case 'learn':
+                case 'recipe':
+                    // Partager une recette rapide
+                    const recipe = quickRecipes[partnerCountry];
+                    if (recipe) {
+                        addChatMessage(container, 'partner', 
+                            `👨‍🍳 Avec plaisir ! Voici ma recette de famille pour le ${recipe.name} ! 📜✨`);
+                        
+                        setTimeout(() => {
+                            // Afficher la recette dans le chat
+                            showRecipeInChat(container, recipe, partnerCountry);
+                            
+                            // Marquer la recette comme apprise
+                            learnedRecipes.add(partnerCountry);
+                            
+                            // Ajouter à l'historique culinaire 
+                            culinaryExchanges.push({
+                                from: partnerCountry,
+                                to: gameState.player.country,
+                                recipe: recipe.name,
+                                date: new Date().toLocaleString()
+                            });
+                            
+                            // Donner bonus XP "Ambassadeur Culinaire"
+                            gainXP(50);
+                            showMessage(`👨‍🍳 Bonus XP : Ambassadeur Culinaire ! +50 XP pour l'échange de recette !`, 'success');
+                            
+                            // Vérifier missions culinaires
+                            updateMissions('masterChef');
+                            updateMissions('culinaryAmbassador');
+                            
+                            // Si pays asiatique, vérifier mission épices
+                            const asianCountries = ['Japan', 'China', 'Thailand', 'India', 'South Korea', 'Vietnam', 'Philippines', 'Indonesia'];
+                            if (asianCountries.includes(partnerCountry)) {
+                                updateMissions('spiceTrader');
+                            }
+                            
+                            setTimeout(() => {
+                                addChatMessage(container, 'partner', 
+                                    `🎉 J'espère que tu vas essayer ! Et toi, tu as une spécialité de ${gameState.player.country} à me partager ? 😊`);
+                                
+                                setTimeout(() => {
+                                    showChatOptions(chatState, [
+                                        { text: `🏆 Bien sûr ! Je te partagerai ma recette favorite !`, action: 'share_recipe' },
+                                        { text: `🍽️ On va créer un livre de recettes international !`, action: 'cookbook' },
+                                        { text: `👫 Nos enfants auront la meilleure cuisine du monde !`, action: 'final' }
+                                    ]);
+                                }, 2000);
+                            }, 3000);
+                        }, 1500);
+                    } else {
+                        addChatMessage(container, 'partner', 
+                            `👨‍🍳 Avec plaisir ! Laisse-moi te montrer comment on prépare nos spécialités ! Je vais t'enseigner les secrets de ma grand-mère ! 👵✨`);
+                        
+                        setTimeout(() => {
+                            addChatMessage(container, 'partner', 
+                                `🎉 J'espère que tu vas essayer ! Et toi, tu as une spécialité à me partager ? 😊`);
+                            
+                            setTimeout(() => {
+                                showChatOptions(chatState, [
+                                    { text: `🏆 Bien sûr ! Je te partagerai ma recette favorite !`, action: 'share_recipe' },
+                                    { text: `🍽️ On va créer un livre de recettes international !`, action: 'cookbook' },
+                                    { text: `👫 Nos enfants auront la meilleure cuisine du monde !`, action: 'final' }
+                                ]);
+                            }, 2000);
+                        }, 2000);
+                    }
+                    break;
+                    
+                case 'share_recipe':
+                    addChatMessage(container, 'partner', 
+                        `🤩 Fantastique ! J'ai hâte de découvrir les secrets culinaires de ${gameState.player.country} ! On va créer la plus belle fusion gastronomique ! 🌟👨‍🍳👩‍🍳`);
+                    
+                    // Bonus XP pour partage mutuel
+                    gainXP(75);
+                    showMessage(`🌟 Bonus XP : Échange Culinaire Parfait ! +75 XP pour le partage mutuel !`, 'success');
+                    updateMissions('culinaryAmbassador');
+                    
+                    setTimeout(() => {
+                        showChatOptions(chatState, [
+                            { text: `🏠 Notre maison sentira les épices du monde entier !`, action: 'final' },
+                            { text: `🍽️ On ouvrira un restaurant fusion ensemble !`, action: 'final' },
+                            { text: `👨‍👩‍👧‍👦 Nos enfants seront de vrais petits chefs !`, action: 'final' }
+                        ]);
+                    }, 3000);
+                    break;
+                    
+                case 'country':
+                    const countryPraise = getCountryPraise(partnerCountry);
+                    addChatMessage(container, 'partner', countryPraise);
+                    
+                    setTimeout(() => {
+                        showChatOptions(chatState, [
+                            { text: `🤩 Ça a l'air magnifique ! Tu me feras visiter ?`, action: 'tour' },
+                            { text: `📚 Et l'histoire de ${partnerCountry} ? Tu peux m'en parler ?`, action: 'history' },
+                            { text: `🎵 Tu connais de la musique traditionnelle ?`, action: 'music' }
+                        ]);
+                    }, 2000);
+                    break;
+                    
+                case 'visit':
+                    addChatMessage(container, 'partner', 
+                        `🛫 Oh oui ! ${gameState.player.country} ${countries[gameState.player.country]} a l'air incroyable ! Qu'est-ce que tu me recommandes de voir en premier ? ✨`);
+                    
+                    setTimeout(() => {
+                        showChatOptions(chatState, [
+                            { text: `🏛️ Je te montrerai nos monuments historiques !`, action: 'monuments' },
+                            { text: `🍴 On commencera par goûter notre cuisine !`, action: 'cuisine' },
+                            { text: `🌆 Les plus belles vues de nos villes !`, action: 'views' }
+                        ]);
+                    }, 2000);
+                    break;
+                    
+                default:
+                    // Réponses finales pour conclure
+                    const finalResponses = [
+                        `🎉 C'est formidable ! Notre mariage sera le début d'une belle aventure ! 💒`,
+                        `💫 J'ai hâte de partager nos cultures ! Ce sera merveilleux ! 🌟`,
+                        `🥂 À notre bonheur et à l'union de nos deux pays ! Santé ! 🍾`,
+                        `💑 Tu es parfait(e) ! Je suis si heureux/heureuse d'être ton/ta époux(se) ! 💖`
+                    ];
+                    
+                    const randomResponse = finalResponses[Math.floor(Math.random() * finalResponses.length)];
+                    addChatMessage(container, 'partner', randomResponse);
+                    
+                    // Fin de la conversation
+                    setTimeout(() => {
+                        addChatMessage(container, 'partner', 
+                            `👋 À bientôt mon/ma chéri(e) ! Il faut que j'aille préparer notre lune de miel ! 🌙✨`);
+                        
+                        // Ajouter un bouton fermer au chat
+                        setTimeout(() => {
+                            const chatCloseBtn = document.createElement('div');
+                            chatCloseBtn.style.textAlign = 'center';
+                            chatCloseBtn.style.marginTop = '15px';
+                            chatCloseBtn.innerHTML = `
+                                <button class="btn btn-secondary" onclick="this.parentElement.parentElement.remove()" style="padding: 8px 15px; font-size: 12px;">
+                                    ✖️ Fermer la conversation
+                                </button>
+                            `;
+                            container.appendChild(chatCloseBtn);
+                        }, 2000);
+                    }, 3000);
+            }
+        }
+
+        // Ajouter un message au chat
+        function addChatMessage(container, sender, text) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `chat-message ${sender}`;
+            messageDiv.textContent = text;
+            container.appendChild(messageDiv);
+            
+            // Scroll automatique
+            container.scrollTop = container.scrollHeight;
+        }
+
+        // Afficher indicateur de frappe
+        function showTypingIndicator(container) {
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'typing-indicator';
+            typingDiv.innerHTML = `
+                <div class="typing-dots">
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                </div>
+            `;
+            container.appendChild(typingDiv);
+            container.scrollTop = container.scrollHeight;
+        }
+
+        // Supprimer indicateur de frappe
+        function removeTypingIndicator(container) {
+            const typingIndicator = container.querySelector('.typing-indicator');
+            if (typingIndicator) {
+                typingIndicator.remove();
+            }
+        }
+
+        // Afficher recette dans le chat
+        function showRecipeInChat(container, recipe, country) {
+            const recipeDiv = document.createElement('div');
+            recipeDiv.className = 'chat-message partner';
+            recipeDiv.style.backgroundColor = '#e8f5e8';
+            recipeDiv.style.border = '2px solid #4ECDC4';
+            recipeDiv.style.maxWidth = '95%';
+            recipeDiv.innerHTML = `
+                <div style="font-weight: bold; color: #2d5016; margin-bottom: 8px;">
+                    📜 ${recipe.name} ${countries[country]}
+                </div>
+                <div style="margin-bottom: 8px; font-size: 14px;">
+                    <strong>🛒 Ingrédients :</strong><br>
+                    ${recipe.ingredients}
+                </div>
+                <div style="font-size: 14px;">
+                    <strong>👨‍🍳 Étapes :</strong><br>
+                    ${recipe.steps}
+                </div>
+                <div style="margin-top: 8px; font-size: 12px; font-style: italic; color: #666;">
+                    💡 Recette traditionnelle de ${country}
+                </div>
+            `;
+            container.appendChild(recipeDiv);
+            container.scrollTop = container.scrollHeight;
+        }
+
+        // Compliments spécifiques aux pays
+        function getCountryPraise(country) {
+            const praises = {
+                'France': `🇫🇷 J'adore les châteaux, la Tour Eiffel, et bien sûr... le fromage et le vin ! 🧀🍷`,
+                'Italy': `🇮🇹 L'Italie, c'est la pizza, les pâtes, Rome et Venise ! Que du bonheur ! 🍕🍝`,
+                'Japan': `🇯🇵 Le Japon c'est les cerisiers, les temples, la technologie et les mangas ! 🌸⛩️`,
+                'Brazil': `🇧🇷 Le Brésil, c'est le football, le carnaval, Rio et la samba ! 🏈🎭`,
+                'Germany': `🇩🇪 L'Allemagne c'est les châteaux, la bière, les voitures et l'Oktoberfest ! 🍺🏰`,
+                'China': `🇨🇳 La Chine, c'est la Grande Muraille, la cuisine délicieuse et tant d'histoire ! 🥟🏯`,
+                'India': `🇮🇳 L'Inde c'est les épices, le Taj Mahal, Bollywood et les couleurs ! 🌶️💃`,
+                'Spain': `🇪🇸 L'Espagne c'est le flamenco, la paella, le soleil et les plages ! 💃🥘`,
+                'Russia': `🇷🇺 La Russie c'est immense ! Moscou, Saint-Pétersbourg, la vodka et l'histoire ! 🏛️❄️`,
+                'Egypt': `🇪🇬 L'Égypte, ce sont les pyramides, le Nil, le désert et tant de mystères ! 🏜️🔺`,
+                'Australia': `🇦🇺 L'Australie c'est les kangourous, Sydney, les plages et l'aventure ! 🦘🏄`,
+                'Mexico': `🇲🇽 Le Mexique c'est les tacos, les mariachis, les couleurs et la joie de vivre ! 🌮🎺`,
+                'Kabyle': `🏔️ La Kabylie c'est les montagnes, la culture amazighe, la musique et l'hospitalité ! 🎵🏔️`,
+                'Canada': `🇨🇦 Le Canada c'est les grands espaces, l'érable, la politesse et les lacs ! 🍁🏞️`,
+                'United Kingdom': `🇬🇧 Le Royaume-Uni c'est Big Ben, le thé, les châteaux et l'élégance ! ☕👑`
+            };
+            
+            return praises[country] || `${countries[country]} ${country} est un pays magnifique avec une culture si riche ! ✨🌍`;
+        }
+
+        // Ajouter au historique des mariages
+        function addToMarriageHistory(firstName, lastName, country) {
+            marriageHistory.push({
+                player: gameState.player.fullName,
+                playerCountry: gameState.player.country,
+                partner: `${firstName} ${lastName}`,
+                partnerCountry: country,
+                date: new Date().toLocaleString()
+            });
+        }
+
+        // Vérifier et mettre à jour les missions
+        function checkMissions(partnerCountry) {
+            const playerContinent = countryContinents[gameState.player.country];
+            const partnerContinent = countryContinents[partnerCountry];
+            
+            // Mission pont culturel
+            if (!missions.culturalBridge.completed && 
+                ((playerContinent === 'Europe' && partnerContinent === 'Africa') ||
+                 (playerContinent === 'Africa' && partnerContinent === 'Europe'))) {
+                updateMissions('culturalBridge');
+            }
+            
+            // Mission union continentale
+            if (!missions.continentalUnion.completed) {
+                const usedContinents = new Set();
+                marriageHistory.forEach(marriage => {
+                    usedContinents.add(countryContinents[marriage.playerCountry]);
+                    usedContinents.add(countryContinents[marriage.partnerCountry]);
+                });
+                if (usedContinents.size >= 3) {
+                    updateMissions('continentalUnion');
+                }
+            }
+        }
+
+        // Mettre à jour les missions
+        function updateMissions(missionKey) {
+            const mission = missions[missionKey];
+            if (mission && !mission.completed) {
+                mission.progress++;
+                if (mission.progress >= mission.target) {
+                    mission.completed = true;
+                    gainXP(mission.reward);
+                    showMessage(`🏆 Mission accomplie: ${mission.name}! +${mission.reward} XP bonus!`, 'success');
+                }
+            }
+        }
+
+        // Créer effet feux d'artifice
+        function createFireworks() {
+            const fireworksContainer = document.createElement('div');
+            fireworksContainer.className = 'fireworks';
+            document.body.appendChild(fireworksContainer);
+            
+            for (let i = 0; i < 10; i++) {
+                setTimeout(() => {
+                    const firework = document.createElement('div');
+                    firework.style.position = 'absolute';
+                    firework.style.left = Math.random() * window.innerWidth + 'px';
+                    firework.style.top = Math.random() * window.innerHeight + 'px';
+                    firework.style.width = '20px';
+                    firework.style.height = '20px';
+                    firework.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 50%)`;
+                    firework.style.borderRadius = '50%';
+                    firework.style.animation = 'pulse 0.6s ease-out';
+                    fireworksContainer.appendChild(firework);
+                    
+                    setTimeout(() => {
+                        firework.remove();
+                    }, 600);
+                }, i * 100);
+            }
+            
+            setTimeout(() => {
+                fireworksContainer.remove();
+            }, 2000);
+        }
+
+        // Créer animation de cœurs
+        function createHeartAnimation() {
+            for (let i = 0; i < 15; i++) {
+                setTimeout(() => {
+                    const heart = document.createElement('div');
+                    heart.className = 'heart-animation';
+                    heart.textContent = '💖';
+                    heart.style.left = Math.random() * window.innerWidth + 'px';
+                    heart.style.top = window.innerHeight + 'px';
+                    document.body.appendChild(heart);
+                    
+                    setTimeout(() => {
+                        heart.remove();
+                    }, 2000);
+                }, i * 200);
+            }
+        }
+
+        // Créer effet d'explosion
+        function createExplosionEffect() {
+            const explosionContainer = document.createElement('div');
+            explosionContainer.style.position = 'fixed';
+            explosionContainer.style.top = '50%';
+            explosionContainer.style.left = '50%';
+            explosionContainer.style.transform = 'translate(-50%, -50%)';
+            explosionContainer.style.fontSize = '100px';
+            explosionContainer.style.zIndex = '9999';
+            explosionContainer.textContent = '💥';
+            explosionContainer.style.animation = 'shake 0.5s ease-in-out';
+            document.body.appendChild(explosionContainer);
+            
+            setTimeout(() => {
+                explosionContainer.remove();
+            }, 1000);
+        }
+
+        // Afficher le message de mariage réussi avec bouton partager
+        function showMarriageSuccessMessage(firstName, lastName, country, xpGained) {
+            const messageContainer = document.getElementById('messageContainer');
+            const message = document.createElement('div');
+            message.className = 'message success';
+            message.style.display = 'flex';
+            message.style.alignItems = 'center';
+            message.style.justifyContent = 'space-between';
+            message.style.flexWrap = 'wrap';
+            message.style.gap = '10px';
+            message.innerHTML = `
+                <span>🎉 Félicitations! Vous avez épousé ${firstName} ${lastName} de ${country}! +${xpGained} XP</span>
+                <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                    <button class="btn share-btn" onclick="shareMarriage('${firstName.replace(/'/g, "\\'")}', '${lastName.replace(/'/g, "\\'")}', '${country.replace(/'/g, "\\'")}')">
+                        📤 Partager
+                    </button>
+                    <button class="btn btn-secondary" onclick="this.parentElement.parentElement.remove()">
+                        ✖️ Fermer
+                    </button>
+                </div>
+            `;
+            messageContainer.appendChild(message);
+
+            // La fermeture automatique a été supprimée - le message reste jusqu'à ce que l'utilisateur clique sur "Fermer"
+        }
+
+        // Système d'XP
+        function gainXP(amount) {
+            gameState.xp += amount;
+            
+            // Vérifier si le joueur monte de niveau
+            const xpForNextLevel = gameState.level * 100;
+            if (gameState.xp >= xpForNextLevel) {
+                gameState.level++;
+                gameState.xp = gameState.xp - xpForNextLevel;
+                showMessage(`🌟 Niveau supérieur! Vous êtes maintenant niveau ${gameState.level}!`, 'success');
+            }
+            
+            updateXPDisplay();
+        }
+
+        // Mise à jour de l'affichage XP
+        function updateXPDisplay() {
+            document.getElementById('level').textContent = gameState.level;
+            document.getElementById('xp').textContent = gameState.xp;
+            
+            const xpForNextLevel = gameState.level * 100;
+            const xpPercentage = (gameState.xp / xpForNextLevel) * 100;
+            document.getElementById('xpFill').style.width = `${xpPercentage}%`;
+        }
+
+        // Affichage des messages
+        function showMessage(text, type) {
+            const messageContainer = document.getElementById('messageContainer');
+            const message = document.createElement('div');
+            message.className = `message ${type}`;
+            message.style.display = 'flex';
+            message.style.alignItems = 'center';
+            message.style.justifyContent = 'space-between';
+            message.style.flexWrap = 'wrap';
+            message.style.gap = '10px';
+            message.innerHTML = `
+                <span>${text}</span>
+                <button class="btn btn-secondary" onclick="this.parentElement.remove()" style="padding: 8px 15px; font-size: 12px; margin: 0;">
+                    ✖️ Fermer
+                </button>
+            `;
+            messageContainer.appendChild(message);
+
+            // La fermeture automatique a été supprimée - le message reste jusqu'à ce que l'utilisateur clique sur "Fermer"
+        }
+
+        // Améliorer la fonction de réinitialisation avec confirmation
+        function resetGame() {
+            const confirmationMenu = document.createElement('div');
+            confirmationMenu.className = 'game-screen';
+            confirmationMenu.style.position = 'fixed';
+            confirmationMenu.style.top = '50%';
+            confirmationMenu.style.left = '50%';
+            confirmationMenu.style.transform = 'translate(-50%, -50%)';
+            confirmationMenu.style.zIndex = '1000';
+            confirmationMenu.style.maxWidth = '500px';
+            confirmationMenu.style.width = '90%';
+            confirmationMenu.style.textAlign = 'center';
+            
+            confirmationMenu.innerHTML = `
+                <h2 style="margin-bottom: 20px;">⚠️ Nouvelle Partie</h2>
+                <p style="margin-bottom: 20px; font-size: 16px;">
+                    Êtes-vous sûr de vouloir recommencer une nouvelle partie ?<br>
+                    <strong>Tous vos progrès actuels seront perdus !</strong>
+                </p>
+                
+                <div style="background: rgba(255,193,7,0.1); padding: 15px; border-radius: 10px; margin: 20px 0;">
+                    💡 <strong>Conseil :</strong> Sauvegardez vos progrès avant de recommencer !
+                </div>
+                
+                <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+                    <button class="btn" onclick="showSaveMenu(); confirmationMenu.remove();">
+                        💾 Sauvegarder d'abord
+                    </button>
+                    <button class="btn btn-warning" onclick="confirmReset()">
+                        🔄 Oui, recommencer
+                    </button>
+                    <button class="btn btn-secondary" onclick="confirmationMenu.remove()">
+                        ❌ Annuler
+                    </button>
+                </div>
+            `;
+            
+            document.body.appendChild(confirmationMenu);
+
+            window.confirmReset = function() {
+                // Réinitialiser complètement
+                gameState = {
+                    selectedCountry: '',
+                    player: {
+                        country: '',
+                        gender: '',
+                        firstName: '',
+                        lastName: '',
+                        fullName: ''
+                    },
+                    xp: 0,
+                    level: 1,
+                    marriages: 0,
+                    totalPlayTime: 0,
+                    startTime: Date.now(),
+                    achievements: [],
+                    statistics: {
+                        totalMarriages: 0,
+                        countriesVisited: new Set(),
+                        bossesDefeated: 0,
+                        recipesLearned: 0,
+                        maxLevel: 1
+                    }
+                };
+
+                // Réinitialiser toutes les données
+                marriageHistory = [];
+                culinaryExchanges = [];
+                defeatedBosses = new Set();
+                passedQuizzes = new Set();
+                discoveredCouples = new Set();
+                learnedRecipes = new Set();
+                missions = {
+                    continentalUnion: { name: 'Union Continentale', description: 'Marier des pays de 3 continents différents', progress: 0, target: 3, reward: 200, completed: false },
+                    speedMarriage: { name: 'Mariages Express', description: 'Réaliser 5 mariages en moins de 2 minutes', progress: 0, target: 5, reward: 150, completed: false },
+                    culturalBridge: { name: 'Pont Culturel', description: 'Marier un pays européen avec un pays africain', progress: 0, target: 1, reward: 100, completed: false },
+                    legendary: { name: 'Couples Légendaires', description: 'Découvrir 3 couples spéciaux', progress: 0, target: 3, reward: 300, completed: false },
+                    masterChef: { name: 'Master Chef International', description: 'Apprendre 5 recettes de pays différents', progress: 0, target: 5, reward: 250, completed: false },
+                    culinaryAmbassador: { name: 'Ambassadeur Culinaire', description: 'Partager 3 échanges culinaires', progress: 0, target: 3, reward: 180, completed: false },
+                    spiceTrader: { name: 'Marchand d\'Épices', description: 'Découvrir la cuisine de 8 pays asiatiques', progress: 0, target: 8, reward: 300, completed: false }
+                };
+
+                // Réinitialiser l'interface
+                document.getElementById('gameMain').classList.add('hidden');
+                document.getElementById('characterCreation').classList.add('hidden');
+                document.getElementById('countrySelection').classList.remove('hidden');
+                
+                // Réinitialiser les sélections
+                document.querySelectorAll('.country-ball').forEach(ball => {
+                    ball.classList.remove('selected');
+                });
+                
+                document.getElementById('nextToCharacter').disabled = true;
+                document.getElementById('startGame').disabled = true;
+                document.getElementById('genderSelect').selectedIndex = 0;
+                document.getElementById('messageContainer').innerHTML = '';
+                document.getElementById('partnersResults').classList.add('hidden');
+                
+                updateXPDisplay();
+                confirmationMenu.remove();
+                
+                showMessage('🎮 Nouvelle partie commencée ! Bonne chance !', 'success');
+                delete window.confirmReset;
+            };
+        }
+
+        // Fonction pour jouer un son de victoire
+        function playVictorySound() {
+            try {
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                
+                // Créer une mélodie de victoire simple
+                const notes = [523.25, 659.25, 783.99, 1046.50]; // Do, Mi, Sol, Do (octave supérieure)
+                let startTime = audioContext.currentTime;
+                
+                notes.forEach((frequency, index) => {
+                    const oscillator = audioContext.createOscillator();
+                    const gainNode = audioContext.createGain();
+                    
+                    oscillator.connect(gainNode);
+                    gainNode.connect(audioContext.destination);
+                    
+                    oscillator.frequency.setValueAtTime(frequency, startTime + index * 0.2);
+                    oscillator.type = 'sine';
+                    
+                    gainNode.gain.setValueAtTime(0, startTime + index * 0.2);
+                    gainNode.gain.linearRampToValueAtTime(0.3, startTime + index * 0.2 + 0.05);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, startTime + index * 0.2 + 0.15);
+                    
+                    oscillator.start(startTime + index * 0.2);
+                    oscillator.stop(startTime + index * 0.2 + 0.2);
+                });
+            } catch (error) {
+                console.log('Audio non supporté:', error);
+            }
+        }
+
+        // Fonction de partage
+        function shareMarriage(firstName, lastName, country) {
+            const shareText = `🎉 Je viens d'épouser ${firstName} ${lastName} de ${country} dans Country Balls: Mariage! 💕 #CountryBallsMarriage`;
+            const shareUrl = window.location.href;
+
+            // Essayer l'API native de partage
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Country Balls: Mariage',
+                    text: shareText,
+                    url: shareUrl
+                }).catch(err => console.log('Erreur de partage:', err));
+            } else {
+                // Afficher les options de partage alternatives
+                showShareOptions(shareText, shareUrl);
+            }
+        }
+
+        // Afficher les options de partage
+        function showShareOptions(shareText, shareUrl) {
+            // Supprimer les options existantes
+            const existingOptions = document.querySelector('.share-options');
+            if (existingOptions) {
+                existingOptions.remove();
+            }
+
+            const shareContainer = document.createElement('div');
+            shareContainer.className = 'share-options show';
+            shareContainer.innerHTML = `
+                <h4>📤 Partager votre mariage</h4>
+                <div style="margin: 15px 0;">
+                    <button class="share-option" onclick="copyToClipboard('${shareText.replace(/'/g, "\\'")}')">
+                        📋 Copier le texte
+                    </button>
+                    <a class="share-option" href="https://wa.me/?text=${encodeURIComponent(shareText)}" target="_blank">
+                        💬 WhatsApp
+                    </a>
+                    <a class="share-option" href="https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}" target="_blank">
+                        🐦 Twitter
+                    </a>
+                    <a class="share-option" href="https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}" target="_blank">
+                        📘 Facebook
+                    </a>
+                </div>
+                <button class="btn" onclick="this.parentElement.remove()" style="margin-top: 10px;">✖️ Fermer</button>
+            `;
+
+            document.getElementById('messageContainer').appendChild(shareContainer);
+
+            // La fermeture automatique a été supprimée - le panneau reste jusqu'à ce que l'utilisateur clique sur "Fermer"
+        }
+
+        // Copier dans le presse-papiers
+        function copyToClipboard(text) {
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(text).then(() => {
+                    showMessage('📋 Texte copié dans le presse-papiers!', 'success');
+                }).catch(err => {
+                    console.error('Erreur de copie:', err);
+                    showMessage('❌ Erreur lors de la copie', 'error');
+                });
+            } else {
+                // Fallback pour navigateurs plus anciens
+                const textArea = document.createElement('textarea');
+                textArea.value = text;
+                document.body.appendChild(textArea);
+                textArea.select();
+                try {
+                    document.execCommand('copy');
+                    showMessage('📋 Texte copié!', 'success');
+                } catch (err) {
+                    showMessage('❌ Erreur lors de la copie', 'error');
+                }
+                document.body.removeChild(textArea);
+            }
+        }
+
+        // Fonction de basculement du thème
+        function toggleTheme() {
+            const body = document.body;
+            const themeToggle = document.getElementById('themeToggle');
+            const isDark = body.classList.contains('dark');
+
+            if (isDark) {
+                body.classList.remove('dark');
+                themeToggle.textContent = '🌙';
+                currentTheme = 'light';
+            } else {
+                body.classList.add('dark');
+                themeToggle.textContent = '☀️';
+                currentTheme = 'dark';
+            }
+        }
+
+        // Initialiser le thème depuis les préférences système
+        function initTheme() {
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+            const themeToggle = document.getElementById('themeToggle');
+
+            if (prefersDark) {
+                document.body.classList.add('dark');
+                themeToggle.textContent = '☀️';
+                currentTheme = 'dark';
+            } else {
+                themeToggle.textContent = '🌙';
+                currentTheme = 'light';
+            }
+        }
+
+        // ========================
+        // SYSTÈME DE SAUVEGARDE COMPLET
+        // ========================
+
+        // Calculer le temps de jeu total
+        function updatePlayTime() {
+            if (gameState.startTime) {
+                gameState.totalPlayTime += Date.now() - gameState.startTime;
+                gameState.startTime = Date.now();
+            }
+        }
+
+        // Formater le temps de jeu
+        function formatPlayTime(milliseconds) {
+            const seconds = Math.floor(milliseconds / 1000);
+            const minutes = Math.floor(seconds / 60);
+            const hours = Math.floor(minutes / 60);
+            
+            if (hours > 0) {
+                return `${hours}h ${minutes % 60}m`;
+            } else if (minutes > 0) {
+                return `${minutes}m ${seconds % 60}s`;
+            } else {
+                return `${seconds}s`;
+            }
+        }
+
+        // Créer les données de sauvegarde complètes
+        function createSaveData() {
+            updatePlayTime();
+            
+            // Mettre à jour les statistiques
+            gameState.statistics.totalMarriages = marriageHistory.length;
+            gameState.statistics.countriesVisited = new Set(marriageHistory.map(m => m.partnerCountry));
+            gameState.statistics.bossesDefeated = defeatedBosses.size;
+            gameState.statistics.recipesLearned = learnedRecipes.size;
+            gameState.statistics.maxLevel = Math.max(gameState.statistics.maxLevel, gameState.level);
+
+            return {
+                version: "1.0",
+                timestamp: new Date().toISOString(),
+                gameState: {
+                    ...gameState,
+                    statistics: {
+                        ...gameState.statistics,
+                        countriesVisited: Array.from(gameState.statistics.countriesVisited)
+                    }
+                },
+                gameData: {
+                    marriageHistory: marriageHistory,
+                    culinaryExchanges: culinaryExchanges,
+                    defeatedBosses: Array.from(defeatedBosses),
+                    passedQuizzes: Array.from(passedQuizzes),
+                    discoveredCouples: Array.from(discoveredCouples),
+                    learnedRecipes: Array.from(learnedRecipes),
+                    missions: missions,
+                    currentTheme: currentTheme
+                }
+            };
+        }
+
+        // Charger les données de sauvegarde
+        function loadSaveData(saveData) {
+            try {
+                // Vérifier la version
+                if (!saveData.version) {
+                    throw new Error("Format de sauvegarde invalide");
+                }
+
+                // Restaurer l'état du jeu
+                gameState = {
+                    ...saveData.gameState,
+                    startTime: Date.now(),
+                    statistics: {
+                        ...saveData.gameState.statistics,
+                        countriesVisited: new Set(saveData.gameState.statistics.countriesVisited)
+                    }
+                };
+
+                // Restaurer les données du jeu
+                marriageHistory = saveData.gameData.marriageHistory || [];
+                culinaryExchanges = saveData.gameData.culinaryExchanges || [];
+                defeatedBosses = new Set(saveData.gameData.defeatedBosses || []);
+                passedQuizzes = new Set(saveData.gameData.passedQuizzes || []);
+                discoveredCouples = new Set(saveData.gameData.discoveredCouples || []);
+                learnedRecipes = new Set(saveData.gameData.learnedRecipes || []);
+                missions = saveData.gameData.missions || missions;
+                currentTheme = saveData.gameData.currentTheme || 'light';
+
+                // Appliquer le thème
+                if (currentTheme === 'dark') {
+                    document.body.classList.add('dark');
+                    document.getElementById('themeToggle').textContent = '☀️';
+                } else {
+                    document.body.classList.remove('dark');
+                    document.getElementById('themeToggle').textContent = '🌙';
+                }
+
+                // Mettre à jour l'affichage
+                updateXPDisplay();
+
+                // Si un joueur existe, aller au jeu principal
+                if (gameState.player.fullName) {
+                    document.getElementById('countrySelection').classList.add('hidden');
+                    document.getElementById('characterCreation').classList.add('hidden');
+                    document.getElementById('gameMain').classList.remove('hidden');
+
+                    // Afficher les informations du joueur
+                    const playerInfo = document.getElementById('playerInfo');
+                    playerInfo.innerHTML = `
+                        <div style="font-size: 3em; margin-bottom: 10px;">${countries[gameState.player.country]}</div>
+                        <div><strong>${gameState.player.fullName}</strong></div>
+                        <div>${gameState.player.gender === 'male' ? '🧑' : '👩'} ${gameState.player.country}</div>
+                        <div style="margin-top: 10px; font-size: 14px; opacity: 0.8;">
+                            ⏱️ Temps de jeu : ${formatPlayTime(gameState.totalPlayTime)}
+                        </div>
+                    `;
+
+                    populateSearchCountries();
+                }
+
+                return true;
+            } catch (error) {
+                console.error('Erreur lors du chargement:', error);
+                return false;
+            }
+        }
+
+        // Générer un code de sauvegarde (Base64)
+        function generateSaveCode() {
+            const saveData = createSaveData();
+            try {
+                const jsonString = JSON.stringify(saveData);
+                const base64Code = btoa(jsonString);
+                return base64Code;
+            } catch (error) {
+                console.error('Erreur génération code:', error);
+                return null;
+            }
+        }
+
+        // Décoder un code de sauvegarde
+        function decodeSaveCode(code) {
+            try {
+                const jsonString = atob(code);
+                const saveData = JSON.parse(jsonString);
+                return saveData;
+            } catch (error) {
+                console.error('Erreur décodage code:', error);
+                return null;
+            }
+        }
+
+        // Afficher le menu de sauvegarde
+        function showSaveMenu() {
+            const messageContainer = document.getElementById('messageContainer');
+            const saveMenu = document.createElement('div');
+            saveMenu.className = 'game-screen';
+            saveMenu.style.position = 'fixed';
+            saveMenu.style.top = '50%';
+            saveMenu.style.left = '50%';
+            saveMenu.style.transform = 'translate(-50%, -50%)';
+            saveMenu.style.zIndex = '1000';
+            saveMenu.style.maxWidth = '600px';
+            saveMenu.style.width = '90%';
+            saveMenu.style.maxHeight = '80vh';
+            saveMenu.style.overflow = 'auto';
+            
+            const saveCode = generateSaveCode();
+            const saveData = createSaveData();
+            
+            saveMenu.innerHTML = `
+                <h2 style="text-align: center; margin-bottom: 20px;">💾 Sauvegarder vos Progrès</h2>
+                
+                <div style="margin-bottom: 20px; text-align: center;">
+                    <h4>📊 Statistiques de votre Aventure</h4>
+                    <div style="background: rgba(0,122,255,0.1); padding: 15px; border-radius: 10px; margin: 10px 0;">
+                        👤 <strong>${gameState.player.fullName || 'Personnage non créé'}</strong><br>
+                        🌍 Pays d'origine : ${gameState.player.country}<br>
+                        💎 Niveau : ${gameState.level} | 🏆 XP : ${gameState.xp}<br>
+                        💕 Mariages réalisés : ${marriageHistory.length}<br>
+                        🗺️ Pays visités : ${gameState.statistics.countriesVisited.size}<br>
+                        👊 Boss vaincus : ${defeatedBosses.size}<br>
+                        🍽️ Recettes apprises : ${learnedRecipes.size}<br>
+                        ⏱️ Temps de jeu : ${formatPlayTime(gameState.totalPlayTime)}<br>
+                        📅 Dernière session : ${new Date().toLocaleString()}
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 20px;">
+                    <h4>📥 Export Fichier de Sauvegarde</h4>
+                    <p style="font-size: 14px; opacity: 0.8;">Téléchargez un fichier JSON avec tous vos progrès</p>
+                    <button class="btn btn-success" onclick="downloadSaveFile()">
+                        📁 Télécharger Sauvegarde (.json)
+                    </button>
+                </div>
+
+                <div style="margin-bottom: 20px;">
+                    <h4>🔢 Code de Sauvegarde</h4>
+                    <p style="font-size: 14px; opacity: 0.8;">Copiez ce code pour récupérer vos progrès plus tard</p>
+                    <textarea id="saveCodeDisplay" readonly style="width: 100%; height: 100px; padding: 10px; font-family: monospace; font-size: 12px; resize: vertical;">${saveCode}</textarea>
+                    <button class="btn" onclick="copyToClipboard(document.getElementById('saveCodeDisplay').value)">
+                        📋 Copier le Code
+                    </button>
+                </div>
+
+                <div style="text-align: center; margin-top: 30px;">
+                    <button class="btn btn-secondary" onclick="closeSaveMenu()">
+                        ✖️ Fermer
+                    </button>
+                </div>
+            `;
+            
+            document.body.appendChild(saveMenu);
+
+            // Fonction pour fermer le menu
+            window.closeSaveMenu = function() {
+                saveMenu.remove();
+                delete window.closeSaveMenu;
+                delete window.downloadSaveFile;
+            };
+
+            // Fonction pour télécharger le fichier
+            window.downloadSaveFile = function() {
+                const saveData = createSaveData();
+                const jsonString = JSON.stringify(saveData, null, 2);
+                const blob = new Blob([jsonString], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = `country-balls-mariage-save-${new Date().toISOString().split('T')[0]}.json`;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                URL.revokeObjectURL(url);
+                
+                showMessage('📁 Fichier de sauvegarde téléchargé avec succès !', 'success');
+            };
+        }
+
+        // Afficher le menu de chargement
+        function showLoadMenu() {
+            const messageContainer = document.getElementById('messageContainer');
+            const loadMenu = document.createElement('div');
+            loadMenu.className = 'game-screen';
+            loadMenu.style.position = 'fixed';
+            loadMenu.style.top = '50%';
+            loadMenu.style.left = '50%';
+            loadMenu.style.transform = 'translate(-50%, -50%)';
+            loadMenu.style.zIndex = '1000';
+            loadMenu.style.maxWidth = '600px';
+            loadMenu.style.width = '90%';
+            loadMenu.style.maxHeight = '80vh';
+            loadMenu.style.overflow = 'auto';
+            
+            loadMenu.innerHTML = `
+                <h2 style="text-align: center; margin-bottom: 20px;">📂 Charger vos Progrès</h2>
+                
+                <div style="background: rgba(255,193,7,0.1); padding: 15px; border-radius: 10px; margin-bottom: 20px; text-align: center;">
+                    ⚠️ <strong>Attention :</strong> Charger une sauvegarde remplacera votre progression actuelle !
+                </div>
+
+                <div style="margin-bottom: 25px;">
+                    <h4>📁 Import Fichier de Sauvegarde</h4>
+                    <p style="font-size: 14px; opacity: 0.8;">Sélectionnez un fichier .json de sauvegarde</p>
+                    <input type="file" id="saveFileInput" accept=".json" style="width: 100%; padding: 10px; margin: 10px 0; border: 2px dashed rgba(0,122,255,0.3); border-radius: 10px; background: rgba(0,122,255,0.05);">
+                    <button class="btn btn-success" onclick="loadFromFile()">
+                        📂 Charger depuis Fichier
+                    </button>
+                </div>
+
+                <div style="margin-bottom: 25px;">
+                    <h4>🔢 Code de Sauvegarde</h4>
+                    <p style="font-size: 14px; opacity: 0.8;">Collez votre code de sauvegarde ici</p>
+                    <textarea id="saveCodeInput" placeholder="Collez votre code de sauvegarde ici..." style="width: 100%; height: 100px; padding: 10px; font-family: monospace; font-size: 12px; resize: vertical;"></textarea>
+                    <button class="btn btn-warning" onclick="loadFromCode()">
+                        🔓 Charger depuis Code
+                    </button>
+                </div>
+
+                <div style="text-align: center; margin-top: 30px;">
+                    <button class="btn btn-secondary" onclick="closeLoadMenu()">
+                        ✖️ Fermer
+                    </button>
+                </div>
+            `;
+            
+            document.body.appendChild(loadMenu);
+
+            // Fonctions pour le menu de chargement
+            window.closeLoadMenu = function() {
+                loadMenu.remove();
+                delete window.closeLoadMenu;
+                delete window.loadFromFile;
+                delete window.loadFromCode;
+            };
+
+            window.loadFromFile = function() {
+                const fileInput = document.getElementById('saveFileInput');
+                const file = fileInput.files[0];
+                
+                if (!file) {
+                    showMessage('❌ Veuillez sélectionner un fichier !', 'error');
+                    return;
+                }
+
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    try {
+                        const saveData = JSON.parse(e.target.result);
+                        if (loadSaveData(saveData)) {
+                            showMessage('🎉 Sauvegarde chargée avec succès !', 'success');
+                            closeLoadMenu();
+                        } else {
+                            showMessage('❌ Erreur lors du chargement de la sauvegarde !', 'error');
+                        }
+                    } catch (error) {
+                        showMessage('❌ Fichier de sauvegarde invalide !', 'error');
+                    }
+                };
+                reader.readAsText(file);
+            };
+
+            window.loadFromCode = function() {
+                const codeInput = document.getElementById('saveCodeInput');
+                const code = codeInput.value.trim();
+                
+                if (!code) {
+                    showMessage('❌ Veuillez entrer un code de sauvegarde !', 'error');
+                    return;
+                }
+
+                const saveData = decodeSaveCode(code);
+                if (saveData && loadSaveData(saveData)) {
+                    showMessage('🎉 Sauvegarde chargée avec succès !', 'success');
+                    closeLoadMenu();
+                } else {
+                    showMessage('❌ Code de sauvegarde invalide !', 'error');
+                }
+            };
+        }
+
+        // Sauvegarde automatique périodique (toutes les 30 secondes)
+        function startAutoSave() {
+            setInterval(() => {
+                if (gameState.player.fullName) {
+                    // Sauvegarde automatique en mémoire
+                    const saveData = createSaveData();
+                    console.log('Sauvegarde automatique effectuée:', new Date().toLocaleString());
+                    
+                    // Optionnel : afficher discrètement qu'une sauvegarde auto a eu lieu
+                    const autoSaveIndicator = document.createElement('div');
+                    autoSaveIndicator.style.position = 'fixed';
+                    autoSaveIndicator.style.top = '10px';
+                    autoSaveIndicator.style.right = '80px';
+                    autoSaveIndicator.style.background = 'rgba(40, 167, 69, 0.9)';
+                    autoSaveIndicator.style.color = 'white';
+                    autoSaveIndicator.style.padding = '5px 10px';
+                    autoSaveIndicator.style.borderRadius = '15px';
+                    autoSaveIndicator.style.fontSize = '12px';
+                    autoSaveIndicator.style.zIndex = '999';
+                    autoSaveIndicator.style.opacity = '0';
+                    autoSaveIndicator.style.transition = 'opacity 0.3s';
+                    autoSaveIndicator.textContent = '💾 Sauvé';
+                    document.body.appendChild(autoSaveIndicator);
+                    
+                    // Animation fade in/out
+                    setTimeout(() => autoSaveIndicator.style.opacity = '1', 100);
+                    setTimeout(() => autoSaveIndicator.style.opacity = '0', 1500);
+                    setTimeout(() => autoSaveIndicator.remove(), 2000);
+                }
+            }, 30000); // 30 secondes
+        }
+
+        // Initialisation au chargement de la page
+        window.onload = function() {
+            initGame();
+            initTheme();
+            startAutoSave();
+        };
+    </script>
+</body>
+</html>
