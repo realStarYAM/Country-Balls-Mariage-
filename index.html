@@ -2677,11 +2677,10 @@
                     </div>
                 `;
                 
-                // Ajouter l'event listener directement au bouton
+                // Action "Je te quitte"
                 const breakupBtn = marriageCard.querySelector('.breakup-btn');
-                breakupBtn.addEventListener('click', function() {
-                    console.log('Bouton cliqué pour:', marriage.partner); // Debug
-                    initiateBreakup(index);
+                breakupBtn.addEventListener('click', () => {
+                    breakUp(marriage.partner);
                 });
                 
                 // Ajouter la carte à la liste
@@ -2689,19 +2688,6 @@
             });
         }
 
-        // Fonction pour initialiser la rupture
-        function initiateBreakup(marriageIndex) {
-            if (marriageIndex < 0 || marriageIndex >= marriageHistory.length) {
-                console.error('Index de mariage invalide:', marriageIndex);
-                return;
-            }
-            
-            const marriage = marriageHistory[marriageIndex];
-            const genderEmoji = marriage.partnerGender === 'male' ? '👨' : '👩';
-            
-            console.log('Initiation de la rupture avec:', marriage.partner); // Debug
-            breakUp(marriageIndex, marriage.partner, marriage.partnerCountry, genderEmoji);
-        }
 
         function updateMissions(missionKey) {
             if (!missionKey || missions[missionKey].completed) return;
@@ -4506,18 +4492,19 @@
         // SYSTÈME DE RUPTURE DRAMATIQUE
         // ============================================
 
-        function breakUp(marriageIndex, partnerName, partnerCountry, genderEmoji) {
-            console.log(`💔 Tentative de rupture avec ${partnerName} (index: ${marriageIndex})`);
-            
-            // Vérifier que l'index est valide
-            if (marriageIndex < 0 || marriageIndex >= marriageHistory.length) {
-                console.error('❌ Index de mariage invalide:', marriageIndex);
-                showMessage('❌ Erreur : Impossible de trouver ce mariage !', 'error');
+        function breakUp(partnerName) {
+            const marriageIndex = marriageHistory.findIndex(m => m.partner === partnerName);
+            if (marriageIndex === -1) {
+                console.error('❌ Partenaire introuvable:', partnerName);
+                showMessage('❌ Erreur : partenaire introuvable !', 'error');
                 return;
             }
-            
-            // Récupérer les détails du mariage avant la suppression
+
             const marriage = marriageHistory[marriageIndex];
+            const partnerCountry = marriage.partnerCountry;
+            const genderEmoji = marriage.partnerGender === 'male' ? '👨' : '👩';
+
+            console.log(`💔 Tentative de rupture avec ${partnerName} (index: ${marriageIndex})`);
             
             // Confirmation dramatique
             const confirmMessage = `💔 Êtes-vous vraiment sûr(e) de vouloir quitter ${genderEmoji} ${partnerName} de ${partnerCountry} ?\n\n⚠️ Cette action est irréversible et aura des conséquences !`;
