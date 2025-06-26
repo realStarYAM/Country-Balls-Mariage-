@@ -196,6 +196,249 @@
         .dark .container {
             background: transparent !important;
         }
+
+        /* ========================================== */
+        /* SYSTÈME AERO GLASS AVEC RÉGLAGE D'INTENSITÉ */
+        /* ========================================== */
+        
+        :root {
+            --aero-blur-intensity: 16px;
+            --aero-opacity: 0.15;
+            --aero-border-opacity: 0.4;
+            --aero-brightness: 0.9;
+        }
+        
+        /* Classe principale Aero Glass */
+        .aero-glass {
+            backdrop-filter: blur(var(--aero-blur-intensity)) brightness(var(--aero-brightness));
+            -webkit-backdrop-filter: blur(var(--aero-blur-intensity)) brightness(var(--aero-brightness));
+            background: rgba(255, 255, 255, var(--aero-opacity)) !important;
+            border: 1.5px solid rgba(255, 255, 255, var(--aero-border-opacity)) !important;
+            box-shadow: 
+                0 8px 32px rgba(31, 38, 135, 0.37),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3),
+                inset 0 -1px 0 rgba(255, 255, 255, 0.1) !important;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* Mode sombre pour Aero Glass */
+        .dark .aero-glass {
+            background: rgba(30, 30, 30, 0.25) !important;
+            border: 1.5px solid rgba(255, 255, 255, 0.2) !important;
+            box-shadow: 
+                0 8px 32px rgba(0, 0, 0, 0.5),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2),
+                inset 0 -1px 0 rgba(255, 255, 255, 0.05) !important;
+        }
+        
+        /* Pseudo-élément pour renforcer l'effet glassmorphism */
+        .aero-glass::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, 
+                transparent, 
+                rgba(255, 255, 255, 0.6), 
+                transparent);
+            z-index: 1;
+            pointer-events: none;
+        }
+        
+        /* Pseudo-élément pour l'effet de reflet */
+        .aero-glass::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, 
+                transparent, 
+                rgba(255, 255, 255, 0.1), 
+                transparent);
+            animation: aeroShimmer 3s ease-in-out infinite;
+            z-index: 1;
+            pointer-events: none;
+        }
+        
+        @keyframes aeroShimmer {
+            0%, 100% { 
+                left: -100%; 
+                opacity: 0; 
+            }
+            50% { 
+                left: 100%; 
+                opacity: 1; 
+            }
+        }
+        
+        /* Applications spécifiques de l'effet Aero Glass */
+        
+        /* Cartes principales */
+        .country-card.aero-glass {
+            transition: all 0.3s ease;
+        }
+        
+        .country-card.aero-glass:hover {
+            backdrop-filter: blur(calc(var(--aero-blur-intensity) + 4px)) brightness(1.1);
+            -webkit-backdrop-filter: blur(calc(var(--aero-blur-intensity) + 4px)) brightness(1.1);
+            transform: translateY(-2px);
+            box-shadow: 
+                0 12px 40px rgba(31, 38, 135, 0.5),
+                inset 0 1px 0 rgba(255, 255, 255, 0.4),
+                inset 0 -1px 0 rgba(255, 255, 255, 0.2) !important;
+        }
+        
+        /* Messages avec effet Aero */
+        .message.aero-glass {
+            backdrop-filter: blur(var(--aero-blur-intensity)) brightness(var(--aero-brightness));
+            -webkit-backdrop-filter: blur(var(--aero-blur-intensity)) brightness(var(--aero-brightness));
+        }
+        
+        .message.success.aero-glass {
+            background: rgba(212, 237, 218, 0.3) !important;
+            border-left: 5px solid rgba(40, 167, 69, 0.8) !important;
+        }
+        
+        .message.error.aero-glass {
+            background: rgba(248, 215, 218, 0.3) !important;
+            border-left: 5px solid rgba(220, 53, 69, 0.8) !important;
+        }
+        
+        .message.special.aero-glass {
+            background: rgba(226, 227, 255, 0.3) !important;
+            border-left: 5px solid rgba(93, 92, 222, 0.8) !important;
+        }
+        
+        /* Chat avec effet Aero */
+        .chat-window.aero-glass {
+            backdrop-filter: blur(var(--aero-blur-intensity)) brightness(var(--aero-brightness));
+            -webkit-backdrop-filter: blur(var(--aero-blur-intensity)) brightness(var(--aero-brightness));
+            background: rgba(255, 255, 255, 0.12) !important;
+            border-radius: 20px !important;
+        }
+        
+        .dark .chat-window.aero-glass {
+            background: rgba(30, 30, 30, 0.2) !important;
+        }
+        
+        /* En-tête de chat avec effet subtil */
+        .chat-header.aero-glass {
+            background: rgba(93, 92, 222, 0.15) !important;
+            backdrop-filter: blur(calc(var(--aero-blur-intensity) / 2));
+            -webkit-backdrop-filter: blur(calc(var(--aero-blur-intensity) / 2));
+        }
+        
+        /* Boutons avec effet léger */
+        .btn.aero-glass {
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.3) !important;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn.aero-glass:hover {
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            transform: translateY(-1px);
+        }
+        
+        /* Modales et overlays */
+        .modal-aero {
+            backdrop-filter: blur(calc(var(--aero-blur-intensity) * 1.5));
+            -webkit-backdrop-filter: blur(calc(var(--aero-blur-intensity) * 1.5));
+            background: rgba(255, 255, 255, 0.08) !important;
+        }
+        
+        /* Sélecteurs et inputs */
+        .form-aero {
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            background: rgba(255, 255, 255, 0.1) !important;
+            border: 1px solid rgba(255, 255, 255, 0.3) !important;
+        }
+        
+        .dark .form-aero {
+            background: rgba(60, 60, 60, 0.2) !important;
+            border: 1px solid rgba(255, 255, 255, 0.15) !important;
+        }
+        
+        /* Compatibilité navigateurs - Fallback pour les navigateurs non compatibles */
+        @supports not (backdrop-filter: blur(1px)) {
+            .aero-glass {
+                background: rgba(255, 255, 255, 0.85) !important;
+                box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37) !important;
+            }
+            
+            .dark .aero-glass {
+                background: rgba(30, 30, 30, 0.85) !important;
+            }
+            
+            .chat-window.aero-glass {
+                background: rgba(255, 255, 255, 0.95) !important;
+            }
+            
+            .dark .chat-window.aero-glass {
+                background: rgba(30, 30, 30, 0.95) !important;
+            }
+        }
+        
+        /* Styles pour le curseur de réglage d'intensité */
+        .aero-intensity-slider {
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            background: linear-gradient(90deg, 
+                rgba(93, 92, 222, 0.3), 
+                rgba(93, 92, 222, 0.8));
+            outline: none;
+            -webkit-appearance: none;
+            appearance: none;
+            cursor: pointer;
+        }
+        
+        .aero-intensity-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #5D5CDE, #7C4DFF);
+            cursor: pointer;
+            border: 2px solid rgba(255, 255, 255, 0.8);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        
+        .aero-intensity-slider::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #5D5CDE, #7C4DFF);
+            cursor: pointer;
+            border: 2px solid rgba(255, 255, 255, 0.8);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        
+        /* Panneau de contrôle Aero */
+        .aero-control-panel {
+            backdrop-filter: blur(20px) brightness(1.1);
+            -webkit-backdrop-filter: blur(20px) brightness(1.1);
+            background: rgba(255, 255, 255, 0.1) !important;
+            border: 1.5px solid rgba(255, 255, 255, 0.3) !important;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 10px 0;
+        }
+        
+        .dark .aero-control-panel {
+            background: rgba(30, 30, 30, 0.2) !important;
+            border: 1.5px solid rgba(255, 255, 255, 0.15) !important;
+        }
         
         @keyframes slideIn {
             from {
@@ -1283,158 +1526,288 @@
             <div class="country-card">
                 <h2 class="text-3xl font-bold mb-6 text-center">✨ Création de votre Country Ball ✨</h2>
                 
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Informations de base -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
                     <div>
                         <label class="block text-lg font-semibold mb-3">👤 Prénom :</label>
-                        <input type="text" id="firstName" placeholder="Votre prénom..."
+                        <input type="text" id="firstName" placeholder="Votre prénom..." 
                                class="w-full p-4 border-2 border-purple-300 rounded-lg text-base focus:border-purple-500 focus:outline-none transition-colors duration-300 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                               oninput="updatePronunciationZone()">
+                               onchange="updateCharacterPreview()">
                     </div>
                     
                     <div>
                         <label class="block text-lg font-semibold mb-3">🏷️ Nom de famille :</label>
                         <input type="text" id="lastName" placeholder="Votre nom..." 
-                               class="w-full p-4 border-2 border-purple-300 rounded-lg text-base focus:border-purple-500 focus:outline-none transition-colors duration-300 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                               class="w-full p-4 border-2 border-purple-300 rounded-lg text-base focus:border-purple-500 focus:outline-none transition-colors duration-300 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                               onchange="updateCharacterPreview()">
                     </div>
                     
                     <div>
                         <label class="block text-lg font-semibold mb-3">⚧️ Genre :</label>
                         <select id="genderSelect" 
-                                class="w-full p-4 border-2 border-purple-300 rounded-lg text-base focus:border-purple-500 focus:outline-none transition-colors duration-300 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                class="w-full p-4 border-2 border-purple-300 rounded-lg text-base focus:border-purple-500 focus:outline-none transition-colors duration-300 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                                onchange="updateCharacterPreview()">
                             <option value="">Choisissez...</option>
                             <option value="male">👨 Homme</option>
                             <option value="female">👩 Femme</option>
                         </select>
                     </div>
                 </div>
-                
-                <div class="mt-6">
-                    <label class="block text-lg font-semibold mb-3">🏳️ Choisissez votre pays :</label>
-                    <select id="countrySelect" 
-                            class="w-full p-4 border-2 border-purple-300 rounded-lg text-base focus:border-purple-500 focus:outline-none transition-colors duration-300 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
-                        <option value="">Sélectionnez un pays...</option>
-                        <option value="France">🇫🇷 France</option>
-                        <option value="Germany">🇩🇪 Allemagne</option>
-                        <option value="United States">🇺🇸 États-Unis</option>
-                        <option value="Japan">🇯🇵 Japon</option>
-                        <option value="United Kingdom">🇬🇧 Royaume-Uni</option>
-                        <option value="Italy">🇮🇹 Italie</option>
-                        <option value="Spain">🇪🇸 Espagne</option>
-                        <option value="Canada">🇨🇦 Canada</option>
-                        <option value="Australia">🇦🇺 Australie</option>
-                        <option value="Brazil">🇧🇷 Brésil</option>
-                        <option value="Mexico">🇲🇽 Mexique</option>
-                        <option value="China">🇨🇳 Chine</option>
-                        <option value="India">🇮🇳 Inde</option>
-                        <option value="South Korea">🇰🇷 Corée du Sud</option>
-                        <option value="Russia">🇷🇺 Russie</option>
-                        <option value="Netherlands">🇳🇱 Pays-Bas</option>
-                        <option value="Sweden">🇸🇪 Suède</option>
-                        <option value="Norway">🇳🇴 Norvège</option>
-                        <option value="Denmark">🇩🇰 Danemark</option>
-                        <option value="Finland">🇫🇮 Finlande</option>
-                        <option value="Switzerland">🇨🇭 Suisse</option>
-                        <option value="Belgium">🇧🇪 Belgique</option>
-                        <option value="Austria">🇦🇹 Autriche</option>
-                        <option value="Portugal">🇵🇹 Portugal</option>
-                        <option value="Poland">🇵🇱 Pologne</option>
-                        <option value="Czech Republic">🇨🇿 République tchèque</option>
-                        <option value="Greece">🇬🇷 Grèce</option>
-                        <option value="Turkey">🇹🇷 Turquie</option>
-                        <option value="Egypt">🇪🇬 Égypte</option>
-                        <option value="Morocco">🇲🇦 Maroc</option>
-                        <option value="Algeria">🇩🇿 Algérie</option>
-                        <option value="Kabylia">ⵣ Kabyle</option>
-                        <option value="Tunisia">🇹🇳 Tunisie</option>
-                        <option value="South Africa">🇿🇦 Afrique du Sud</option>
-                        <option value="Nigeria">🇳🇬 Nigeria</option>
-                        <option value="Kenya">🇰🇪 Kenya</option>
-                        <option value="Argentina">🇦🇷 Argentine</option>
-                        <option value="Chile">🇨🇱 Chili</option>
-                        <option value="Peru">🇵🇪 Pérou</option>
-                        <option value="Colombia">🇨🇴 Colombie</option>
-                        <option value="Venezuela">🇻🇪 Venezuela</option>
-                        <option value="Thailand">🇹🇭 Thaïlande</option>
-                        <option value="Vietnam">🇻🇳 Vietnam</option>
-                        <option value="Philippines">🇵🇭 Philippines</option>
-                        <option value="Indonesia">🇮🇩 Indonésie</option>
-                        <option value="Malaysia">🇲🇾 Malaisie</option>
-                        <option value="Singapore">🇸🇬 Singapour</option>
-                        <option value="New Zealand">🇳🇿 Nouvelle-Zélande</option>
-                        <option value="Israel">🇮🇱 Israël</option>
-                        <option value="Saudi Arabia">🇸🇦 Arabie Saoudite</option>
-                        <option value="UAE">🇦🇪 Émirats Arabes Unis</option>
-                        <option value="Iran">🇮🇷 Iran</option>
-                        <option value="Iraq">🇮🇶 Irak</option>
-                        <option value="Syria">🇸🇾 Syrie</option>
-                        <option value="Lebanon">🇱🇧 Liban</option>
-                        <option value="Jordan">🇯🇴 Jordanie</option>
-                        <option value="Palestine">🇵🇸 Palestine</option>
-                        <option value="Libya">🇱🇾 Libye</option>
-                        <option value="Sudan">🇸🇩 Soudan</option>
-                        <option value="Ethiopia">🇪🇹 Éthiopie</option>
-                        <option value="Ghana">🇬🇭 Ghana</option>
-                        <option value="Ivory Coast">🇨🇮 Côte d'Ivoire</option>
-                        <option value="Senegal">🇸🇳 Sénégal</option>
-                        <option value="Mali">🇲🇱 Mali</option>
-                        <option value="Burkina Faso">🇧🇫 Burkina Faso</option>
-                        <option value="Niger">🇳🇪 Niger</option>
-                        <option value="Chad">🇹🇩 Tchad</option>
-                        <option value="Cameroon">🇨🇲 Cameroun</option>
-                        <option value="Central African Republic">🇨🇫 République centrafricaine</option>
-                        <option value="Democratic Republic of Congo">🇨🇩 République démocratique du Congo</option>
-                        <option value="Republic of Congo">🇨🇬 République du Congo</option>
-                        <option value="Gabon">🇬🇦 Gabon</option>
-                        <option value="Equatorial Guinea">🇬🇶 Guinée équatoriale</option>
-                        <option value="Sao Tome and Principe">🇸🇹 Sao Tomé-et-Principe</option>
-                        <option value="Cape Verde">🇨🇻 Cap-Vert</option>
-                        <option value="Guinea-Bissau">🇬🇼 Guinée-Bissau</option>
-                        <option value="Guinea">🇬🇳 Guinée</option>
-                        <option value="Sierra Leone">🇸🇱 Sierra Leone</option>
-                        <option value="Liberia">🇱🇷 Liberia</option>
-                        <option value="Togo">🇹🇬 Togo</option>
-                        <option value="Benin">🇧🇯 Bénin</option>
-                        <option value="Mauritania">🇲🇷 Mauritanie</option>
-                        <option value="Gambia">🇬🇲 Gambie</option>
-                        <option value="Guinea">🇬🇳 Guinée</option>
-                        <option value="Madagascar">🇲🇬 Madagascar</option>
-                        <option value="Mauritius">🇲🇺 Maurice</option>
-                        <option value="Seychelles">🇸🇨 Seychelles</option>
-                        <option value="Comoros">🇰🇲 Comores</option>
-                        <option value="Djibouti">🇩🇯 Djibouti</option>
-                        <option value="Eritrea">🇪🇷 Érythrée</option>
-                        <option value="Somalia">🇸🇴 Somalie</option>
-                        <option value="Uganda">🇺🇬 Ouganda</option>
-                        <option value="Tanzania">🇹🇿 Tanzanie</option>
-                        <option value="Rwanda">🇷🇼 Rwanda</option>
-                        <option value="Burundi">🇧🇮 Burundi</option>
-                        <option value="Malawi">🇲🇼 Malawi</option>
-                        <option value="Zambia">🇿🇲 Zambie</option>
-                        <option value="Zimbabwe">🇿🇼 Zimbabwe</option>
-                        <option value="Botswana">🇧🇼 Botswana</option>
-                        <option value="Namibia">🇳🇦 Namibie</option>
-                        <option value="Lesotho">🇱🇸 Lesotho</option>
-                        <option value="Eswatini">🇸🇿 Eswatini</option>
-                        <option value="Mozambique">🇲🇿 Mozambique</option>
-                        <option value="Angola">🇦🇴 Angola</option>
-                    </select>
+
+                <!-- Sélection des origines multiples -->
+                <div class="mb-8">
+                    <label class="block text-lg font-semibold mb-3">🌍 Vos origines (sélectionnez jusqu'à 3) :</label>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-3 max-h-60 overflow-y-auto border-2 border-purple-200 rounded-lg p-4 dark:border-gray-600">
+                        <div class="origin-checkbox">
+                            <input type="checkbox" id="origin_France" value="France" onchange="updateOriginSelection()">
+                            <label for="origin_France" class="flex items-center gap-2 cursor-pointer p-2 rounded hover:bg-purple-100 dark:hover:bg-gray-700">
+                                <span>🇫🇷</span> <span>France</span>
+                            </label>
+                        </div>
+                        <div class="origin-checkbox">
+                            <input type="checkbox" id="origin_Morocco" value="Morocco" onchange="updateOriginSelection()">
+                            <label for="origin_Morocco" class="flex items-center gap-2 cursor-pointer p-2 rounded hover:bg-purple-100 dark:hover:bg-gray-700">
+                                <span>🇲🇦</span> <span>Maroc</span>
+                            </label>
+                        </div>
+                        <div class="origin-checkbox">
+                            <input type="checkbox" id="origin_Algeria" value="Algeria" onchange="updateOriginSelection()">
+                            <label for="origin_Algeria" class="flex items-center gap-2 cursor-pointer p-2 rounded hover:bg-purple-100 dark:hover:bg-gray-700">
+                                <span>🇩🇿</span> <span>Algérie</span>
+                            </label>
+                        </div>
+                        <div class="origin-checkbox">
+                            <input type="checkbox" id="origin_Kabylia" value="Kabylia" onchange="updateOriginSelection()">
+                            <label for="origin_Kabylia" class="flex items-center gap-2 cursor-pointer p-2 rounded hover:bg-purple-100 dark:hover:bg-gray-700">
+                                <span>ⵣ</span> <span>Kabyle</span>
+                            </label>
+                        </div>
+                        <div class="origin-checkbox">
+                            <input type="checkbox" id="origin_Tunisia" value="Tunisia" onchange="updateOriginSelection()">
+                            <label for="origin_Tunisia" class="flex items-center gap-2 cursor-pointer p-2 rounded hover:bg-purple-100 dark:hover:bg-gray-700">
+                                <span>🇹🇳</span> <span>Tunisie</span>
+                            </label>
+                        </div>
+                        <div class="origin-checkbox">
+                            <input type="checkbox" id="origin_Lebanon" value="Lebanon" onchange="updateOriginSelection()">
+                            <label for="origin_Lebanon" class="flex items-center gap-2 cursor-pointer p-2 rounded hover:bg-purple-100 dark:hover:bg-gray-700">
+                                <span>🇱🇧</span> <span>Liban</span>
+                            </label>
+                        </div>
+                        <div class="origin-checkbox">
+                            <input type="checkbox" id="origin_Germany" value="Germany" onchange="updateOriginSelection()">
+                            <label for="origin_Germany" class="flex items-center gap-2 cursor-pointer p-2 rounded hover:bg-purple-100 dark:hover:bg-gray-700">
+                                <span>🇩🇪</span> <span>Allemagne</span>
+                            </label>
+                        </div>
+                        <div class="origin-checkbox">
+                            <input type="checkbox" id="origin_Turkey" value="Turkey" onchange="updateOriginSelection()">
+                            <label for="origin_Turkey" class="flex items-center gap-2 cursor-pointer p-2 rounded hover:bg-purple-100 dark:hover:bg-gray-700">
+                                <span>🇹🇷</span> <span>Turquie</span>
+                            </label>
+                        </div>
+                        <div class="origin-checkbox">
+                            <input type="checkbox" id="origin_Italy" value="Italy" onchange="updateOriginSelection()">
+                            <label for="origin_Italy" class="flex items-center gap-2 cursor-pointer p-2 rounded hover:bg-purple-100 dark:hover:bg-gray-700">
+                                <span>🇮🇹</span> <span>Italie</span>
+                            </label>
+                        </div>
+                        <div class="origin-checkbox">
+                            <input type="checkbox" id="origin_Spain" value="Spain" onchange="updateOriginSelection()">
+                            <label for="origin_Spain" class="flex items-center gap-2 cursor-pointer p-2 rounded hover:bg-purple-100 dark:hover:bg-gray-700">
+                                <span>🇪🇸</span> <span>Espagne</span>
+                            </label>
+                        </div>
+                        <div class="origin-checkbox">
+                            <input type="checkbox" id="origin_Canada" value="Canada" onchange="updateOriginSelection()">
+                            <label for="origin_Canada" class="flex items-center gap-2 cursor-pointer p-2 rounded hover:bg-purple-100 dark:hover:bg-gray-700">
+                                <span>🇨🇦</span> <span>Canada</span>
+                            </label>
+                        </div>
+                        <div class="origin-checkbox">
+                            <input type="checkbox" id="origin_US" value="United States" onchange="updateOriginSelection()">
+                            <label for="origin_US" class="flex items-center gap-2 cursor-pointer p-2 rounded hover:bg-purple-100 dark:hover:bg-gray-700">
+                                <span>🇺🇸</span> <span>États-Unis</span>
+                            </label>
+                        </div>
+                        <div class="origin-checkbox">
+                            <input type="checkbox" id="origin_Mexico" value="Mexico" onchange="updateOriginSelection()">
+                            <label for="origin_Mexico" class="flex items-center gap-2 cursor-pointer p-2 rounded hover:bg-purple-100 dark:hover:bg-gray-700">
+                                <span>🇲🇽</span> <span>Mexique</span>
+                            </label>
+                        </div>
+                        <div class="origin-checkbox">
+                            <input type="checkbox" id="origin_Brazil" value="Brazil" onchange="updateOriginSelection()">
+                            <label for="origin_Brazil" class="flex items-center gap-2 cursor-pointer p-2 rounded hover:bg-purple-100 dark:hover:bg-gray-700">
+                                <span>🇧🇷</span> <span>Brésil</span>
+                            </label>
+                        </div>
+                        <div class="origin-checkbox">
+                            <input type="checkbox" id="origin_UK" value="United Kingdom" onchange="updateOriginSelection()">
+                            <label for="origin_UK" class="flex items-center gap-2 cursor-pointer p-2 rounded hover:bg-purple-100 dark:hover:bg-gray-700">
+                                <span>🇬🇧</span> <span>Royaume-Uni</span>
+                            </label>
+                        </div>
+                        <div class="origin-checkbox">
+                            <input type="checkbox" id="origin_Japan" value="Japan" onchange="updateOriginSelection()">
+                            <label for="origin_Japan" class="flex items-center gap-2 cursor-pointer p-2 rounded hover:bg-purple-100 dark:hover:bg-gray-700">
+                                <span>🇯🇵</span> <span>Japon</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div id="selectedOrigins" class="mt-3 text-sm text-purple-600 dark:text-purple-400"></div>
                 </div>
 
-                <div class="mt-6">
-                    <label class="block text-lg font-semibold mb-3">🗣️ Origines pour la prononciation :</label>
-                    <select id="pronunciationOrigins" multiple
-                            class="w-full p-4 border-2 border-purple-300 rounded-lg text-base focus:border-purple-500 focus:outline-none transition-colors duration-300 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                            onchange="updatePronunciationZone()">
-                        <option value="Kabylia">ⵣ Kabyle</option>
-                        <option value="Morocco">🇲🇦 Maroc</option>
-                        <option value="Lebanon">🇱🇧 Liban</option>
-                    </select>
-                    <div id="pronunciationZone" class="text-sm text-purple-600 dark:text-purple-400 mt-2"></div>
+                <!-- Chiffre porte-bonheur -->
+                <div class="mb-8">
+                    <label class="block text-lg font-semibold mb-3">🍀 Votre chiffre porte-bonheur :</label>
+                    <div class="flex justify-center gap-2">
+                        <input type="number" id="luckyNumber" min="0" max="99" placeholder="7" 
+                               class="w-20 p-3 border-2 border-purple-300 rounded-lg text-base text-center focus:border-purple-500 focus:outline-none transition-colors duration-300 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                               onchange="updateCharacterPreview()">
+                        <span class="self-center text-sm text-gray-600 dark:text-gray-400">(0-99)</span>
+                    </div>
                 </div>
 
-                <button id="startGameBtn" class="btn btn-primary mt-8 text-xl px-8 py-4" onclick="startMainGame()">
-                    🚀 Commencer l'aventure !
-                </button>
+                <!-- Personnalisation visuelle -->
+                <div class="mb-8">
+                    <label class="block text-lg font-semibold mb-3">🎨 Style de votre Country Ball :</label>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        <!-- Couleur de fond -->
+                        <div>
+                            <label class="block text-sm font-medium mb-2">🌈 Couleur :</label>
+                            <select id="ballColor" onchange="updateCharacterPreview()" 
+                                    class="w-full p-2 border-2 border-purple-300 rounded-lg text-sm focus:border-purple-500 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                <option value="#FF6B9D">💖 Rose</option>
+                                <option value="#5D5CDE">💜 Violet</option>
+                                <option value="#4ECDC4">💙 Turquoise</option>
+                                <option value="#FFD93D">💛 Jaune</option>
+                                <option value="#FF6B6B">❤️ Rouge</option>
+                                <option value="#4CAF50">💚 Vert</option>
+                                <option value="#FF9800">🧡 Orange</option>
+                                <option value="#9C27B0">💜 Violet foncé</option>
+                            </select>
+                        </div>
+                        
+                        <!-- Accessoire -->
+                        <div>
+                            <label class="block text-sm font-medium mb-2">👒 Accessoire :</label>
+                            <select id="ballAccessory" onchange="updateCharacterPreview()" 
+                                    class="w-full p-2 border-2 border-purple-300 rounded-lg text-sm focus:border-purple-500 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                <option value="">Aucun</option>
+                                <option value="🧢">🧢 Casquette</option>
+                                <option value="👑">👑 Couronne</option>
+                                <option value="🎩">🎩 Haut-de-forme</option>
+                                <option value="👒">👒 Chapeau</option>
+                                <option value="🧣">🧣 Écharpe</option>
+                                <option value="👓">👓 Lunettes</option>
+                                <option value="😎">😎 Lunettes de soleil</option>
+                                <option value="🎀">🎀 Nœud</option>
+                            </select>
+                        </div>
+                        
+                        <!-- Style spécial selon origine -->
+                        <div>
+                            <label class="block text-sm font-medium mb-2">🏺 Style culturel :</label>
+                            <select id="culturalStyle" onchange="updateCharacterPreview()" 
+                                    class="w-full p-2 border-2 border-purple-300 rounded-lg text-sm focus:border-purple-500 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                <option value="">Standard</option>
+                                <option value="🧕">🧕 Hijab (style arabe)</option>
+                                <option value="ⵣ">ⵣ Tatouage kabyle</option>
+                                <option value="🥖">🥖 Baguette française</option>
+                                <option value="🍕">🍕 Style italien</option>
+                                <option value="🌮">🌮 Style mexicain</option>
+                                <option value="🍁">🍁 Style canadien</option>
+                                <option value="🗾">🗾 Style japonais</option>
+                                <option value="🏰">🏰 Style européen</option>
+                            </select>
+                        </div>
+                        
+                        <!-- Expression -->
+                        <div>
+                            <label class="block text-sm font-medium mb-2">😊 Expression :</label>
+                            <select id="ballExpression" onchange="updateCharacterPreview()" 
+                                    class="w-full p-2 border-2 border-purple-300 rounded-lg text-sm focus:border-purple-500 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                <option value="😊">😊 Souriant</option>
+                                <option value="😍">😍 Amoureux</option>
+                                <option value="😎">😎 Cool</option>
+                                <option value="🤗">🤗 Câlin</option>
+                                <option value="😄">😄 Joyeux</option>
+                                <option value="🥰">🥰 Adorable</option>
+                                <option value="😋">😋 Gourmand</option>
+                                <option value="🤩">🤩 Émerveillé</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Aperçu du personnage -->
+                <div class="mb-8 p-6 bg-gradient-to-br from-purple-100 to-pink-100 dark:from-purple-900/30 dark:to-pink-900/30 rounded-xl border-2 border-purple-200 dark:border-purple-700">
+                    <h3 class="text-xl font-bold mb-4">👁️ Aperçu de votre Country Ball</h3>
+                    <div id="characterPreview" class="flex flex-col items-center">
+                        <div id="ballPreview" class="w-32 h-32 rounded-full border-4 border-white shadow-lg flex items-center justify-center text-4xl mb-4" 
+                             style="background: linear-gradient(45deg, #FF6B9D, #FFB5C5);">
+                            😊
+                        </div>
+                        <div id="previewFlags" class="mb-2 text-2xl"></div>
+                        <div id="previewName" class="text-lg font-bold text-purple-700 dark:text-purple-300 mb-1">Votre nom</div>
+                        <div id="previewDescription" class="text-sm text-gray-600 dark:text-gray-400 text-center max-w-md italic"></div>
+                        <div id="previewLuckyNumber" class="text-lg font-bold text-yellow-600 dark:text-yellow-400 mt-2"></div>
+                    </div>
+                </div>
+
+                <!-- Section prononciations avancées -->
+                <div id="pronunciationSection" class="mb-8 hidden">
+                    <h3 class="text-xl font-bold mb-4">🗣️ Prononciations de votre prénom</h3>
+                    <div id="pronunciationOptions" class="space-y-4"></div>
+                </div>
+
+                <!-- Panneau de configuration Aero Glass -->
+                <div class="aero-control-panel">
+                    <h4 class="text-lg font-bold mb-4 text-center">✨ Configuration Effet Aero Glass ✨</h4>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-semibold mb-2">🌫️ Intensité du flou :</label>
+                            <input type="range" id="aeroBlurSlider" class="aero-intensity-slider" 
+                                   min="4" max="24" value="16" step="2" 
+                                   oninput="updateAeroIntensity(this.value)">
+                            <div class="flex justify-between text-xs mt-1">
+                                <span>4px (léger)</span>
+                                <span id="aeroBlurValue">16px</span>
+                                <span>24px (intense)</span>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold mb-2">🎭 Effet appliqué sur :</label>
+                            <div class="flex flex-wrap gap-2">
+                                <button class="btn btn-sm" style="background: rgba(93, 92, 222, 0.2);" onclick="toggleAeroClass('.country-card', 'aero-glass')">
+                                    🃏 Cartes
+                                </button>
+                                <button class="btn btn-sm" style="background: rgba(93, 92, 222, 0.2);" onclick="toggleAeroClass('.message', 'aero-glass')">
+                                    💬 Messages
+                                </button>
+                                <button class="btn btn-sm" style="background: rgba(93, 92, 222, 0.2);" onclick="toggleAeroClass('.btn', 'aero-glass')">
+                                    🔘 Boutons
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-center mt-4">
+                        <button class="btn btn-secondary" onclick="resetAeroSettings()">
+                            🔄 Réinitialiser l'effet
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Boutons d'action -->
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <button id="quizBtn" class="btn btn-warning" onclick="startCulturalQuiz()">
+                        🧠 Quiz culturel (+bonus XP)
+                    </button>
+                    <button id="startGameBtn" class="btn btn-primary text-xl px-8 py-4" onclick="startMainGame()">
+                        🚀 Commencer l'aventure !
+                    </button>
+                </div>
             </div>
         </div>
 
@@ -3138,28 +3511,6 @@
             markUnsavedChanges();
         }
 
-        // Met à jour l'affichage dynamique des prononciations selon les origines sélectionnées
-        function updatePronunciationZone() {
-            const select = document.getElementById('pronunciationOrigins');
-            const zone = document.getElementById('pronunciationZone');
-            const name = document.getElementById('firstName').value.trim();
-
-            if (!select || !zone) return;
-
-            const origins = Array.from(select.selectedOptions).map(o => o.value);
-            if (origins.length === 0 || !name) {
-                zone.textContent = '';
-                return;
-            }
-
-            const parts = origins.map(origin => {
-                const pron = adaptPronunciationToLanguage(name, origin) || 'N/A';
-                return `${origin} : [${pron}]`;
-            });
-
-            zone.innerHTML = `<strong>Prononciation :</strong> ${parts.join(' • ')}`;
-        }
-
         // Fonction pour mettre à jour l'interface selon la langue
         function updateInterfaceLanguage(language) {
             const t = translations[language];
@@ -3348,19 +3699,30 @@
         function startMainGame() {
             const firstName = document.getElementById('firstName').value.trim();
             const lastName = document.getElementById('lastName').value.trim();
-            const country = document.getElementById('countrySelect').value;
             const gender = document.getElementById('genderSelect').value;
 
-            if (!firstName || !lastName || !country || !gender) {
-                alert('⚠️ Veuillez remplir tous les champs !');
+            if (!firstName || !lastName || !gender) {
+                alert('⚠️ Veuillez remplir tous les champs obligatoires !');
+                return;
+            }
+
+            if (selectedOrigins.length === 0) {
+                alert('⚠️ Veuillez sélectionner au moins une origine !');
                 return;
             }
 
             gameState.player.firstName = firstName;
             gameState.player.lastName = lastName;
-            gameState.player.country = country;
+            gameState.player.origins = selectedOrigins.slice(); // Copie des origines
+            gameState.player.country = selectedOrigins[0]; // Pays principal pour compatibilité
             gameState.player.gender = gender;
             gameState.player.fullName = `${firstName} ${lastName}`;
+
+            // Appliquer le bonus XP du quiz s'il y en a un en attente
+            if (quizData.pendingBonus) {
+                gameState.player.xp += quizData.pendingBonus;
+                quizData.pendingBonus = 0;
+            }
 
             document.getElementById('characterCreation').classList.add('hidden');
             document.getElementById('gameMain').classList.remove('hidden');
@@ -3368,7 +3730,16 @@
             updatePlayerInfo();
             
             const genderEmoji = gender === 'male' ? '👨' : '👩';
-            showMessage(`🎉 Bienvenue ${genderEmoji} ${gameState.player.fullName} ! Votre aventure amoureuse commence maintenant ! 🎉`, 'success');
+            const originsText = selectedOrigins.length > 1 ? 
+                `aux origines multiples (${selectedOrigins.join(', ')})` : 
+                `de ${selectedOrigins[0]}`;
+            
+            showMessage(`🎉 Bienvenue ${genderEmoji} ${gameState.player.fullName} ${originsText} ! Votre aventure amoureuse commence maintenant ! 🎉`, 'success');
+            
+            // Afficher le bonus XP du quiz si applicable
+            if (quizData.completed && quizData.bonusXP > 0) {
+                showMessage(`🧠 Bonus quiz culturel appliqué : +${quizData.bonusXP} XP !`, 'success');
+            }
             
             markUnsavedChanges();
         }
@@ -3486,9 +3857,9 @@
                     <h4 class="text-2xl font-bold mb-2">${genderEmoji} ${firstName} ${lastName}</h4>
                     <p class="text-lg mb-2 font-semibold text-blue-600 dark:text-blue-400">${displayOrigins}</p>
                     
-                    <!-- Affichage des prononciations -->
-                    <div class="text-sm text-purple-600 dark:text-purple-400 mb-3">
-                        ${formatPronunciation(character.prononciation)}
+                    <!-- Affichage des prononciations amélioré -->
+                    <div id="pronunciationDisplay" class="pronunciation-zone mb-4">
+                        ${formatAdvancedPronunciation(character.prononciation, randomOrigins, firstName)}
                     </div>
                     <p class="text-sm text-purple-600 dark:text-purple-400 mb-4">${genderText}</p>
                     <p class="text-gray-600 dark:text-gray-300 mb-6">${description}</p>
@@ -3540,6 +3911,80 @@
             }
             
             return `<strong>Prononciation :</strong> ${pronunciations.join(' • ')}`;
+        }
+
+        // Fonction avancée pour afficher les prononciations selon les origines multiples
+        function formatAdvancedPronunciation(prononciation, origins, firstName) {
+            if (!prononciation || Object.keys(prononciation).length === 0) {
+                return `
+                    <div class="text-sm text-gray-500 dark:text-gray-400 text-center italic">
+                        Prononciation non disponible
+                    </div>
+                `;
+            }
+            
+            // Déterminer les langues/origines à afficher
+            let targetOrigins = [];
+            if (typeof origins === 'string') {
+                // Origine simple
+                targetOrigins = [{ name: origins, code: getLanguageCode(origins) }];
+            } else if (origins && origins.primary) {
+                // Origines multiples
+                targetOrigins = [
+                    { name: origins.primary, code: getLanguageCode(origins.primary) },
+                    { name: origins.secondary, code: getLanguageCode(origins.secondary) }
+                ];
+            }
+            
+            // Mapping des codes de langue vers les noms affichés
+            const languageDisplayNames = {
+                'french': 'Français',
+                'arabic': 'Arabe',
+                'berber': 'Kabyle',
+                'german': 'Allemand',
+                'english': 'Anglais',
+                'italian': 'Italien',
+                'spanish': 'Espagnol',
+                'portuguese': 'Portugais',
+                'japanese': 'Japonais',
+                'chinese': 'Chinois',
+                'hindi': 'Hindi',
+                'russian': 'Russe',
+                'turkish': 'Turc'
+            };
+            
+            // Construire l'affichage des prononciations
+            const pronunciationItems = [];
+            
+            for (const origin of targetOrigins) {
+                const langCode = origin.code;
+                const displayName = languageDisplayNames[langCode] || origin.name;
+                
+                if (prononciation[langCode]) {
+                    pronunciationItems.push(`<span class="font-semibold text-purple-600 dark:text-purple-400">${displayName}</span> : <span class="text-gray-700 dark:text-gray-300">[${prononciation[langCode]}]</span>`);
+                } else {
+                    pronunciationItems.push(`<span class="font-semibold text-purple-600 dark:text-purple-400">${displayName}</span> : <span class="text-gray-500 dark:text-gray-400 italic">N/A</span>`);
+                }
+            }
+            
+            // Si pas de prononciations pour les origines, afficher toutes les prononciations disponibles
+            if (pronunciationItems.length === 0 || pronunciationItems.every(item => item.includes('N/A'))) {
+                for (const [langue, prononciation_text] of Object.entries(prononciation)) {
+                    const displayName = languageDisplayNames[langue] || langue.charAt(0).toUpperCase() + langue.slice(1);
+                    pronunciationItems.push(`<span class="font-semibold text-purple-600 dark:text-purple-400">${displayName}</span> : <span class="text-gray-700 dark:text-gray-300">[${prononciation_text}]</span>`);
+                }
+            }
+            
+            return `
+                <div class="bg-purple-50 dark:bg-purple-900/20 p-3 rounded-lg border border-purple-200 dark:border-purple-700">
+                    <div class="text-sm font-semibold text-purple-800 dark:text-purple-300 mb-2 text-center">
+                        🗣️ Prononciation de "${firstName}"
+                    </div>
+                    <div class="text-sm text-center space-y-1">
+                        ${pronunciationItems.join(' • ')}
+                    </div>
+                </div>
+            `;
         }
 
         function generateDescription(country, firstName, gender) {
@@ -5756,6 +6201,797 @@
         }
 
         // ============================================
+        // FONCTIONS DE CRÉATION DE PERSONNAGE
+        // ============================================
+
+        // Variables pour les origines sélectionnées
+        let selectedOrigins = [];
+        let quizData = {
+            completed: false,
+            score: 0,
+            bonusXP: 0
+        };
+
+        // Mettre à jour la sélection des origines
+        function updateOriginSelection() {
+            const checkboxes = document.querySelectorAll('input[type="checkbox"][id^="origin_"]');
+            selectedOrigins = [];
+            
+            checkboxes.forEach(checkbox => {
+                if (checkbox.checked) {
+                    selectedOrigins.push(checkbox.value);
+                }
+            });
+            
+            // Limiter à 3 origines maximum
+            if (selectedOrigins.length > 3) {
+                // Décocher la dernière sélectionnée
+                const lastChecked = Array.from(checkboxes).find(cb => 
+                    cb.checked && selectedOrigins[selectedOrigins.length - 1] === cb.value
+                );
+                if (lastChecked) {
+                    lastChecked.checked = false;
+                }
+                selectedOrigins.pop();
+                showMessage('⚠️ Maximum 3 origines autorisées !', 'error');
+            }
+            
+            // Mettre à jour l'affichage
+            const selectedOriginsDiv = document.getElementById('selectedOrigins');
+            if (selectedOriginsDiv) {
+                if (selectedOrigins.length === 0) {
+                    selectedOriginsDiv.textContent = '';
+                } else {
+                    const flags = selectedOrigins.map(origin => countries[origin] || '🏳️').join(' ');
+                    selectedOriginsDiv.textContent = `Sélectionnées : ${flags} ${selectedOrigins.join(', ')}`;
+                }
+            }
+            
+            updateCharacterPreview();
+            updatePronunciationSection();
+        }
+
+        // Mettre à jour l'aperçu du personnage
+        function updateCharacterPreview() {
+            const firstName = document.getElementById('firstName')?.value.trim() || '';
+            const lastName = document.getElementById('lastName')?.value.trim() || '';
+            const gender = document.getElementById('genderSelect')?.value || '';
+            const luckyNumber = document.getElementById('luckyNumber')?.value || '';
+            const ballColor = document.getElementById('ballColor')?.value || '#FF6B9D';
+            const ballAccessory = document.getElementById('ballAccessory')?.value || '';
+            const culturalStyle = document.getElementById('culturalStyle')?.value || '';
+            const ballExpression = document.getElementById('ballExpression')?.value || '😊';
+            
+            // Mettre à jour le nom
+            const previewName = document.getElementById('previewName');
+            if (previewName) {
+                const fullName = firstName && lastName ? `${firstName} ${lastName}` : 'Votre nom';
+                previewName.textContent = fullName;
+            }
+            
+            // Mettre à jour les drapeaux
+            const previewFlags = document.getElementById('previewFlags');
+            if (previewFlags) {
+                if (selectedOrigins.length > 0) {
+                    const flags = selectedOrigins.map(origin => countries[origin] || '🏳️').join(' ');
+                    previewFlags.textContent = flags;
+                } else {
+                    previewFlags.textContent = '🏳️';
+                }
+            }
+            
+            // Mettre à jour la description
+            const previewDescription = document.getElementById('previewDescription');
+            if (previewDescription) {
+                previewDescription.textContent = generatePersonalDescription(firstName, lastName, gender, selectedOrigins);
+            }
+            
+            // Mettre à jour le chiffre porte-bonheur
+            const previewLuckyNumber = document.getElementById('previewLuckyNumber');
+            if (previewLuckyNumber) {
+                if (luckyNumber) {
+                    previewLuckyNumber.textContent = `🍀 Chiffre porte-bonheur : ${luckyNumber}`;
+                } else {
+                    previewLuckyNumber.textContent = '';
+                }
+            }
+            
+            // Mettre à jour l'apparence du Country Ball
+            const ballPreview = document.getElementById('ballPreview');
+            if (ballPreview) {
+                // Couleur de fond
+                ballPreview.style.background = `linear-gradient(45deg, ${ballColor}, ${ballColor}88)`;
+                
+                // Contenu du ball (expression + accessoires + style culturel)
+                let ballContent = ballExpression;
+                if (ballAccessory) {
+                    ballContent = ballAccessory + ballExpression;
+                }
+                if (culturalStyle) {
+                    ballContent += culturalStyle;
+                }
+                
+                ballPreview.textContent = ballContent;
+            }
+        }
+
+        // Générer une description personnalisée
+        function generatePersonalDescription(firstName, lastName, gender, origins) {
+            if (!firstName) return 'Votre aventure commence ici...';
+            
+            const genderText = gender === 'male' ? 'homme' : gender === 'female' ? 'femme' : 'personne';
+            const name = lastName ? `${firstName} ${lastName}` : firstName;
+            
+            if (origins.length === 0) {
+                return `${name}, ${genderText} mystérieux(se) aux origines secrètes.`;
+            } else if (origins.length === 1) {
+                const origin = origins[0];
+                const adjectives = {
+                    'France': 'français(e)',
+                    'Morocco': 'marocain(e)',
+                    'Algeria': 'algérien(ne)',
+                    'Kabylia': 'kabyle',
+                    'Tunisia': 'tunisien(ne)',
+                    'Lebanon': 'libanais(e)',
+                    'Germany': 'allemand(e)',
+                    'Turkey': 'turc(que)',
+                    'Italy': 'italien(ne)',
+                    'Spain': 'espagnol(e)',
+                    'Canada': 'canadien(ne)',
+                    'United States': 'américain(e)',
+                    'Mexico': 'mexicain(e)',
+                    'Brazil': 'brésilien(ne)',
+                    'United Kingdom': 'britannique',
+                    'Japan': 'japonais(e)'
+                };
+                const adjective = adjectives[origin] || `de ${origin}`;
+                return `${name}, ${genderText} ${adjective}, fier(ère) de ses racines !`;
+            } else {
+                const originNames = origins.join(', ');
+                return `${name}, ${genderText} aux origines multiples (${originNames}), citoyen(ne) du monde !`;
+            }
+        }
+
+        // Mettre à jour la section de prononciation
+        function updatePronunciationSection() {
+            const pronunciationSection = document.getElementById('pronunciationSection');
+            const pronunciationOptions = document.getElementById('pronunciationOptions');
+            
+            if (!pronunciationSection || !pronunciationOptions) return;
+            
+            const firstName = document.getElementById('firstName')?.value.trim() || '';
+            
+            if (!firstName || selectedOrigins.length === 0) {
+                pronunciationSection.classList.add('hidden');
+                return;
+            }
+            
+            pronunciationSection.classList.remove('hidden');
+            
+            // Générer les options de prononciation pour chaque origine
+            let pronunciationHTML = '';
+            
+            selectedOrigins.forEach(origin => {
+                const languageCode = getLanguageCode(origin);
+                const displayName = getLanguageDisplayName(languageCode);
+                const pronunciation = adaptPronunciationToLanguage(firstName, origin);
+                
+                pronunciationHTML += `
+                    <div class="bg-purple-50 dark:bg-purple-900/20 p-4 rounded-lg border border-purple-200 dark:border-purple-700">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <span class="font-semibold text-purple-700 dark:text-purple-300">${countries[origin]} ${displayName}</span>
+                                <div class="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                                    Prononciation : [${pronunciation}]
+                                </div>
+                            </div>
+                            <button class="btn btn-sm btn-success" onclick="playPronunciation('${pronunciation}', '${displayName}')">
+                                🔊 Écouter
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            pronunciationOptions.innerHTML = pronunciationHTML;
+        }
+
+        // Fonction pour obtenir le nom d'affichage de la langue
+        function getLanguageDisplayName(languageCode) {
+            const displayNames = {
+                'french': 'Français',
+                'arabic': 'Arabe',
+                'berber': 'Amazigh (Kabyle)',
+                'german': 'Allemand',
+                'english': 'Anglais',
+                'italian': 'Italien',
+                'spanish': 'Espagnol',
+                'portuguese': 'Portugais',
+                'japanese': 'Japonais',
+                'chinese': 'Chinois',
+                'hindi': 'Hindi',
+                'russian': 'Russe',
+                'turkish': 'Turc'
+            };
+            return displayNames[languageCode] || languageCode;
+        }
+
+        // Jouer la prononciation (simulé)
+        function playPronunciation(pronunciation, languageName) {
+            showMessage(`🔊 Prononciation en ${languageName} : "${pronunciation}"`, 'special');
+            
+            // Simulation d'audio avec synthèse vocale si disponible
+            if ('speechSynthesis' in window) {
+                const utterance = new SpeechSynthesisUtterance(pronunciation);
+                const voices = speechSynthesis.getVoices();
+                
+                // Essayer de trouver une voix appropriée
+                const languageMap = {
+                    'Français': 'fr',
+                    'Arabe': 'ar',
+                    'Allemand': 'de',
+                    'Anglais': 'en',
+                    'Italien': 'it',
+                    'Espagnol': 'es',
+                    'Japonais': 'ja'
+                };
+                
+                const langCode = languageMap[languageName] || 'en';
+                const voice = voices.find(voice => voice.lang.startsWith(langCode));
+                
+                if (voice) {
+                    utterance.voice = voice;
+                }
+                
+                utterance.rate = 0.8;
+                utterance.pitch = 1;
+                
+                speechSynthesis.speak(utterance);
+            } else {
+                showMessage('⚠️ Synthèse vocale non supportée sur ce navigateur', 'error');
+            }
+        }
+
+        // Quiz culturel
+        function startCulturalQuiz() {
+            if (selectedOrigins.length === 0) {
+                showMessage('⚠️ Sélectionnez d\'abord vos origines pour commencer le quiz !', 'error');
+                return;
+            }
+            
+            // Questions du quiz selon les origines
+            const quizQuestions = generateCulturalQuestions(selectedOrigins);
+            
+            if (quizQuestions.length === 0) {
+                showMessage('⚠️ Pas de questions disponibles pour vos origines sélectionnées.', 'error');
+                return;
+            }
+            
+            showQuizModal(quizQuestions);
+        }
+
+        // Générer des questions culturelles selon les origines
+        function generateCulturalQuestions(origins) {
+            const allQuestions = {
+                'France': [
+                    {
+                        question: 'Quelle est la capitale de la France ?',
+                        options: ['Lyon', 'Paris', 'Marseille', 'Toulouse'],
+                        correct: 1,
+                        points: 10
+                    },
+                    {
+                        question: 'Quel monument célèbre se trouve à Paris ?',
+                        options: ['Tour de Pise', 'Tour Eiffel', 'Big Ben', 'Statue de la Liberté'],
+                        correct: 1,
+                        points: 10
+                    }
+                ],
+                'Morocco': [
+                    {
+                        question: 'Quelle est la capitale du Maroc ?',
+                        options: ['Casablanca', 'Marrakech', 'Rabat', 'Fès'],
+                        correct: 2,
+                        points: 10
+                    },
+                    {
+                        question: 'Quel plat est typiquement marocain ?',
+                        options: ['Paella', 'Couscous', 'Pizza', 'Sushi'],
+                        correct: 1,
+                        points: 10
+                    }
+                ],
+                'Algeria': [
+                    {
+                        question: 'Quelle est la capitale de l\'Algérie ?',
+                        options: ['Oran', 'Constantine', 'Alger', 'Annaba'],
+                        correct: 2,
+                        points: 10
+                    }
+                ],
+                'Kabylia': [
+                    {
+                        question: 'Comment dit-on "bonjour" en kabyle ?',
+                        options: ['Salam', 'Azul', 'Bonjour', 'Hello'],
+                        correct: 1,
+                        points: 15
+                    }
+                ],
+                'Germany': [
+                    {
+                        question: 'Quelle est la capitale de l\'Allemagne ?',
+                        options: ['Munich', 'Berlin', 'Hambourg', 'Cologne'],
+                        correct: 1,
+                        points: 10
+                    }
+                ],
+                'Japan': [
+                    {
+                        question: 'Quelle est la capitale du Japon ?',
+                        options: ['Osaka', 'Kyoto', 'Tokyo', 'Hiroshima'],
+                        correct: 2,
+                        points: 10
+                    }
+                ]
+            };
+            
+            let questions = [];
+            origins.forEach(origin => {
+                if (allQuestions[origin]) {
+                    questions = questions.concat(allQuestions[origin]);
+                }
+            });
+            
+            // Mélanger et prendre maximum 5 questions
+            return questions.sort(() => Math.random() - 0.5).slice(0, 5);
+        }
+
+        // Afficher le modal du quiz
+        function showQuizModal(questions) {
+            const modal = document.createElement('div');
+            modal.style.position = 'fixed';
+            modal.style.top = '0';
+            modal.style.left = '0';
+            modal.style.width = '100%';
+            modal.style.height = '100%';
+            modal.style.background = 'rgba(0, 0, 0, 0.8)';
+            modal.style.display = 'flex';
+            modal.style.alignItems = 'center';
+            modal.style.justifyContent = 'center';
+            modal.style.zIndex = '10000';
+            modal.id = 'quizModal';
+            
+            modal.innerHTML = `
+                <div class="bg-white dark:bg-gray-800 rounded-xl p-6 max-w-md w-full mx-4 max-h-90vh overflow-y-auto">
+                    <div class="text-center mb-6">
+                        <h3 class="text-2xl font-bold text-purple-700 dark:text-purple-300">🧠 Quiz Culturel</h3>
+                        <p class="text-sm text-gray-600 dark:text-gray-400 mt-2">Testez vos connaissances sur vos origines !</p>
+                    </div>
+                    
+                    <div id="quizContent">
+                        <div id="quizProgress" class="mb-4">
+                            Question <span id="currentQuestion">1</span> sur ${questions.length}
+                        </div>
+                        <div id="quizQuestionArea">
+                            <!-- Questions will be loaded here -->
+                        </div>
+                    </div>
+                    
+                    <div class="flex justify-between mt-6">
+                        <button class="btn btn-secondary" onclick="closeQuiz()">❌ Fermer</button>
+                        <div>
+                            Score : <span id="quizScore" class="font-bold text-purple-600">0</span> pts
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            
+            // Initialiser le quiz
+            window.currentQuizQuestions = questions;
+            window.currentQuestionIndex = 0;
+            window.quizScore = 0;
+            
+            loadQuizQuestion();
+        }
+
+        // Charger une question du quiz
+        function loadQuizQuestion() {
+            const questions = window.currentQuizQuestions;
+            const index = window.currentQuestionIndex;
+            
+            if (index >= questions.length) {
+                completeQuiz();
+                return;
+            }
+            
+            const question = questions[index];
+            const questionArea = document.getElementById('quizQuestionArea');
+            const currentQuestionSpan = document.getElementById('currentQuestion');
+            
+            if (currentQuestionSpan) {
+                currentQuestionSpan.textContent = index + 1;
+            }
+            
+            if (questionArea) {
+                questionArea.innerHTML = `
+                    <div class="mb-4">
+                        <h4 class="text-lg font-semibold mb-4">${question.question}</h4>
+                        <div class="space-y-2">
+                            ${question.options.map((option, i) => `
+                                <button class="quiz-option w-full text-left p-3 border-2 border-gray-300 rounded-lg hover:border-purple-500 hover:bg-purple-50 dark:border-gray-600 dark:hover:border-purple-400 dark:hover:bg-purple-900/20 transition-colors duration-200" 
+                                        onclick="selectQuizAnswer(${i}, ${question.correct}, ${question.points})">
+                                    ${option}
+                                </button>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        // Sélectionner une réponse du quiz
+        function selectQuizAnswer(selectedIndex, correctIndex, points) {
+            const options = document.querySelectorAll('.quiz-option');
+            
+            // Désactiver tous les boutons
+            options.forEach((option, index) => {
+                option.disabled = true;
+                option.style.pointerEvents = 'none';
+                
+                if (index === correctIndex) {
+                    option.style.background = '#d4edda';
+                    option.style.borderColor = '#28a745';
+                    option.textContent += ' ✅';
+                } else if (index === selectedIndex && selectedIndex !== correctIndex) {
+                    option.style.background = '#f8d7da';
+                    option.style.borderColor = '#dc3545';
+                    option.textContent += ' ❌';
+                }
+            });
+            
+            // Mettre à jour le score
+            if (selectedIndex === correctIndex) {
+                window.quizScore += points;
+                const scoreSpan = document.getElementById('quizScore');
+                if (scoreSpan) {
+                    scoreSpan.textContent = window.quizScore;
+                }
+            }
+            
+            // Passer à la question suivante après 2 secondes
+            setTimeout(() => {
+                window.currentQuestionIndex++;
+                loadQuizQuestion();
+            }, 2000);
+        }
+
+        // Terminer le quiz
+        function completeQuiz() {
+            const score = window.quizScore;
+            const maxScore = window.currentQuizQuestions.reduce((sum, q) => sum + q.points, 0);
+            const percentage = Math.round((score / maxScore) * 100);
+            
+            let bonusXP = 0;
+            let message = '';
+            
+            if (percentage >= 80) {
+                bonusXP = 50;
+                message = '🏆 Excellent ! Vous maîtrisez parfaitement vos origines !';
+            } else if (percentage >= 60) {
+                bonusXP = 30;
+                message = '👍 Très bien ! Vous connaissez bien votre culture !';
+            } else if (percentage >= 40) {
+                bonusXP = 15;
+                message = '👌 Pas mal ! Continuez à apprendre sur vos origines !';
+            } else {
+                bonusXP = 5;
+                message = '🤔 Il faut encore apprendre sur vos origines !';
+            }
+            
+            const questionArea = document.getElementById('quizQuestionArea');
+            if (questionArea) {
+                questionArea.innerHTML = `
+                    <div class="text-center">
+                        <div class="text-4xl mb-4">🎉</div>
+                        <h4 class="text-xl font-bold mb-4">Quiz terminé !</h4>
+                        <div class="bg-purple-50 dark:bg-purple-900/20 p-4 rounded-lg mb-4">
+                            <div class="text-lg font-semibold">Score : ${score}/${maxScore} (${percentage}%)</div>
+                            <div class="text-sm text-purple-600 dark:text-purple-400">${message}</div>
+                            <div class="text-lg font-bold text-green-600 dark:text-green-400 mt-2">+${bonusXP} XP bonus !</div>
+                        </div>
+                        <button class="btn btn-success w-full" onclick="applyQuizBonus(${bonusXP})">
+                            ✨ Récupérer le bonus XP
+                        </button>
+                    </div>
+                `;
+            }
+            
+            quizData.completed = true;
+            quizData.score = percentage;
+            quizData.bonusXP = bonusXP;
+        }
+
+        // Appliquer le bonus XP du quiz
+        function applyQuizBonus(bonusXP) {
+            closeQuiz();
+            
+            // Ajouter le bonus XP au joueur si le jeu a commencé
+            if (gameState.player && gameState.player.fullName) {
+                gainXP(bonusXP);
+                showMessage(`🎉 Quiz culturel terminé ! +${bonusXP} XP bonus !`, 'success');
+            } else {
+                // Stocker pour plus tard
+                quizData.pendingBonus = bonusXP;
+                showMessage(`🎉 Quiz terminé ! +${bonusXP} XP bonus vous attend au début du jeu !`, 'success');
+            }
+        }
+
+        // Fermer le quiz
+        function closeQuiz() {
+            const modal = document.getElementById('quizModal');
+            if (modal) {
+                modal.remove();
+            }
+            
+            // Nettoyer les variables globales
+            window.currentQuizQuestions = null;
+            window.currentQuestionIndex = 0;
+            window.quizScore = 0;
+        }
+
+        // ============================================
+        // SYSTÈME AERO GLASS AVEC RÉGLAGE D'INTENSITÉ
+        // ============================================
+
+        // Fonction pour mettre à jour l'intensité du flou Aero Glass
+        function updateAeroIntensity(value) {
+            const root = document.documentElement;
+            root.style.setProperty('--aero-blur-intensity', value + 'px');
+            
+            // Mettre à jour l'affichage de la valeur
+            const aeroBlurValue = document.getElementById('aeroBlurValue');
+            if (aeroBlurValue) {
+                aeroBlurValue.textContent = value + 'px';
+            }
+            
+            // Sauvegarder la préférence
+            if (gameState.player && gameState.player.fullName) {
+                markUnsavedChanges();
+            }
+            
+            console.log(`🌫️ Intensité Aero Glass mise à jour : ${value}px`);
+        }
+
+        // Fonction pour activer/désactiver l'effet Aero Glass sur des éléments
+        function toggleAeroClass(selector, className) {
+            const elements = document.querySelectorAll(selector);
+            let activated = 0;
+            let deactivated = 0;
+            
+            elements.forEach(element => {
+                if (element.classList.contains(className)) {
+                    element.classList.remove(className);
+                    deactivated++;
+                } else {
+                    element.classList.add(className);
+                    activated++;
+                }
+            });
+            
+            // Afficher un message de confirmation
+            if (activated > 0) {
+                showMessage(`✨ Effet Aero Glass activé sur ${activated} élément(s) ${getElementTypeName(selector)} !`, 'success');
+            } else if (deactivated > 0) {
+                showMessage(`❌ Effet Aero Glass désactivé sur ${deactivated} élément(s) ${getElementTypeName(selector)}.`, 'special');
+            }
+            
+            console.log(`🎭 Toggle Aero Glass sur ${selector}: +${activated}, -${deactivated}`);
+        }
+
+        // Fonction utilitaire pour obtenir le nom du type d'élément
+        function getElementTypeName(selector) {
+            const typeNames = {
+                '.country-card': 'cartes',
+                '.message': 'messages',
+                '.btn': 'boutons',
+                '.chat-window': 'fenêtres de chat',
+                '.chat-header': 'en-têtes de chat'
+            };
+            return typeNames[selector] || 'éléments';
+        }
+
+        // Fonction pour réinitialiser tous les paramètres Aero Glass
+        function resetAeroSettings() {
+            // Remettre l'intensité par défaut
+            updateAeroIntensity(16);
+            const aeroBlurSlider = document.getElementById('aeroBlurSlider');
+            if (aeroBlurSlider) {
+                aeroBlurSlider.value = 16;
+            }
+            
+            // Retirer toutes les classes aero-glass
+            const aeroElements = document.querySelectorAll('.aero-glass');
+            aeroElements.forEach(element => {
+                element.classList.remove('aero-glass');
+            });
+            
+            // Remettre les propriétés CSS par défaut
+            const root = document.documentElement;
+            root.style.setProperty('--aero-blur-intensity', '16px');
+            root.style.setProperty('--aero-opacity', '0.15');
+            root.style.setProperty('--aero-border-opacity', '0.4');
+            root.style.setProperty('--aero-brightness', '0.9');
+            
+            showMessage('🔄 Paramètres Aero Glass réinitialisés !', 'success');
+            
+            console.log('🔄 Tous les paramètres Aero Glass ont été réinitialisés');
+        }
+
+        // Fonction pour appliquer l'effet Aero Glass automatiquement sur les nouveaux éléments
+        function applyAeroToNewElements() {
+            // Observer les nouveaux éléments ajoutés au DOM
+            const observer = new MutationObserver(function(mutations) {
+                mutations.forEach(function(mutation) {
+                    mutation.addedNodes.forEach(function(node) {
+                        if (node.nodeType === Node.ELEMENT_NODE) {
+                            // Appliquer automatiquement l'effet sur certains éléments
+                            if (node.classList?.contains('country-card')) {
+                                node.classList.add('aero-glass');
+                            }
+                            if (node.classList?.contains('message') && 
+                                (node.classList.contains('success') || node.classList.contains('special'))) {
+                                node.classList.add('aero-glass');
+                            }
+                            
+                            // Chercher dans les enfants également
+                            const childCards = node.querySelectorAll?.('.country-card');
+                            childCards?.forEach(card => card.classList.add('aero-glass'));
+                            
+                            const childMessages = node.querySelectorAll?.('.message.success, .message.special');
+                            childMessages?.forEach(msg => msg.classList.add('aero-glass'));
+                        }
+                    });
+                });
+            });
+            
+            // Observer les changements dans le container principal
+            observer.observe(document.body, {
+                childList: true,
+                subtree: true
+            });
+            
+            console.log('👁️ Observer Aero Glass initialisé pour les nouveaux éléments');
+        }
+
+        // Fonction pour créer un effet de démonstration Aero Glass
+        function demonstrateAeroEffect() {
+            const demoContainer = document.createElement('div');
+            demoContainer.className = 'aero-glass demo-aero-container';
+            demoContainer.style.position = 'fixed';
+            demoContainer.style.top = '50%';
+            demoContainer.style.left = '50%';
+            demoContainer.style.transform = 'translate(-50%, -50%)';
+            demoContainer.style.zIndex = '9999';
+            demoContainer.style.padding = '30px';
+            demoContainer.style.borderRadius = '20px';
+            demoContainer.style.maxWidth = '400px';
+            demoContainer.style.textAlign = 'center';
+            demoContainer.style.animation = 'fadeIn 0.5s ease-out';
+            
+            demoContainer.innerHTML = `
+                <div style="color: white; text-shadow: 2px 2px 4px rgba(0,0,0,0.7);">
+                    <h3 style="font-size: 24px; margin-bottom: 20px;">✨ Effet Aero Glass Activé ✨</h3>
+                    <p style="font-size: 16px; margin-bottom: 20px;">
+                        Magnifique effet de transparence et de flou !<br>
+                        Ajustez l'intensité avec le curseur ci-dessus.
+                    </p>
+                    <div style="display: flex; gap: 10px; justify-content: center; margin-top: 25px;">
+                        <button class="btn btn-success" onclick="this.parentElement.parentElement.parentElement.remove()">
+                            👍 Super !
+                        </button>
+                        <button class="btn btn-secondary" onclick="this.parentElement.parentElement.parentElement.remove()">
+                            ✖️ Fermer
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(demoContainer);
+            
+            // Retirer automatiquement après 5 secondes
+            setTimeout(() => {
+                if (demoContainer.parentElement) {
+                    demoContainer.remove();
+                }
+            }, 5000);
+        }
+
+        // Fonction pour activer automatiquement l'effet Aero Glass sur les éléments principaux
+        function enableDefaultAeroEffects() {
+            // Attendre que le DOM soit prêt
+            setTimeout(() => {
+                // Activer sur les cartes principales
+                const countryCards = document.querySelectorAll('.country-card');
+                countryCards.forEach(card => {
+                    card.classList.add('aero-glass');
+                });
+                
+                // Activer sur certains messages
+                const specialMessages = document.querySelectorAll('.message.success, .message.special');
+                specialMessages.forEach(msg => {
+                    msg.classList.add('aero-glass');
+                });
+                
+                // Activer sur le panneau de contrôle Aero
+                const aeroPanel = document.querySelector('.aero-control-panel');
+                if (aeroPanel) {
+                    aeroPanel.classList.add('aero-glass');
+                }
+                
+                console.log('✨ Effets Aero Glass par défaut appliqués');
+            }, 500);
+        }
+
+        // Fonction pour sauvegarder les préférences Aero Glass
+        function saveAeroPreferences() {
+            const preferences = {
+                blurIntensity: document.getElementById('aeroBlurSlider')?.value || 16,
+                enabledElements: {
+                    cards: document.querySelector('.country-card.aero-glass') !== null,
+                    messages: document.querySelector('.message.aero-glass') !== null,
+                    buttons: document.querySelector('.btn.aero-glass') !== null
+                }
+            };
+            
+            // Stocker dans gameState si disponible
+            if (gameState) {
+                gameState.aeroPreferences = preferences;
+                markUnsavedChanges();
+            }
+            
+            console.log('💾 Préférences Aero Glass sauvegardées:', preferences);
+            return preferences;
+        }
+
+        // Fonction pour charger les préférences Aero Glass
+        function loadAeroPreferences() {
+            if (gameState && gameState.aeroPreferences) {
+                const prefs = gameState.aeroPreferences;
+                
+                // Restaurer l'intensité du flou
+                if (prefs.blurIntensity) {
+                    updateAeroIntensity(prefs.blurIntensity);
+                    const slider = document.getElementById('aeroBlurSlider');
+                    if (slider) {
+                        slider.value = prefs.blurIntensity;
+                    }
+                }
+                
+                // Restaurer les éléments activés
+                if (prefs.enabledElements) {
+                    setTimeout(() => {
+                        if (prefs.enabledElements.cards) {
+                            document.querySelectorAll('.country-card').forEach(el => 
+                                el.classList.add('aero-glass'));
+                        }
+                        if (prefs.enabledElements.messages) {
+                            document.querySelectorAll('.message').forEach(el => 
+                                el.classList.add('aero-glass'));
+                        }
+                        if (prefs.enabledElements.buttons) {
+                            document.querySelectorAll('.btn').forEach(el => 
+                                el.classList.add('aero-glass'));
+                        }
+                    }, 300);
+                }
+                
+                console.log('📂 Préférences Aero Glass chargées:', prefs);
+            }
+        }
+
+        // ============================================
         // INITIALISATION
         // ============================================
 
@@ -5765,6 +7001,10 @@
             initTheme();
             startJealousySystem();
             
+            // Initialiser l'effet Aero Glass
+            applyAeroToNewElements();
+            enableDefaultAeroEffects();
+            
             // Initialiser les événements du tchat
             const chatInput = document.getElementById('chatInput');
             if (chatInput) {
@@ -5773,6 +7013,13 @@
                     updateSendButton();
                 });
             }
+            
+            // Charger les préférences Aero Glass
+            setTimeout(() => {
+                loadAeroPreferences();
+            }, 1000);
+            
+            console.log('🎮 Jeu initialisé avec système Aero Glass avancé');
         };
     </script>
 </body>
