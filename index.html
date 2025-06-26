@@ -839,7 +839,38 @@
         .btn-warning {
             background: linear-gradient(45deg, #ffc107, #fd7e14);
         }
+
+        /* Boîte Gemini */
+        .gemini-box {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .gemini-input {
+            width: 100%;
+            max-width: 400px;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            background: rgba(255, 255, 255, 0.8);
+            margin-bottom: 10px;
+        }
+
+        .dark .gemini-input {
+            background: rgba(0, 0, 0, 0.6);
+            border-color: #555;
+            color: #fff;
+        }
+
+        .gemini-response {
+            margin-top: 10px;
+            white-space: pre-wrap;
+            font-size: 14px;
+        }
     </style>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 </head>
 <body>
     <!-- Bouton mode sombre -->
@@ -931,6 +962,12 @@
                 <button class="btn" onclick="resetGame()">🔄 Nouveau jeu</button>
             </div>
         </div>
+        <div id="geminiBox" class="gemini-box">
+            <input id="geminiInput" class="gemini-input" type="text" placeholder="Demandez à Gemini…">
+            <button id="geminiBtn" class="btn">Envoyer à Gemini</button>
+            <div id="geminiResponse" class="gemini-response"></div>
+        </div>
+        <div id="geminiChatRoot"></div>
     </div>
 
     <script>
@@ -3754,12 +3791,90 @@
             }, 30000); // 30 secondes
         }
 
+        // Interroger l'API Gemini
+        async function askGemini(promptText) {
+            const endpoint = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=AIzaSyAexxa_34YRVsyqS9wUqKqoe_suqEXR7vE';
+            try {
+                const response = await fetch(endpoint, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        contents: [{ role: 'user', parts: [{ text: promptText }] }]
+                    })
+                });
+
+                if (!response.ok) throw new Error(response.statusText);
+                const data = await response.json();
+                return data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+            } catch (err) {
+                console.error('Gemini request failed:', err);
+                return '';
+            }
+        }
+
+        // Initialiser la boîte Gemini
+        function initGeminiBox() {
+            const btn = document.getElementById('geminiBtn');
+            if (!btn) return;
+            btn.addEventListener('click', async () => {
+                const input = document.getElementById('geminiInput');
+                const prompt = input.value.trim();
+                if (!prompt) return;
+                const result = await askGemini(prompt);
+                document.getElementById('geminiResponse').textContent = result;
+            });
+        }
+
         // Initialisation au chargement de la page
         window.onload = function() {
             initGame();
             initTheme();
             startAutoSave();
+            initGeminiBox();
         };
+    </script>
+    <script type="text/babel">
+        const { useState } = React;
+
+        function GeminiChat({ aiColor = '#6b46c1', aiEmoji = '🤖', userEmoji = '🙂' }) {
+            const [messages, setMessages] = useState([]);
+            const [text, setText] = useState('');
+
+            const send = async () => {
+                const prompt = text.trim();
+                if (!prompt) return;
+                setMessages([...messages, { role: 'user', text: prompt }]);
+                setText('');
+                const reply = await askGemini(prompt);
+                setMessages(prev => [...prev, { role: 'ai', text: reply }]);
+            };
+
+            return (
+                <div className="chat-container" style={{ marginTop: '20px' }}>
+                    {messages.map((m, i) => (
+                        <div
+                            key={i}
+                            className={`chat-message ${m.role === 'user' ? 'player' : 'partner'}`}
+                            style={m.role === 'ai' ? { background: aiColor, color: '#fff' } : null}
+                        >
+                            {m.role === 'user' ? userEmoji : aiEmoji} {m.text}
+                        </div>
+                    ))}
+                    <div style={{ display: 'flex', gap: '8px', marginTop: '10px' }}>
+                        <input
+                            className="gemini-input"
+                            placeholder="Votre message..."
+                            value={text}
+                            onChange={e => setText(e.target.value)}
+                        />
+                        <button className="btn" onClick={send}>Envoyer</button>
+                    </div>
+                </div>
+            );
+        }
+
+        ReactDOM.createRoot(document.getElementById('geminiChatRoot'))
+            .render(<GeminiChat aiColor="#764ba2" aiEmoji="✨" userEmoji="🧑" />);
     </script>
 </body>
 </html>
