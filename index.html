@@ -15,7 +15,8 @@
 
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%, #f093fb 200%);
+            background: linear-gradient(135deg, rgba(102,126,234,0.6) 0%, rgba(118,75,162,0.6) 100%);
+            backdrop-filter: blur(16px);
             background-attachment: fixed;
             min-height: 100vh;
             color: #1d1d1f;
@@ -428,7 +429,8 @@
 
         /* Mode sombre */
         .dark {
-            background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
+            background: linear-gradient(135deg, rgba(45,55,72,0.7) 0%, rgba(26,32,44,0.7) 100%);
+            backdrop-filter: blur(16px);
             color: #e2e8f0;
         }
 
@@ -849,21 +851,53 @@
             max-height: 300px;
             overflow-y: auto;
             padding: 10px;
-            background: rgba(0, 0, 0, 0.2);
-            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.35);
+            backdrop-filter: blur(8px);
+            border-radius: 12px;
             margin-bottom: 10px;
         }
 
-        .chat-message.user {
+        .dark .chat-messages {
+            background: rgba(0, 0, 0, 0.35);
+        }
+
+        .chat-message {
+            padding: 8px 12px;
+            border-radius: 18px;
+            max-width: 75%;
+            margin: 6px 0;
+            word-break: break-word;
+        }
+
+        .chat-message.player1 {
             background: #4e73df;
             color: #fff;
             margin-left: auto;
         }
 
+        .chat-message.player2 {
+            background: #38b2ac;
+            color: #fff;
+            margin-right: auto;
+        }
+
         .chat-message.ai {
-            background: #f8f9fa;
+            background: #f1f5f9;
             color: #000;
             margin-right: auto;
+            position: relative;
+        }
+
+        .chat-message.ai::after {
+            content: 'Gemini';
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 10px;
+            background: #a855f7;
+            color: #fff;
+            position: absolute;
+            top: -12px;
+            right: -4px;
         }
 
         .dark .chat-message.ai {
@@ -874,6 +908,12 @@
         .chat-input-container {
             display: flex;
             gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .sender-select {
+            border-radius: 8px;
+            padding: 8px;
         }
 
         .gemini-input {
@@ -989,8 +1029,14 @@
         <div id="geminiChat" class="gemini-chat">
             <div id="chatMessages" class="chat-messages"></div>
             <div class="chat-input-container">
+                <select id="senderSelect" class="sender-select">
+                    <option value="player1">Joueur 1</option>
+                    <option value="player2">Joueur 2</option>
+                </select>
                 <input id="geminiInput" class="gemini-input" type="text" placeholder="Écrivez votre message…">
                 <button id="geminiBtn" class="btn">Envoyer</button>
+                <button id="saveChat" class="btn btn-secondary" title="Sauvegarder">💾</button>
+                <button id="loadChat" class="btn btn-secondary" title="Charger">📂</button>
             </div>
         </div>
         <!-- Gemini Chat END -->
@@ -3818,51 +3864,69 @@
         }
 
         // === Gemini Chat ===
-        const GEMINI_API_KEY = ''; // Renseignez votre clé API ici
+        const GEMINI_API_KEY = '';
+        const GEMINI_ENDPOINT = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`;
 
-        async function askGemini(promptText) {
-            const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`;
+        const chatHistory = [];
+
+        async function askGemini(text) {
             try {
-                const response = await fetch(endpoint, {
+                const res = await fetch(GEMINI_ENDPOINT, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        contents: [{ role: 'user', parts: [{ text: promptText }] }]
-                    })
+                    body: JSON.stringify({ contents: [{ role: 'user', parts: [{ text }] }] })
                 });
-
-                if (!response.ok) throw new Error(response.statusText);
-                const data = await response.json();
+                if (!res.ok) throw new Error(res.statusText);
+                const data = await res.json();
                 return data.candidates?.[0]?.content?.parts?.[0]?.text || '';
-            } catch (err) {
-                console.error('Gemini request failed:', err);
+            } catch (e) {
+                console.error('Gemini request failed:', e);
                 return '';
             }
         }
 
-        function addMessage(text, type) {
+        function typeText(el, text) {
+            el.textContent = '';
+            [...text].forEach((ch, i) => {
+                setTimeout(() => el.textContent += ch, i * 30);
+            });
+        }
+
+        function addMessage(text, sender) {
             const div = document.createElement('div');
-            div.className = `chat-message ${type}`;
-            div.textContent = text;
+            div.className = `chat-message ${sender}`;
             document.getElementById('chatMessages').appendChild(div);
+            typeText(div, text);
+            chatHistory.push({ sender, text });
+            document.getElementById('chatMessages').scrollTop = document.getElementById('chatMessages').scrollHeight;
         }
 
         async function sendGeminiMessage() {
             const input = document.getElementById('geminiInput');
-            const prompt = input.value.trim();
-            if (!prompt) return;
-            addMessage(prompt, 'user');
+            const sender = document.getElementById('senderSelect').value;
+            const msg = input.value.trim();
+            if (!msg) return;
+            addMessage(msg, sender);
             input.value = '';
-            const result = await askGemini(prompt);
-            if (result) addMessage(result, 'ai');
-            const msgs = document.getElementById('chatMessages');
-            msgs.scrollTop = msgs.scrollHeight;
+            const aiText = await askGemini(msg);
+            if (aiText) addMessage(aiText, 'ai');
+        }
+
+        function saveChat() {
+            localStorage.setItem('chatHistory', JSON.stringify(chatHistory));
+        }
+
+        function loadChat() {
+            const data = localStorage.getItem('chatHistory');
+            if (!data) return;
+            JSON.parse(data).forEach(m => addMessage(m.text, m.sender));
         }
 
         function initGeminiBox() {
-            const btn = document.getElementById('geminiBtn');
-            if (!btn) return;
-            btn.addEventListener('click', sendGeminiMessage);
+            document.getElementById('geminiBtn').addEventListener('click', sendGeminiMessage);
+            document.getElementById('saveChat').addEventListener('click', saveChat);
+            document.getElementById('loadChat').addEventListener('click', loadChat);
+            loadChat();
         }
 
         // Initialisation au chargement de la page
