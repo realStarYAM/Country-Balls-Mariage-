@@ -1815,6 +1815,21 @@
             'Iran': '🇮🇷'
         };
 
+        // Outils pour gérer les origines multiples
+        function parseOrigins(country) {
+            if (Array.isArray(country)) return country;
+            if (countries[country]) return [country];
+            return country.split(/[-\/]/).map(c => c.trim()).filter(Boolean);
+        }
+
+        function formatCountryName(country) {
+            return parseOrigins(country).join(' - ');
+        }
+
+        function getFlags(country) {
+            return parseOrigins(country).map(c => countries[c] || '🏳️').join('-');
+        }
+
         // Prénoms par pays
         const namesByCountry = {
             'France': {
@@ -1982,37 +1997,38 @@
             
             // Sélectionner un pays aléatoire des mariages
             const randomMarriage = marriageHistory[Math.floor(Math.random() * marriageHistory.length)];
-            const targetCountry = randomMarriage.partnerCountry;
+            const targetCountry = randomMarriage.formattedCountry || randomMarriage.partnerCountry;
+            const targetFlags = getFlags(targetCountry);
             
             // Messages dramatiques selon le type d'événement
             const eventTypes = [
                 {
                     type: 'ex_returns',
-                    message: `😱 Drama ! Un(e) ex de ${targetCountry} essaie de récupérer votre partenaire !`,
+                    message: `😱 Drama ! Un(e) ex de ${targetCountry} ${targetFlags} essaie de récupérer votre partenaire !`,
                     effect: -20,
                     emoji: '💔💔💔'
                 },
                 {
                     type: 'celebrity_crush',
-                    message: `📸 Scandale ! Votre partenaire de ${targetCountry} a été vu(e) avec une célébrité !`,
+                    message: `📸 Scandale ! Votre partenaire de ${targetCountry} ${targetFlags} a été vu(e) avec une célébrité !`,
                     effect: -15,
                     emoji: '📸📸📸'
                 },
                 {
                     type: 'family_disapproval',
-                    message: `💔 La famille de ${targetCountry} n'approuve pas votre relation !`,
+                    message: `💔 La famille de ${targetCountry} ${targetFlags} n'approuve pas votre relation !`,
                     effect: -25,
                     emoji: '⚡😤⚡'
                 },
                 {
                     type: 'social_media_drama',
-                    message: `📱 Drama sur les réseaux ! Votre relation avec ${targetCountry} fait polémique !`,
+                    message: `📱 Drama sur les réseaux ! Votre relation avec ${targetCountry} ${targetFlags} fait polémique !`,
                     effect: -10,
                     emoji: '📱💬📱'
                 },
                 {
                     type: 'old_flame',
-                    message: `🌹 Coup de théâtre ! Une ancienne flamme de ${targetCountry} réapparaît !`,
+                    message: `🌹 Coup de théâtre ! Une ancienne flamme de ${targetCountry} ${targetFlags} réapparaît !`,
                     effect: -18,
                     emoji: '🌹💕🌹'
                 }
@@ -2508,11 +2524,11 @@
         }
 
         function updatePlayerInfo() {
-            const flag = countries[gameState.player.country] || '🏳️';
-            document.getElementById('playerInfo').textContent = 
+            const flag = getFlags(gameState.player.country);
+            document.getElementById('playerInfo').textContent =
                 `${flag} ${gameState.player.fullName}`;
-            document.getElementById('playerDetails').textContent = 
-                `Niveau ${gameState.player.level} • ${gameState.player.country}`;
+            document.getElementById('playerDetails').textContent =
+                `Niveau ${gameState.player.level} • ${formatCountryName(gameState.player.country)}`;
             updateXPDisplay();
         }
 
@@ -2595,14 +2611,19 @@
                 return;
             }
             
-            const randomCountry = availableCountries[Math.floor(Math.random() * availableCountries.length)];
-            const countryFlag = countries[randomCountry];
+            const baseCountry = availableCountries[Math.floor(Math.random() * availableCountries.length)];
+            let randomCountry = baseCountry;
+            if (Math.random() < 0.15) {
+                const second = availableCountries[Math.floor(Math.random() * availableCountries.length)];
+                if (second !== baseCountry) randomCountry = `${baseCountry}-${second}`;
+            }
+            const countryFlag = getFlags(randomCountry);
             
             // Générer une personne aléatoire du genre opposé au joueur
-            const names = namesByCountry[randomCountry] || namesByCountry['United States'];
+            const names = namesByCountry[baseCountry] || namesByCountry['United States'];
             const gender = gameState.player.gender === 'male' ? 'female' : 'male';
             const firstName = names[gender][Math.floor(Math.random() * names[gender].length)];
-            const lastName = generateLastName(randomCountry);
+            const lastName = generateLastName(baseCountry);
             
             const resultDiv = document.getElementById('exploreResult');
             resultDiv.classList.remove('hidden');
@@ -2616,9 +2637,9 @@
                         <span class="text-4xl">${countryFlag}</span>
                     </div>
                     <h4 class="text-2xl font-bold mb-2">${genderEmoji} ${firstName} ${lastName}</h4>
-                    <p class="text-lg mb-2">${randomCountry}</p>
+                    <p class="text-lg mb-2">${formatCountryName(randomCountry)}</p>
                     <p class="text-sm text-purple-600 dark:text-purple-400 mb-4">${genderText}</p>
-                    <p class="text-gray-600 dark:text-gray-300 mb-6">${generateDescription(randomCountry, firstName, gender)}</p>
+            <p class="text-gray-600 dark:text-gray-300 mb-6">${generateDescription(baseCountry, firstName, gender)}</p>
                     
                     <div class="flex flex-col sm:flex-row gap-4 justify-center">
                         <button class="btn btn-success" onclick="proposeMarriage('${firstName}', '${lastName}', '${randomCountry}', '${gender}')">
@@ -2632,7 +2653,7 @@
             `;
             
             gainXP(10);
-            showMessage(`🌍 Vous explorez ${randomCountry} et rencontrez ${firstName} ${lastName} !`, 'special');
+            showMessage(`🌍 Vous explorez ${formatCountryName(randomCountry)} et rencontrez ${firstName} ${lastName} !`, 'special');
         }
 
         function generateLastName(country) {
@@ -2722,7 +2743,8 @@
                 partnerCountry: country,
                 partnerGender: gender,
                 date: new Date().toLocaleDateString('fr-FR'),
-                flag: countries[country] || '🏳️'
+                flag: getFlags(country),
+                formattedCountry: formatCountryName(country)
             };
             
             marriageHistory.push(marriage);
@@ -2762,7 +2784,7 @@
                             <div class="text-4xl">${marriage.flag}</div>
                             <div>
                                 <h4 class="text-xl font-bold">${genderEmoji} ${marriage.partner}</h4>
-                                <p class="text-gray-600 dark:text-gray-300">${marriage.partnerCountry}</p>
+                                <p class="text-gray-600 dark:text-gray-300">${marriage.formattedCountry}</p>
                                 <p class="text-sm text-purple-600 dark:text-purple-400">${genderText}</p>
                                 <p class="text-sm text-gray-500 dark:text-gray-400">Marié(e) le ${marriage.date}</p>
                             </div>
@@ -3340,7 +3362,7 @@
             messageDiv.style.border = '2px solid #28a745';
             messageDiv.style.boxShadow = '0 8px 25px rgba(40, 167, 69, 0.3)';
             
-            const shareText = `💕 Mariage réussi ! Je me suis marié(e) avec ${genderEmoji} ${firstName} ${lastName} de ${country} dans Country Balls: Mariage ! 🌍💍`;
+            const shareText = `💕 Mariage réussi ! Je me suis marié(e) avec ${genderEmoji} ${firstName} ${lastName} de ${formatCountryName(country)} dans Country Balls: Mariage ! 🌍💍`;
             
             messageDiv.innerHTML = `
                 <div class="flex flex-col gap-3">
@@ -3351,7 +3373,7 @@
                                 💕 ${genderEmoji} ${firstName} ${lastName} a accepté votre demande ! Vous voilà mariés ! 💕
                             </div>
                             <div class="text-sm text-green-700 dark:text-green-300 mt-2">
-                                🌍 ${country} • ${new Date().toLocaleDateString('fr-FR')} • +50 XP
+                                🌍 ${formatCountryName(country)} • ${new Date().toLocaleDateString('fr-FR')} • +50 XP
                             </div>
                         </div>
                         <button class="btn btn-secondary ml-4 py-1 px-3 text-sm" onclick="this.closest('.marriage-success').remove()">
@@ -3376,7 +3398,7 @@
 
         // Système de partage
         function shareMarriage(shareText, firstName, lastName, country, gender) {
-            const flag = countries[country] || '🏳️';
+            const flag = getFlags(country);
             const genderEmoji = gender === 'male' ? '👨' : '👩';
             const fullShareText = `${shareText}\n\n🎮 Jouez aussi : Country Balls Mariage !`;
             
@@ -3400,6 +3422,7 @@
 
         // Dialogue de partage personnalisé
         function showCustomShareDialog(shareText, firstName, lastName, country, gender, flag, genderEmoji) {
+            const formattedCountry = formatCountryName(country);
             const messageContainer = document.getElementById('messageContainer');
             const shareDialog = document.createElement('div');
             shareDialog.className = 'message special share-dialog';
@@ -3415,7 +3438,7 @@
             shareDialog.innerHTML = `
                 <div class="text-center">
                     <div class="text-xl font-bold mb-4">📤 Partager votre mariage</div>
-                    <div class="text-lg mb-4">${flag} ${genderEmoji} ${firstName} ${lastName}</div>
+                    <div class="text-lg mb-4">${flag} ${genderEmoji} ${firstName} ${lastName} - ${formattedCountry}</div>
                     
                     <div class="bg-white bg-opacity-20 p-3 rounded-lg mb-4 text-sm">
                         <div class="font-semibold mb-2">📝 Message à partager :</div>
@@ -3535,9 +3558,9 @@
         function initializeChatWithPartner(firstName, lastName, country, gender) {
             const partner = {
                 name: `${firstName} ${lastName}`,
-                country: country,
+                country: formatCountryName(country),
                 gender: gender,
-                flag: countries[country] || '🏳️',
+                flag: getFlags(country),
                 avatar: gender === 'male' ? '👨' : '👩'
             };
             
@@ -3708,7 +3731,7 @@
                 return `Notre mariage est le plus beau jour de ma vie ! 💒✨`;
             }
             if (lowerMessage.includes('pays') || lowerMessage.includes('voyage')) {
-                return `J'aimerais explorer le monde avec toi ! 🌍 ${countries[gameState.player.country]} et ${chatState.currentPartner.flag} ensemble !`;
+                return `J'aimerais explorer le monde avec toi ! 🌍 ${getFlags(gameState.player.country)} et ${chatState.currentPartner.flag} ensemble !`;
             }
             if (lowerMessage.includes('rêve') || lowerMessage.includes('futur')) {
                 return `Mes rêves se réalisent avec toi ! 🌟 Construisons notre avenir ensemble !`;
@@ -4606,7 +4629,7 @@
             console.log(`💔 Tentative de rupture avec ${partnerName} (index: ${marriageIndex})`);
             
             // Confirmation dramatique
-            const confirmMessage = `💔 Êtes-vous vraiment sûr(e) de vouloir quitter ${genderEmoji} ${partnerName} de ${partnerCountry} ?\n\n⚠️ Cette action est irréversible et aura des conséquences !`;
+            const confirmMessage = `💔 Êtes-vous vraiment sûr(e) de vouloir quitter ${genderEmoji} ${partnerName} de ${formatCountryName(partnerCountry)} ?\n\n⚠️ Cette action est irréversible et aura des conséquences !`;
             
             if (!confirm(confirmMessage)) {
                 console.log('💔 Rupture annulée par l\'utilisateur');
@@ -4648,7 +4671,7 @@
             markUnsavedChanges();
             
             // Message de confirmation immédiat
-            showMessage(`💔 Rupture confirmée ! Vous avez quitté ${genderEmoji} ${partnerName} de ${partnerCountry}. XP: -${xpLoss}, Stabilité: -50`, 'error');
+            showMessage(`💔 Rupture confirmée ! Vous avez quitté ${genderEmoji} ${partnerName} de ${formatCountryName(partnerCountry)}. XP: -${xpLoss}, Stabilité: -50`, 'error');
             
             // Effets dramatiques de rupture (après le message de confirmation)
             setTimeout(() => {
@@ -4774,7 +4797,7 @@
                         🚨 RUPTURE DRAMATIQUE ! 🚨
                     </div>
                     <div style="font-size: 20px; margin-bottom: 20px; background: rgba(0,0,0,0.4); padding: 20px; border-radius: 15px;">
-                        💔 Vous avez quitté ${genderEmoji} ${partnerName} de ${partnerCountry} !
+                        💔 Vous avez quitté ${genderEmoji} ${partnerName} de ${formatCountryName(partnerCountry)} !
                     </div>
                     <div style="font-size: 18px; margin: 15px 0; background: rgba(139,0,0,0.6); padding: 15px; border-radius: 10px;">
                         "${randomMessage}"
