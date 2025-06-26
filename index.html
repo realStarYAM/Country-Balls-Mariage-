@@ -1275,10 +1275,10 @@
     <div class="container mx-auto px-4 py-8 max-w-4xl">
         <!-- Header -->
         <header class="text-center mb-8">
-            <h1 class="text-4xl md:text-5xl font-bold bg-gradient-to-r from-pink-500 to-purple-600 bg-clip-text text-transparent mb-4">
+            <h1 id="headerTitle" data-i18n="headerTitle" class="text-4xl md:text-5xl font-bold bg-gradient-to-r from-pink-500 to-purple-600 bg-clip-text text-transparent mb-4">
                 💕 Country Balls: Mariage 💕
             </h1>
-            <p class="text-lg text-gray-600 dark:text-gray-300">
+            <p id="tagline" data-i18n="tagline" class="text-lg text-gray-600 dark:text-gray-300">
                 Trouvez l'amour à travers le monde ! 🌍💖
             </p>
             
@@ -1286,12 +1286,16 @@
             <button id="themeToggle" class="btn btn-secondary mt-4" onclick="toggleTheme()">
                 🌙 Mode Sombre
             </button>
+            <select id="languageSelect" class="btn btn-secondary mt-4 ml-2">
+                <option value="fr">FR</option>
+                <option value="en">EN</option>
+            </select>
         </header>
 
         <!-- Écran de création de personnage -->
         <div id="characterCreation" class="text-center">
             <div class="country-card">
-                <h2 class="text-3xl font-bold mb-6 text-center">✨ Création de votre Country Ball ✨</h2>
+                <h2 id="creationTitle" data-i18n="creationTitle" class="text-3xl font-bold mb-6 text-center">✨ Création de votre Country Ball ✨</h2>
                 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <div>
@@ -1429,7 +1433,7 @@
                     </select>
                 </div>
                 
-                <button id="startGameBtn" class="btn btn-primary mt-8 text-xl px-8 py-4" onclick="startMainGame()">
+                <button id="startGameBtn" data-i18n="startAdventure" class="btn btn-primary mt-8 text-xl px-8 py-4" onclick="startMainGame()">
                     🚀 Commencer l'aventure !
                 </button>
             </div>
@@ -1737,6 +1741,59 @@
             }
         });
 
+        // ==============================
+        // MULTILINGUAL SUPPORT
+        // ==============================
+
+        const translations = {
+            fr: {
+                headerTitle: '💕 Country Balls: Mariage 💕',
+                tagline: "Trouvez l'amour à travers le monde ! 🌍💖",
+                themeToggleDark: '🌙 Mode Sombre',
+                themeToggleLight: '☀️ Mode Clair',
+                creationTitle: '✨ Création de votre Country Ball ✨',
+                startAdventure: "🚀 Commencer l'aventure !"
+            },
+            en: {
+                headerTitle: '💕 Country Balls: Wedding 💕',
+                tagline: 'Find love around the world! 🌍💖',
+                themeToggleDark: '🌙 Dark Mode',
+                themeToggleLight: '☀️ Light Mode',
+                creationTitle: '✨ Create Your Country Ball ✨',
+                startAdventure: '🚀 Start the adventure!'
+            }
+        };
+
+        let currentLang = 'fr';
+
+        function updateThemeToggleText() {
+            const themeToggle = document.getElementById('themeToggle');
+            if (themeToggle) {
+                const isDark = document.documentElement.classList.contains('dark');
+                themeToggle.textContent = isDark
+                    ? translations[currentLang].themeToggleLight
+                    : translations[currentLang].themeToggleDark;
+            }
+        }
+
+        function setLanguage(lang) {
+            currentLang = lang;
+            document.documentElement.setAttribute('lang', lang);
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (key && translations[lang][key]) {
+                    el.textContent = translations[lang][key];
+                }
+            });
+            updateThemeToggleText();
+        }
+
+        document.getElementById('languageSelect').addEventListener('change', e => {
+            setLanguage(e.target.value);
+        });
+
+        // ==============================
+        
         // État du jeu
         let gameState = {
             player: {
@@ -2489,7 +2546,7 @@
             const themeToggle = document.getElementById('themeToggle');
             if (themeToggle) {
                 const isDark = document.documentElement.classList.contains('dark');
-                themeToggle.textContent = isDark ? '☀️ Mode Clair' : '🌙 Mode Sombre';
+                updateThemeToggleText();
                 gameState.theme = isDark ? 'dark' : 'light';
                 
                 // Forcer l'application du thème
@@ -2513,10 +2570,7 @@
             const isDarkAfter = document.documentElement.classList.contains('dark');
             
             // Mettre à jour le bouton
-            const themeToggle = document.getElementById('themeToggle');
-            if (themeToggle) {
-                themeToggle.textContent = isDarkAfter ? '☀️ Mode Clair' : '🌙 Mode Sombre';
-            }
+            updateThemeToggleText();
             
             // Mettre à jour l'état du jeu
             gameState.theme = isDarkAfter ? 'dark' : 'light';
@@ -4976,6 +5030,7 @@
         window.onload = function() {
             initGame();
             initTheme();
+            setLanguage(currentLang);
             startJealousySystem();
             
             // Initialiser les événements du tchat
