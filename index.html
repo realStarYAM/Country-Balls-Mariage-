@@ -1745,6 +1745,7 @@
                 country: '',
                 fullName: '',
                 gender: '',
+                pronunciation: {},
                 level: 1,
                 xp: 0
             },
@@ -2542,11 +2543,13 @@
                 return;
             }
 
+            const info = getNameInfo(firstName, country);
             gameState.player.firstName = firstName;
             gameState.player.lastName = lastName;
             gameState.player.country = country;
             gameState.player.gender = gender;
             gameState.player.fullName = `${firstName} ${lastName}`;
+            gameState.player.pronunciation = info.prononciation;
 
             document.getElementById('characterCreation').classList.add('hidden');
             document.getElementById('gameMain').classList.remove('hidden');
@@ -2559,10 +2562,10 @@
             markUnsavedChanges();
         }
 
-        function updatePlayerInfo() {
-            const flag = getFlags(gameState.player.country);
-            document.getElementById('playerInfo').textContent =
-                `${flag} ${gameState.player.fullName}`;
+       function updatePlayerInfo() {
+           const flag = getFlags(gameState.player.country);
+            document.getElementById('playerInfo').innerHTML =
+                `${flag} ${gameState.player.firstName} <span class="text-sm text-gray-500 dark:text-gray-400 ml-1">${formatPronunciation(gameState.player.pronunciation)}</span> ${gameState.player.lastName}`;
             document.getElementById('playerDetails').textContent =
                 `Niveau ${gameState.player.level} • ${formatCountryName(gameState.player.country)}`;
             updateXPDisplay();
